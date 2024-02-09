@@ -1,0 +1,25 @@
+main {
+    padding: 30px 15px 0;
+}
+
+.main-header-public {
+    background: linear-gradient(180deg, rgba(20, 21, 22, 0.63) 0%, rgba(0, 0, 0, 0.252) 99.99%, rgba(229, 229, 229, 0) 100%), center / cover no-repeat url(./pawel-czerwinski-SD1VYMwGICo-unsplash.jpg);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.main-header-title {
+    color: #F5F5F5;
+    padding: 70px 0 100px;
+}
+
+@media (min-width: 768px) {
+    .main-header-title {
+        padding: 100px 0 160px;
+    }
+}
+
+label.required::after {
+    content: '*';
+    display: inline-block;
+    margin-left: 5px;
+}
