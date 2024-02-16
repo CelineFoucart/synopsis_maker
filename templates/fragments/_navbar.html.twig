@@ -8,26 +8,30 @@
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav me-auto mb-2 mb-md-0">
 					<li class="nav-item">
-						<a class="nav-link active" href="#">Synopsis</a>
+						<a class="nav-link {{ app.request.attributes.get('_route') == 'app_synopsis' ? 'active' : '' }}" href="{{ path('app_synopsis') }}">
+                            Synopsis
+                        </a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Galerie</a>
+						<a class="nav-link {{ app.request.attributes.get('_route') == 'app_gallery' ? 'active' : '' }}" href="{{ path('app_gallery') }}">
+                            Galerie
+                        </a>
 					</li>
 				</ul>
                 <div class="ms-auto">
                     <span class="nav-item">
                         {% if is_granted('IS_AUTHENTICATED_FULLY')  %}
-                            <a class="btn btn-outline-light" href="#">
+                            <a class="btn btn-outline-light" href="{{ path('app_profile') }}">
                                 Compte
                             </a>
-                            <a class="btn btn-danger" href="#">
+                            <a class="btn btn-danger" href="{{ path('app_logout') }}">
                                 Déconnexion
                             </a>
                         {% else %}
-                            <a class="btn btn-outline-light" href="#">
+                            <a class="btn btn-outline-light" href="{{ path('app_login') }}">
                                 Connexion
                             </a>
-                            <a class="btn btn-success" href="#">
+                            <a class="btn btn-success" href="{{ path('app_register') }}">
                                 Inscription
                             </a>
                         {% endif %}

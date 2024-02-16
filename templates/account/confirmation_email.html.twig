@@ -1,0 +1,19 @@
+<h1>BIENVENUE SUR {{ app_name|upper }}</h1>
+
+<p>
+    Nous vous remercions d&#8217;avoir complété votre inscription sur {{ app_name }}. Cet e-mail confirme que votre compte est activé et 
+    que vous pouvez dès à présent créer vos premiers synopsis et consulter votre compte à tout moment en cliquant sur ce lien :
+    <strong><a href="{{ url('app_profile') }}" class="account">Mon profil</a></strong>
+</p>
+
+
+<h2>Confirmer mon email</h2>
+<p>Pour commencer, veuillez cliquer sur le lien ci-dessous pour confirmer votre adresse e-mail.</p>
+<p style="text-align:center"><a href="{{ signedUrl|raw }}">Confirmer mon email</a></p>
+<p>
+    Ce lien expirera dans  {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+</p>
+
+<p>
+    A bientôt !
+</p>

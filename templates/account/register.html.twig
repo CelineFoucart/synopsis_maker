@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="row my-5 align-items-center justify-content-center">
+        <article class="col-md-6 col-lg-3 rounded p-3 border shadow-sm bg-light">
+            <header>
+                <h2 class="h1 mb-5 text-center">Inscription</h2>
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+            </header>
+
+            {{ form_errors(registrationForm) }}
+
+            {{ form_start(registrationForm) }}
+                <div class="mb-3">
+                    {{ form_label(registrationForm.username) }}
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                        {{ form_widget(registrationForm.username) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(registrationForm.email) }}
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                        {{ form_widget(registrationForm.email) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(registrationForm.plainPassword.first) }}
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-unlock-keyhole"></i></span>
+                        {{ form_widget(registrationForm.plainPassword.first) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(registrationForm.plainPassword.second) }}
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-unlock-keyhole"></i></span>
+                        {{ form_widget(registrationForm.plainPassword.second) }}
+                    </div>
+                </div>
+
+                {{ form_row(registrationForm.agreeTerms) }}
+
+                <hr>
+
+                <div id="emailHelp" class="small text-center my-3">
+                    Pour vous utiliser ce site, vous devez acceptez nos <a href="{{ path('app_terms') }}">conditions d'utilisation</a>.
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-4">Inscription</button>
+                <p class="text-center">
+                    Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous</a>
+                </p>
+            {{ form_end(registrationForm) }}
+        </article>
+    </div>
+{% endblock %}

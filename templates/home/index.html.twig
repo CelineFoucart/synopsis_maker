@@ -3,13 +3,32 @@
 {% block title %}Concepteur de synopsis | {{ parent() }} {% endblock %}
 
 {% block body %}
-<div>
-    <h1>Hello ! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/Projets/synopsis_maker/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>D:/Projets/synopsis_maker/templates/home/index.html.twig</code></li>
-    </ul>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <p class="lead text-center my-5">
+            Bienvenue sur {{ app_name }}, l'application pour concevoir et gérer vos synopsis de jeux de rôle et de romans&nbsp;!
+        </p>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="row">
+                <div class="col">
+                    <a href="" class="btn btn-lg btn-success d-block">Créer un nouveau synopsis</a>
+                </div>
+                <div class="col">
+                    <a href="" class="btn btn-lg btn-info d-block">Consulter la liste des synopsis</a>
+                </div>
+                <div class="col">
+                    <a href="" class="btn btn-lg btn-secondary d-block">Consulter la galerie</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center">
+                <h3 class="h5 text-primary mb-4">
+                    Pas encore inscrit ? Créez-vous vite un compte pour commencer à gérer vos synopsis.
+                </h3>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-primary btn-lg btn-lg" id="login-btn">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-lg btn-lg" id="register-btn">S'inscrire</a>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
