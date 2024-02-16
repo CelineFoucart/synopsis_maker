@@ -25,6 +25,7 @@ Encore
 
     .addAliases({
         '&synopsis': `${__dirname}/assets/synopsis`,
+        '&utils': `${__dirname}/assets/utils`,
     })
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
