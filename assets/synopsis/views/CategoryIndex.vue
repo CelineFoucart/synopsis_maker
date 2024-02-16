@@ -40,6 +40,8 @@
             :search-value="searchValue"
             :buttons-pagination="true"
             show-index
+            theme-color="#0d6efd"
+            sort-by="title"
             alternating>
             <template #item-description="{ description }">
                 <div style="white-space: pre-wrap;">{{description}}</div>
@@ -49,7 +51,7 @@
                     <button type="button" class="btn btn-primary" v-tooltip="'Editer'" @click="editCategory(item)">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>   
-                    <button type="button" class="btn btn-danger" v-tooltip="'Supprimer'">
+                    <button type="button" class="btn btn-danger" v-tooltip="'Supprimer'" @click="openDeleteModal(item)">
                         <i class="fa-solid fa-trash"></i>
                     </button>   
                 </div>
@@ -57,6 +59,7 @@
         </DataTable>
         <Loading v-if="loading"></Loading>
         <CategoryModal :category="category" v-if="showEditModal" @on-close="showEditModal = false"></CategoryModal>
+        <Delete :title="category.title" v-if="showDeleteModal" @on-confirm="deleteCategory" @on-close="showDeleteModal = false"></Delete>
     </article>
 </template>
 
@@ -66,6 +69,7 @@ import { useCategoryStore } from '&synopsis/stores/category.js';
 import Loading from '&utils/Loading.vue';
 import { createToastify } from '&utils/toastify.js';
 import CategoryModal from '&synopsis/components/CategoryModal.vue';
+import Delete from '&utils/Delete.vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 
@@ -75,7 +79,8 @@ export default {
     components: {
         DataTable: Vue3EasyDataTable,
         Loading,
-        CategoryModal
+        CategoryModal,
+        Delete
     },
 
     data() {
@@ -88,6 +93,7 @@ export default {
             ],
             category: {id: null, title: null, description: null},
             showEditModal: false,
+            showDeleteModal: false,
             searchField: null,
             searchValue: ''
         }
@@ -117,6 +123,24 @@ export default {
         editCategory(data) {
             this.category = {id: data.id, title: data.title, description: data.description};
             this.showEditModal = true;
+        },
+
+        openDeleteModal(data) {
+            this.category = {id: data.id, title: data.title, description: data.description};
+            this.showDeleteModal = true;
+
+        },
+
+        async deleteCategory() {
+            this.loading = true;
+            this.showDeleteModal = false;
+            const status = await this.categoryStore.deleteCategory(this.category.id);
+            if (status) {
+                createToastify('La catégorie a été supprimée', 'success');
+            }
+
+            this.category = {id: null, title: null, description: null};
+            this.loading = false;
         }
     },
 }

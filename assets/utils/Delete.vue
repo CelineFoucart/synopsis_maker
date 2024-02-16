@@ -9,8 +9,9 @@
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="text-danger fw-bold fs-5 mb-0">
-                            Attention, toute suppression est définitive ! Voulez-vous vraiment effectuer cette opération ?
+                        <p class="text-danger fs-5 mb-0">
+                            Attention, toute suppression est définitive ! Voulez-vous vraiment supprimer 
+                            l'élément <span class="fw-bold">{{ title }}</span> ?
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -26,6 +27,10 @@
 <script>
     export default {
         name: "DeleteModal",
+
+        props: {
+            title: String,
+        },
 
         methods: {
             closeModal() {
