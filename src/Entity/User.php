@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -40,6 +42,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\OneToMany(targetEntity: Synopsis::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $synopses;
+
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $categories;
+
+    public function __construct()
+    {
+        $this->synopses = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -130,6 +144,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Synopsis>
+     */
+    public function getSynopses(): Collection
+    {
+        return $this->synopses;
+    }
+
+    public function addSynopsis(Synopsis $synopsis): static
+    {
+        if (!$this->synopses->contains($synopsis)) {
+            $this->synopses->add($synopsis);
+            $synopsis->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSynopsis(Synopsis $synopsis): static
+    {
+        if ($this->synopses->removeElement($synopsis)) {
+            // set the owning side to null (unless already changed)
+            if ($synopsis->getAuthor() === $this) {
+                $synopsis->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getAuthor() === $this) {
+                $category->setAuthor(null);
+            }
+        }
 
         return $this;
     }
