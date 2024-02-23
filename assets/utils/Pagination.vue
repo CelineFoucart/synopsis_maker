@@ -13,7 +13,7 @@
             </div>
             <nav aria-label="Page navigation">
                 <ul class="pagination mb-0 justify-content-end">
-                    <li class="page-item" :class="{'disabled': currentPage === 1 || emptyPagination}">
+                    <li class="page-item" :class="{'disabled': currentPage === 1 || currentPage === 0 || emptyPagination}">
                         <a class="page-link" href="#" aria-label="Précédent" @click.prevent="previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
@@ -24,7 +24,7 @@
                         </li>
                     </template>
 
-                    <li class="page-item" :class="{'disabled': last === currentPage}">
+                    <li class="page-item" :class="{'disabled': pagination.last === currentPage}">
                         <a class="page-link" href="#" aria-label="Suivant" @click.prevent="next"><span aria-hidden="true">&raquo;</span></a>
                     </li>
                 </ul>
@@ -47,7 +47,7 @@ export default {
     data() {
         return {
             limits: [10, 25, 50, 100],
-            currentPage: 1,
+            currentPage: 0,
             currentLimit: 10
         }
     },
@@ -81,14 +81,6 @@ export default {
             }
 
             return this.pagination.pagesInRange;
-        },
-
-        last() {
-            if (this.pagination === null) {
-                return 0;
-            }
-
-            return 0;
         },
 
         emptyPagination() {

@@ -87,7 +87,7 @@ export default {
         return {
             loading: true,
             headers: [ 
-                {text: 'Nom', value: 'title', sortable: true},
+                {text: 'Titre', value: 'title', sortable: true},
                 {text: 'Description', value: 'description', sortable: true},
                 {text: "Actions", value: "operation"},
             ],
