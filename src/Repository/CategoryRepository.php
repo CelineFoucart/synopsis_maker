@@ -35,4 +35,22 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * @param integer[] $ids
+     * @param User $user
+     * 
+     * @return Category[] Returns an array of Category objects
+     */
+    public function findByIds(array $ids, User $user): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.author = :user')
+            ->andWhere('c.id IN (:ids)')
+            ->setParameter('user', $user)
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -3,7 +3,7 @@
         <div class="col-md-8">
             <div class="d-flex justify-content between flex-column h-100">
                 <div class="text-end">
-                    <button type="button" class="btn btn-sm btn-success" v-tooltip="'Ajouter'" @click="appendSynopsis">
+                    <button type="button" class="btn btn-sm btn-success" v-tooltip="'Ajouter'" @click="showAddModal = true">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -17,6 +17,7 @@
             <AsideSynopsis @on-loading="onLoading" v-model:filters="filters" @on-change="onChangeFilters"></AsideSynopsis>
         </div>
     </div>
+    <AddSynopsisModal v-if="showAddModal" @on-close="showAddModal = false"></AddSynopsisModal>
     <Loading v-if="loading"></Loading>
 </template>
 
@@ -28,6 +29,7 @@ import { createToastify } from '&utils/toastify.js';
 import Pagination from '&utils/Pagination.vue';
 import AsideSynopsis from '&synopsis/components/synopsis/AsideSynopsis.vue';
 import SynopsisList from '&synopsis/components/synopsis/SynopsisList.vue';
+import AddSynopsisModal from '&synopsis/components/synopsis/AddSynopsisModal.vue';
 
 export default {
     name: 'SynopsisIndex',
@@ -36,7 +38,8 @@ export default {
         Pagination,
         Loading,
         AsideSynopsis,
-        SynopsisList
+        SynopsisList,
+        AddSynopsisModal
     },
 
     data() {
@@ -47,7 +50,8 @@ export default {
                 selectedCategories: []
             },
             page: 1,
-            limit: 10
+            limit: 10,
+            showAddModal: false,
         }
     },
 
@@ -56,10 +60,6 @@ export default {
     },
 
     methods: {
-        appendSynopsis() {
-            
-        },
-
         onLoading(loading) {
             this.loading = loading;
         },

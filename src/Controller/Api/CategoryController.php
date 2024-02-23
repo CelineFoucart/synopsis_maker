@@ -8,24 +8,16 @@ use App\Entity\User;
 use App\Entity\Category;
 use App\Security\Voter\CategoryVoter;
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/category')]
-final class CategoryController extends AbstractController
+final class CategoryController extends AbstractApiController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private ValidatorInterface $validator)
-    {
-        
-    }
-
     #[Route('', name: 'api_category_index', methods:["GET"])]
     public function indexAction(CategoryRepository $categoryRepository): JsonResponse
     {
@@ -91,19 +83,5 @@ final class CategoryController extends AbstractController
         $this->entityManager->flush();
 
         return $this->json("", Response::HTTP_NO_CONTENT, [], ['groups' => ['index']]);
-    }
-
-    private function validate(Category $category): array
-    {
-        $errors = [];
-        $violations = $this->validator->validate($category);
-
-        if (count($violations) > 0) {
-            foreach ($violations as $violation) {
-                $errors[$violation->getPropertyPath()][] = $violation->getMessage();
-            }
-        }
-
-        return $errors;
     }
 }
