@@ -4,15 +4,21 @@ import CategoryIndex from "&synopsis/views/CategoryIndex.vue";
 import SynopsisShow from "&synopsis/views/SynopsisShow.vue";
 SynopsisShow
 const routes =  [
+    { path: '/', redirect: '/synopsis' },
     {
         path: "/synopsis",
-        name: "SynopsisIndex",
-        component: SynopsisIndex
-    },
-    {
-        path: "/synopsis/:slug-:id",
-        name: "SynopsisShow",
-        component: SynopsisShow
+        children: [
+            {
+                path: "",
+                name: "SynopsisIndex",
+                component: SynopsisIndex,
+            },
+            {
+                path: ':slug-:id',
+                component: SynopsisShow,
+                name: "SynopsisShow",
+            },
+        ]
     },
     {
         path: "/category",
@@ -23,5 +29,7 @@ const routes =  [
 
 export default createRouter({
     routes: routes,
+    linkActiveClass: 'active',
+    linkExactActiveClass: 'active',
     history: createWebHashHistory()
 });
