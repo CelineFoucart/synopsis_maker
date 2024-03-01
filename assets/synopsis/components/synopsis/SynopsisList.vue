@@ -6,7 +6,7 @@
         <div class="row mb-4 mt-2" v-else>
             <article class="col-sm-6 col-md-4" v-for="synopsis in synopsisStore.synopses" :key="synopsis.id">
                 <div class="bg-light shadow p-3 position-relative">
-                    <span v-for="category in synopsis.categories" :key="category.id" class="badge  bg-secondary">
+                    <span v-for="category in synopsis.categories" :key="category.id" class="badge me-1 bg-secondary">
                         {{ category.title }}
                     </span>
                     <h2 class="h5 mb-0">{{ synopsis.title }}</h2>

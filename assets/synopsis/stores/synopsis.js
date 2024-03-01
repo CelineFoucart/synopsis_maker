@@ -57,6 +57,18 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async putSynopsis(data, id) {
+            try {
+                const url = Routing.generate("api_synopsis_edit", {id: id});
+                const response = await axios.put(url, data);
+                this.synopsis = response.data;
+
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

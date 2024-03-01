@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="modal-backdrop fade show"></div>
-        <div class="modal fade show" id="synopsisModal" tabindex="-1" aria-labelledby="synopsisModalLabel" aria-hidden="true">
+        <div class="modal fade show" id="synopsisModal" tabindex="-1" aria-labelledby="synopsisModalLabel">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -65,6 +65,13 @@ import Choices from 'choices.js';
 export default {
     name: 'AddSynopsisModal',
 
+    props: {
+        synopsis: {
+            type: Object,
+            default: null,
+        },
+    },
+
     data() {
         return {
             title: null,
@@ -88,6 +95,14 @@ export default {
     },
 
     mounted () {
+        if (this.synopsis !== null) {
+            this.title = this.synopsis.title;
+            this.pitch = this.synopsis.pitch;
+            this.synopsis.categories.forEach(category => {
+                this.categories.push(category.id);
+            });
+        }
+
         const choice = new Choices('#categories', {
             allowHTML: true,
             loadingText: 'Chargement...',
@@ -99,7 +114,8 @@ export default {
 
         const options = [];
         this.categoryStore.categories.forEach(element => {
-            options.push({value: element.id, label: element.title, selected: false});
+            const isSelected = this.categories.includes(element.id) ? true : false;
+            options.push({value: element.id, label: element.title, selected: isSelected});
         });
         choice.clearChoices();
         choice.setChoices(options);
@@ -121,11 +137,31 @@ export default {
             }
 
             const data = {title: this.title, pitch: this.pitch, categories: this.categories};
+
+            if (this.synopsis !== null) {
+                await this.edit(data);
+            } else {
+                await this.create(data);
+            }
+        },
+
+        async create(data) {
             const status = await this.synopsisStore.postSynopsis(data);
             if (!status) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
             } else {
                 this.$router.push('/synopsis/' + this.synopsisStore.synopsis.slug + '-' + this.synopsisStore.synopsis.id);
+            }
+        },
+
+        async edit(data) {
+            data.description = this.synopsis.description;
+
+            const status = await this.synopsisStore.putSynopsis(data, this.synopsis.id);
+            if (!status) {
+                createToastify('Le formulaire comporte des erreurs.', 'error');
+            } else {
+                this.closeModal();
             }
         }
     },

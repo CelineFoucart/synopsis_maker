@@ -5,26 +5,24 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\User;
-use App\Entity\Category;
 use App\Entity\Synopsis;
-use App\Repository\CategoryRepository;
+use App\Service\SynopsisHandler;
 use App\Repository\SynopsisRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/synopsis')]
 final class SynopsisController extends AbstractApiController
 {
     public function __construct(
-        protected EntityManagerInterface $entityManager, 
+        protected EntityManagerInterface $entityManager,
         private SluggerInterface $slugger, 
         protected ValidatorInterface $validator
     ) {
@@ -59,7 +57,7 @@ final class SynopsisController extends AbstractApiController
     }
 
     #[Route('', name: 'api_synopsis_create', methods:["POST"])]
-    public function createAction(Request $request, CategoryRepository $categoryRepository): JsonResponse
+    public function createAction(Request $request, SynopsisHandler $handler): JsonResponse
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -67,31 +65,18 @@ final class SynopsisController extends AbstractApiController
         }
 
         $data = json_decode($request->getContent(), true);
-
-        $synopsis = (new Synopsis())
-            ->setTitle(isset($data['title']) ? $data['title'] : null)
-            ->setPitch(isset($data['pitch']) ? $data['pitch'] : null)
-            ->setAuthor($this->getUser());
-        
-        if (!isset($data['categories'])) {
-            return $this->json(['categories'=>'Ce champ est obligatoire'], Response::HTTP_BAD_REQUEST);
+        $errors = $handler->setSynopsis(new Synopsis())->edit($data, $user)->getErrors();
+        if (!empty($errors)) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $categories = $categoryRepository->findByIds($data['categories'], $this->getUser());
-        if (empty($categories)) {
-            return $this->json(['categories'=>'Ce champ est obligatoire'], Response::HTTP_BAD_REQUEST);
-        }
-
-        foreach ($categories as $category) {
-            $synopsis->addCategory($category);
-        }
-
+        $synopsis = $handler->getSynopsis();
         $errors = $this->validate($synopsis);
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $synopsis->setSlug(strtolower((string) $this->slugger->slug($synopsis->getTitle())))->setCreatedAt(new \DateTimeImmutable());
+        $synopsis->setCreatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -102,6 +87,36 @@ final class SynopsisController extends AbstractApiController
     #[Route('/{id}', name: 'api_synopsis_show', methods:["GET"])]
     public function showAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis): JsonResponse
     {
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/{id}', name: 'api_synopsis_edit', methods:["PUT"])]
+    public function editAction(
+        #[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, 
+        #[CurrentUser()] User $user, 
+        Request $request,
+        SynopsisHandler $handler
+    ): JsonResponse {
+        if ($user->getId() !== $synopsis->getAuthor()->getId()) {
+            $this->createAccessDeniedException();
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $errors = $handler->setSynopsis($synopsis)->edit($data, $user)->getErrors();
+        if (!empty($errors)) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $synopsis = $handler->getSynopsis();
+        $errors = $this->validate($synopsis);
+        if (!empty($errors)) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $synopsis->setUpdatedAt(new \DateTime());
+        $this->entityManager->persist($synopsis);
+        $this->entityManager->flush();
+
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 }
