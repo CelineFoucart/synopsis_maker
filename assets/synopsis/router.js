@@ -2,7 +2,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import SynopsisIndex from "&synopsis/views/SynopsisIndex.vue";
 import CategoryIndex from "&synopsis/views/CategoryIndex.vue";
 import SynopsisShow from "&synopsis/views/SynopsisShow.vue";
-SynopsisShow
+import SynopsisEpisodes from "&synopsis/views/SynopsisEpisodes.vue";
+
 const routes =  [
     { path: '/', redirect: '/synopsis' },
     {
@@ -17,6 +18,11 @@ const routes =  [
                 path: ':id-:slug',
                 component: SynopsisShow,
                 name: "SynopsisShow",
+            },
+            {
+                path: ':id-:slug/episodes',
+                component: SynopsisEpisodes,
+                name: "SynopsisEpisodes",
             },
         ]
     },

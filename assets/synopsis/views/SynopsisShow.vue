@@ -1,10 +1,11 @@
 <template>
-    <article :class="{'alert alert-danger': error}">
-        <h1 class="h5" v-if="error">Erreur 404</h1>
-        <p v-if="error">Cette page n'existe pas.</p>
-        <HeaderSynopsis v-if="!loading && synopsisStore.synopsis !== null" :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
+    <Error v-if="error"></Error>
+    <article v-if="!loading && synopsisStore.synopsis !== null">
+        <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
+        <p class="lead mt-3">{{ synopsisStore.synopsis.pitch }}</p>
+        <Description :data="synopsisStore.synopsis.description" @on-save="onSave"></Description>
+        <MetaData :element="synopsisStore.synopsis"></MetaData>
     </article>
-    <Description :data="synopsisStore.synopsis.description" v-if="!loading  && synopsisStore.synopsis !== null" @on-save="onSave"></Description>
     <Loading v-if="loading || partialLoading"></Loading>
 </template>
 
@@ -14,8 +15,10 @@ import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { useCategoryStore } from '&synopsis/stores/category.js';
 import { createToastify } from '&utils/toastify.js';
 import Loading from '&utils/Loading.vue';
+import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import Description from '&synopsis/components/synopsis_show/Description.vue';
+import MetaData from '&synopsis/components/synopsis_show/MetaData.vue';
 
 export default {
     name: 'SynopsisShow',
@@ -23,7 +26,9 @@ export default {
     components: {
         Loading,
         HeaderSynopsis,
-        Description
+        Description,
+        Error,
+        MetaData,
     },
 
     data() {
@@ -73,3 +78,9 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+p {
+    white-space: pre-wrap
+}
+</style>
