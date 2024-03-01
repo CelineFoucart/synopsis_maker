@@ -23,6 +23,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const response = await axios.get(url);
                 this.synopses = response.data.synopses;
                 this.pagination = response.data.meta;
+                this.pagination.limit = response.data.meta.numItemsPerPage;
                 this.synopsis = null;
 
                 return true;
@@ -49,7 +50,7 @@ export const useSynopsisStore = defineStore('synopsis', {
 
         async getSynopsis(params) {
             try {
-                const url = Routing.generate("api_synopsis_show", params);
+                const url = Routing.generate("api_synopsis_show", {id: params.id});
                 const response = await axios.get(url);
                 this.synopsis = response.data;
                 return true;

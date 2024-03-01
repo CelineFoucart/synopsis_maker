@@ -10,6 +10,7 @@ use App\Entity\Synopsis;
 use App\Repository\CategoryRepository;
 use App\Repository\SynopsisRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -41,12 +42,17 @@ final class SynopsisController extends AbstractApiController
         $params = [
             'page' => $request->query->getInt('page', 1),
             'query' => $request->query->get('query', null),
-            'limit' => $request->query->get('limit', 10)
+            'limit' => $request->query->get('limit', 10),
+            'categories' => [],
         ];
+
+        $categoriesString = $request->query->get('categories', '-');
+        if ($categoriesString !== '-') {
+            $params['categories'] = explode('-', $categoriesString);
+        }
 
         $pagination = $synopsisRepository->findPaginated($user, $params);
         $meta = $pagination->getPaginationData();
-        $meta['limit'] = $params['limit'];
 
         return $this->json(['synopses' => $pagination->getItems(), 'meta' => $meta], Response::HTTP_OK, [], ['groups' => ['index']]);
 
@@ -85,11 +91,17 @@ final class SynopsisController extends AbstractApiController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $synopsis->setSlug((string) $this->slugger->slug($synopsis->getTitle()))->setCreatedAt(new \DateTimeImmutable());
+        $synopsis->setSlug(strtolower((string) $this->slugger->slug($synopsis->getTitle())))->setCreatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
         return $this->json($synopsis, Response::HTTP_CREATED, [], ['groups' => 'index']);
+    }
+
+    #[Route('/{id}', name: 'api_synopsis_show', methods:["GET"])]
+    public function showAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis): JsonResponse
+    {
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 }

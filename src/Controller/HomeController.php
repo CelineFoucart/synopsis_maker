@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +14,11 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig');
+        if ($this->getUser() instanceof User) {
+            return $this->render('home/synopsis.html.twig');
+        }
+
+        return $this->render('home/index_anonymous.html.twig');
     }
 
     #[Route('/terms', name: 'app_terms')]

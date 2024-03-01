@@ -1,5 +1,5 @@
 <header class="main-header-public">
-	<nav class="navbar navbar-expand-md navbar-dark">
+	<nav class="navbar navbar-expand-md">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="{{ path('app_home') }}">{{app_name}}</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,42 +7,31 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav me-auto mb-2 mb-md-0">
-					<li class="nav-item">
-						<a class="nav-link {{ app.request.attributes.get('_route') == 'app_synopsis' ? 'active' : '' }}" href="{{ path('app_synopsis') }}">
-                            Synopsis
-                        </a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link {{ app.request.attributes.get('_route') == 'app_gallery' ? 'active' : '' }}" href="{{ path('app_gallery') }}">
-                            Galerie
-                        </a>
-					</li>
-				</ul>
-                <div class="ms-auto">
-                    <span class="nav-item">
-                        {% if is_granted('IS_AUTHENTICATED_FULLY')  %}
-                            <a class="btn btn-outline-light" href="{{ path('app_profile') }}">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY')  %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ app.request.attributes.get('_route') == 'app_profile' ? 'active' : '' }}" href="{{ path('app_profile') }}">
                                 Compte
                             </a>
-                            <a class="btn btn-danger" href="{{ path('app_logout') }}">
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">
                                 Déconnexion
                             </a>
-                        {% else %}
-                            <a class="btn btn-outline-light" href="{{ path('app_login') }}">
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}" href="{{ path('app_login') }}">
                                 Connexion
                             </a>
-                            <a class="btn btn-success" href="{{ path('app_register') }}">
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ app.request.attributes.get('_route') == 'app_register' ? 'active' : '' }}" href="{{ path('app_register') }}">
                                 Inscription
                             </a>
-                        {% endif %}
-                    </span>
-                </div>
+                        </li>
+                    {% endif %}
+				</ul>
 			</div>
 		</div>
 	</nav>
-    <section class="main-header-title">
-        {% block header %}
-            <h1 class="display-4 text-center">Concepteur de scénario de roman et de jeu de rôle | {{ app_name }}</h1>
-        {% endblock %}
-    </section>
 </header>

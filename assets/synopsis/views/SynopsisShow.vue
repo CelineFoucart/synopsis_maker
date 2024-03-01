@@ -1,39 +1,31 @@
 <template>
-    <div>
-        <article class="alert alert-danger" v-if="error">
-            <h2 class="h5">Erreur 404</h2>
-            Ce synopsis n'existe pas.
-        </article>
-        <article v-else>
-            <header>
-                <div class="row">
-                    <div class="col-10">
-                        <h2>Titre</h2>
-                    </div>
-                    <div class="col-2 text-end">
-                        <div class="btn-group">
-                            <router-link :to="{ name: 'SynopsisIndex' }" class="btn btn-sm btn-secondary" v-tooltip="'Liste'">
-                                <i class="fa-solid fa-arrow-left"></i>
-                            </router-link>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        </article>
-    </div>
+    <article :class="{'alert alert-danger': error}">
+        <h1 class="h5" v-if="error">Erreur 404</h1>
+        <p v-if="error">Cette page n'existe pas.</p>
+        <Header v-if="!loading && synopsisStore.synopsis !== null" :title="synopsisStore.synopsis.title" :id="synopsisStore.synopsis.id" />
+    </article>
+    <Loading v-if="loading"></Loading>
 </template>
 
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
+import Loading from '&utils/Loading.vue';
+import Header from '&synopsis/components/synopsis_show/Header.vue';
 
 export default {
     name: 'SynopsisShow',
 
+    components: {
+        Loading,
+        Header
+    },
+
     data() {
         return {
-            error: false
+            error: false,
+            loading: false
         }
     },
 
@@ -46,10 +38,13 @@ export default {
             return;
         }
 
-        this.error = await this.synopsisStore.getSynopsis(this.$route.params);
-        if (this.error) {
+        this.loading = true;
+        this.status = await this.synopsisStore.getSynopsis(this.$route.params);
+        if (!this.status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
+            this.error = true;
         }
+        this.loading = false;
     },
 }
 </script>

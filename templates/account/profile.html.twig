@@ -3,26 +3,40 @@
 {% block title %}Profil | {{ parent() }} {% endblock %}
 
 {% block body %}
-<div class="row my-5 align-items-center justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message|trans() }}
-            </div>
-        {% endfor %}
-        <article class="card">
-            <header class="card-header">
-                <h2 class="card-title h4 mb-0">Modifier mes informations</h2>
+<section class="container-fluid bg-dark text-white jumbotron"> 
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <header>
+                <h1 class="display-5 fw-bold text-center lh-2 mb-3">Gérer mon profil</h1>
             </header>
-            {{ form_start(form) }}
-                <div class="card-body">
-                    {{ form_widget(form) }}
+            <p class="lead text-center mt-5">
+                Sur cette page, vous pourrez modifier vos informations personnelles à l'exception de votre nom d'utilisateur.
+            </p>
+        </div>
+    </div>
+</section>
+<div class="container-fluid"> 
+    <div class="row my-5 align-items-center justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message|trans() }}
                 </div>
-                <footer class="card-footer">
-                    <button type="submit" class="btn btn-primary w-100">Sauvegarder</button>
-                </footer>
-            {{ form_end(form) }}
-        </article>
+            {% endfor %}
+            <article class="card">
+                <header class="card-header">
+                    <h2 class="card-title h4 mb-0">Modifier mes informations</h2>
+                </header>
+                {{ form_start(form) }}
+                    <div class="card-body">
+                        {{ form_widget(form) }}
+                    </div>
+                    <footer class="card-footer">
+                        <button type="submit" class="btn btn-primary w-100">Sauvegarder</button>
+                    </footer>
+                {{ form_end(form) }}
+            </article>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -3,43 +3,46 @@
 {% block title %}Connexion | {{ parent() }}{% endblock %}
 
 {% block body %}
-<div class="row my-5 align-items-center justify-content-center">
-    <article class="col-md-6 col-lg-3 rounded p-3 border shadow-sm bg-light">
-        <header>
-            <h2 class="h1 mb-5 text-center">Connexion</h2>
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-        </header>
+{% include 'fragments/_jumbotron.html.twig' %}
+<div class="container-fluid"> 
+    <div class="row my-5 align-items-center justify-content-center">
+        <article class="col-md-6 col-lg-3 rounded p-3 border shadow-sm bg-light">
+            <header>
+                <h2 class="h1 mb-5 text-center">Connexion</h2>
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+            </header>
 
-        <form method="post">
-            <div class="mb-4">
-                <label for="inputUsername">Pseudo</label>
-                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
-            </div>
-
-            <div class="mb-2">
-                <label for="inputPassword">Mot de passe</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-                <div class="text-end">
-                    <a href="">Mot de passe oublié ?</a>
+            <form method="post">
+                <div class="mb-4">
+                    <label for="inputUsername">Pseudo</label>
+                    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
                 </div>
-            </div>
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <div class="form-check form-switch mb-4">
-                <input class="form-check-input" name="_remember_me" type="checkbox" role="switch" id="remember_me" checked>
-                <label class="form-check-label" for="remember_me">Se souvenir de moi</label>
-            </div>
+                <div class="mb-2">
+                    <label for="inputPassword">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                    <div class="text-end">
+                        <a href="">Mot de passe oublié ?</a>
+                    </div>
+                </div>
 
-            <button class="btn btn-primary w-100 mb-4" type="submit">
-                se connecter
-            </button>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" name="_remember_me" type="checkbox" role="switch" id="remember_me" checked>
+                    <label class="form-check-label" for="remember_me">Se souvenir de moi</label>
+                </div>
 
-            <p class="text-center">
-                <a href="{{ path('app_register') }}">Se créer un compte</a>
-            </p>
-        </form>
-    </article>
+                <button class="btn btn-primary w-100 mb-4" type="submit">
+                    se connecter
+                </button>
+
+                <p class="text-center">
+                    <a href="{{ path('app_register') }}">Se créer un compte</a>
+                </p>
+            </form>
+        </article>
+    </div>
 </div>
 {% endblock %}

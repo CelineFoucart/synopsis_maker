@@ -1,5 +1,8 @@
 <template>
     <div class="row">
+        <div class="col-12">
+            <h1 class="display-5 mb-3">Mes synopsis</h1>
+        </div>
         <div class="col-md-8">
             <div class="d-flex justify-content between flex-column h-100">
                 <div class="text-end">

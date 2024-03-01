@@ -1,14 +1,9 @@
 <template>
     <article>
-        <h2 class="h5 mb-2 border-bottom pb-2 d-flex justify-content-between align-items-center">
-            <span>Catégories</span>
-            <button type="button" class="btn btn-sm btn-success" v-tooltip="'Ajouter'" @click="appendCategory">
-                <i class="fa-solid fa-plus"></i>
-            </button>
-        </h2>
+        <h1 class="display-5 mb-5">Catégories de synopsis</h1>
 
-        <div class="row justify-content-end">
-            <div class="col-md-6">
+        <div class="row align-items-center">
+            <div class="col-8">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <div class="input-group">
                         <span class="input-group-text">
@@ -27,6 +22,11 @@
                         <input type="text" class="form-control w-auto input-sm" id="searchValue" v-model="searchValue" />
                     </div>
                 </div>
+            </div>
+            <div class="col-4 text-end">
+                <button type="button" class="btn btn-success btn-sm" v-tooltip="'Ajouter'" @click="appendCategory">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
             </div>
         </div>
 

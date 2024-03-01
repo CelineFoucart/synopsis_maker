@@ -14,7 +14,7 @@ const routes =  [
                 component: SynopsisIndex,
             },
             {
-                path: ':slug-:id',
+                path: ':id-:slug',
                 component: SynopsisShow,
                 name: "SynopsisShow",
             },

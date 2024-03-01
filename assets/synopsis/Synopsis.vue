@@ -1,9 +1,7 @@
 <template>
-    <div class="card position-relative m-5">
-        <div class="card-header pb-0">
-            <Navigation></Navigation>
-        </div>
-        <div class="card-body">
+    <div>
+        <Navigation></Navigation>
+        <div class="container-fluid my-4">
             <router-view></router-view>
         </div>
     </div>

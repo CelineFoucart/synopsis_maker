@@ -29,9 +29,11 @@ class SynopsisRepository extends ServiceEntityRepository
         $page = isset($params['page']) ? (int)$params['page'] : 1;
         $limit = isset($params['limit']) ? (int)$params['limit'] : 10;
         $search = isset($params['query']) ? $params['query'] : null;
+        $categories = isset($params['categories']) ? $params['categories'] : [];
 
         $query = $this->createQueryBuilder('s')
             ->leftJoin('s.author', 'u')
+            ->leftJoin('s.categories', 'c')->addSelect('c')
             ->andWhere('u.id = :id')
             ->setParameter('id', $user->getId())
         ;
@@ -41,18 +43,25 @@ class SynopsisRepository extends ServiceEntityRepository
             $query->andWhere('s.title LIKE :search')->setParameter('search', '%' . $search . '%');
         }
 
+        if (!empty($categories)) {
+            $query->andWhere('c.id IN (:categories)')->setParameter('categories', $categories);
+        }
+
         $query->getQuery();
 
         return $this->paginator->paginate($query, $page, $limit);
     }
 
-//    public function findOneBySlug(string $slug): ?Synopsis
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.slug = :slug')
-//            ->setParameter('slug', $slug)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneById(int $id): ?Synopsis
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.categories', 'c')->addSelect('c')
+            ->leftJoin('s.episodes', 'e')->addSelect('e')
+            ->leftJoin('s.chapters', 'p')->addSelect('p')
+            ->andWhere('s.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

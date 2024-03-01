@@ -14,9 +14,7 @@
         {% include "fragments/_navbar.html.twig" %}
 
         <main class="flex-shrink-0">
-            <div class="container-fluid">
-                {% block body %}{% endblock %}
-            </div>
+            {% block body %}{% endblock %}
         </main>
 
         {% include "fragments/_footer.html.twig" %}
