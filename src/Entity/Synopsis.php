@@ -64,6 +64,14 @@ class Synopsis
     #[Groups(['index'])]
     private Collection $chapters;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['index'])]
+    private ?bool $archived = null;
+
+    #[ORM\Column(length: 1500, nullable: true)]
+    #[Groups(['index'])]
+    private ?string $legend = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -253,5 +261,29 @@ class Synopsis
             'delete' => ['href' => '/api/synopsis/'.$this->getId()],
             'update' => ['href' => '/api/synopsis/'.$this->getId()],
         ];
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(?bool $archived): static
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    public function getLegend(): ?string
+    {
+        return $this->legend;
+    }
+
+    public function setLegend(?string $legend): static
+    {
+        $this->legend = $legend;
+
+        return $this;
     }
 }

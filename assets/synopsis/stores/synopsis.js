@@ -71,13 +71,25 @@ export const useSynopsisStore = defineStore('synopsis', {
             }
         },
 
+        async putSynopsisLegend(id, data) {
+            try {
+                const url = Routing.generate("api_synopsis_legend_edit", {id: id});
+                await axios.put(url, data);
+                if (this.synopsis) {
+                    this.synopsis.legend = data.legend;
+                }
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
         async deleteSynopsis(id) {
             try {
                 const url = Routing.generate("api_synopsis_delete", {id: id});
                 await axios.delete(url);
                 return true;
             } catch (error) {
-                console.log(error)
                 return false;
             }
         }
