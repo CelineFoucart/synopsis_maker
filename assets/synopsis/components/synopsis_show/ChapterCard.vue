@@ -2,12 +2,11 @@
     <article class="card shadow-sm bg-light" :style="{'border-color': chapter.color ? chapter.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
             <header class="row">
-                <div class="col-9 d-flex gap-1">
-                    <i class="fa-solid fa-circle fa-fw h5 pt-1" :style="{color: chapter.color ? chapter.color : '#000' }"></i>
-                    <div>
-                        <h2 class="h5">{{ chapter.title }}</h2>
-                        <p class="small mb-0" style="white-space: pre-wrap;" v-if="chapter.description && showComment">{{ chapter.description }}</p>
-                    </div>
+                <div class="col-9">
+                    <h2 class="h5">
+                        <i class="fa-solid fa-circle fa-fw" :style="{color: chapter.color ? chapter.color : '#000' }"></i>
+                        {{ chapter.title }}
+                    </h2>
                 </div>
                 <div class="col-3 text-end">
                     <span class="button" @click.prevent="showComment = !showComment">
@@ -22,6 +21,9 @@
                     <i class="fa-solid fa-file-circle-plus button fa-fw me-1" v-tooltip="'Ajouter un épisode'" @click="$emit('on-append', chapter)"></i>
                     <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
+                </div>
+                <div class="col-12" v-if="chapter.description && showComment">
+                    <p class="small mb-0" style="white-space: pre-wrap;">{{ chapter.description }}</p>
                 </div>
             </header>
             <div class="row g-2" v-if="isOpen">
