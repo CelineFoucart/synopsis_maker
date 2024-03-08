@@ -150,7 +150,7 @@ export default {
             if (!status) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
             } else {
-                this.$router.push('/synopsis/' + this.synopsisStore.synopsis.slug + '-' + this.synopsisStore.synopsis.id);
+                this.$router.push('/synopsis/' + this.synopsisStore.synopsis.id + '-' + this.synopsisStore.synopsis.slug);
             }
         },
 

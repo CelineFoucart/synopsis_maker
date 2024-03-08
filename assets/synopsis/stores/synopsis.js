@@ -69,6 +69,17 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async deleteSynopsis(id) {
+            try {
+                const url = Routing.generate("api_synopsis_delete", {id: id});
+                await axios.delete(url);
+                return true;
+            } catch (error) {
+                console.log(error)
+                return false;
+            }
         }
     }
 })

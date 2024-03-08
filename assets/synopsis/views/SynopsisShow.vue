@@ -1,7 +1,7 @@
 <template>
     <Error v-if="error"></Error>
     <article v-if="!loading && synopsisStore.synopsis !== null">
-        <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
+        <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
         <p class="lead mt-3">{{ synopsisStore.synopsis.pitch }}</p>
         <Description :data="synopsisStore.synopsis.description" @on-save="onSave"></Description>
         <MetaData :element="synopsisStore.synopsis"></MetaData>
@@ -74,6 +74,18 @@ export default {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
             }
             this.partialLoading = false;
+        },
+
+        async deleteSynopsis() {
+            this.loading = true;
+            const status = await this.synopsisStore.deleteSynopsis(this.synopsisStore.synopsis.id);
+            if (status) {
+                createToastify('Le synopsis a été supprimé.', 'success');
+                this.$router.push('/synopsis');
+            } else {
+                createToastify('La suppression a échoué.', 'error');
+            }
+            this.loading = false;
         }
     },
 }

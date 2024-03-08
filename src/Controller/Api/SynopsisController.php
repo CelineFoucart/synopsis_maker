@@ -119,4 +119,17 @@ final class SynopsisController extends AbstractApiController
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
+
+    #[Route('/{id}', name: 'api_synopsis_delete', methods:["DELETE"])]
+    public function deleteAction(Synopsis $synopsis, #[CurrentUser()] User $user): JsonResponse
+    {
+        if ($user->getId() !== $synopsis->getAuthor()->getId()) {
+            $this->createAccessDeniedException();
+        }
+
+        $this->entityManager->remove($synopsis);
+        $this->entityManager->flush();
+
+        return $this->json('', Response::HTTP_NO_CONTENT);
+    }
 }
