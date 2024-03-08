@@ -34,12 +34,13 @@
 
             <div class="row g-3 pt-3">
                 <div class="col-12" v-for="chapter in synopsisStore.synopsis.chapters" :key="chapter.id">
-                    <ChapterCard :chapter="chapter" @on-edit="onEditChapter"></ChapterCard>
+                    <ChapterCard :chapter="chapter" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
                 </div>
             </div>
         </article>
         <Loading v-if="loading || partialLoading"></Loading>
         <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
+        <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
     </div>
 </template>
 
@@ -53,7 +54,7 @@ import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
 import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
-
+import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
 
 export default {
     name: 'SynopsisEpisodes',
@@ -63,7 +64,8 @@ export default {
         HeaderSynopsis,
         Error,
         ChapterCard,
-        ChapterModal
+        ChapterModal,
+        EpisodeModal
     },
 
     data() {
@@ -73,7 +75,9 @@ export default {
             loading: false,
             partialLoading: false,
             chapterToEdit: { title: null, description: null, color: null, id: null },
-            chapterModal: false
+            episodeToEdit: {},
+            chapterModal: false,
+            episodeModal: false
         }
     },
 
@@ -120,6 +124,11 @@ export default {
             this.chapterToEdit = chapter;
             this.chapterModal = true;            
         },
+
+        onAppendEpisode(chapter = null) {
+            this.episodeToEdit = { id: null, title: null, description: null, color: null, chapter: chapter };
+            this.episodeModal = true;
+        }
     },
 }
 </script>

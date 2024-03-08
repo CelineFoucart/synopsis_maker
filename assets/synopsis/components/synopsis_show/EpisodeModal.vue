@@ -5,7 +5,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title h5" id="chapterModalConfigLabel">Chapitre</h3>
+                        <h3 class="modal-title h5" id="chapterModalConfigLabel">Episode</h3>
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body">
@@ -17,7 +17,6 @@
                                     Ce champ est obligatoire et doit faire entre 2 et 255 caractères.
                                 </div>
                             </div>
-                            
                             <div class="mb-3">
                                 <label for="color" class="form-label">Couleur</label>
                                 <input type="color" class="form-control form-control-color" id="color" v-model="color" :class="{ 'is-invalid': v$.color.$errors.length }">
@@ -34,6 +33,11 @@
                             <div class="invalid-feedback">
                                 Ce champ doit faire entre 3 et 1500 caractères.
                             </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Contenu</label>
+                            <textarea class="form-control" id="content" rows="3" v-model="content"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -61,10 +65,10 @@ import { required, maxLength, minLength  } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core'
 
 export default {
-    name: 'ChapterModal',
+    name: 'EpisodeModal',
 
     props: {
-        chapter: Object,
+        episode: Object,
     },
 
     data() {
@@ -72,6 +76,7 @@ export default {
             title: null,
             description: null,
             color: null,
+            content: null,
             v$: useVuelidate(),
             loading: false,
         }
@@ -90,9 +95,10 @@ export default {
     },
 
     mounted () {
-        this.title = this.chapter.title;
-        this.description = this.chapter.description;
-        this.color = this.chapter.color;
+        this.title = this.episode.title;
+        this.description = this.episode.description;
+        this.color = this.episode.color;
+        this.content = this.episode.content;
     },
 
     methods: {
@@ -111,14 +117,15 @@ export default {
             }
 
             const data = {
-                title: this.title, description: this.description, color: this.color
+                title: this.title, description: this.description, color: this.color, content: this.content
             };
 
             let status;
-            if (this.chapter.id === null) {
-                status = await this.synopsisStore.postChapter(data);
+            if (this.episode.id === null) {
+                const chapterId = this.episode.chapter ? this.episode.chapter.id : 0;
+                status = await this.synopsisStore.postEpisode(data, chapterId);
             } else {
-                status = await this.synopsisStore.putChapter(data, this.chapter.id);
+                status = await this.synopsisStore.putEpisode(data, this.episode.id);
             }
 
             if (!status) {

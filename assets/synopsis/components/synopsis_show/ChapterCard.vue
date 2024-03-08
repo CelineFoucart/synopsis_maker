@@ -1,9 +1,9 @@
 <template>
-    <article class="card shadow-sm bg-light" :style="{'border-color': this.chapter.color ? this.chapter.color : 'rgba(0, 0, 0, 0.176' }">
+    <article class="card shadow-sm bg-light" :style="{'border-color': chapter.color ? chapter.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
             <header class="row">
                 <div class="col-9 d-flex gap-1">
-                    <i class="fa-solid fa-circle fa-fw h5 pt-1" :style="{color: this.chapter.color ? this.chapter.color : '#000' }"></i>
+                    <i class="fa-solid fa-circle fa-fw h5 pt-1" :style="{color: chapter.color ? chapter.color : '#000' }"></i>
                     <div>
                         <h2 class="h5">{{ chapter.title }}</h2>
                         <p class="small mb-0" style="white-space: pre-wrap;" v-if="chapter.description && showComment">{{ chapter.description }}</p>
@@ -19,11 +19,16 @@
                         <i class="fa-solid fa-folder-open fa-fw me-1" v-if="!isOpen" v-tooltip="'Ouvrir'"></i>
                         <i class="fa-solid fa-folder-closed fa-fw me-1" v-if="isOpen" v-tooltip="'Fermer'"></i>
                     </span>
-                    <i class="fa-solid fa-file-circle-plus button fa-fw me-1" v-tooltip="'Ajouter un épisode'"></i>
+                    <i class="fa-solid fa-file-circle-plus button fa-fw me-1" v-tooltip="'Ajouter un épisode'" @click="$emit('on-append', chapter)"></i>
                     <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
             </header>
+            <div class="row g-2" v-if="isOpen">
+                <div class="col-md-4 col-lg-3" v-for="episode in chapter.episodes">
+                    <EpisodeCard :episode="episode"></EpisodeCard>
+                </div>
+            </div>
         </div>
     </article>
     <Delete :title="chapter.title" :loading="loading" v-if="deleteModal" @on-confirm="onDelete" @on-cancel="deleteModal = false"></Delete>
@@ -33,15 +38,17 @@
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import Delete from '&utils/Delete.vue';
+import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
 
 export default {
     name: 'ChapterCard',
 
     components: {
         Delete,
+        EpisodeCard
     },
 
-    emits: ['on-edit'],
+    emits: ['on-edit', 'on-append'],
 
     props: {
         chapter: Object,

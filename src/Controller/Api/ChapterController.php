@@ -35,7 +35,7 @@ class ChapterController extends AbstractApiController
 
         /** @var Chapter */
         $chapter = $this->serializer->deserialize($request->getContent(), Chapter::class, 'json', ['groups' => ['index']]);
-        $errors = $this->validate($synopsis);
+        $errors = $this->validate($chapter);
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
@@ -45,8 +45,9 @@ class ChapterController extends AbstractApiController
         $chapter->setSynopsis($synopsis)->setPosition($position);
         $this->entityManager->persist($chapter);
         $this->entityManager->flush();
+        $this->entityManager->refresh($synopsis);
 
-        return $this->json($chapter, Response::HTTP_CREATED, [], ['groups' => ['index']]);
+        return $this->json($synopsis, Response::HTTP_CREATED, [], ['groups' => ['index']]);
     }
 
     #[Route('/chapter/{chapterId}', name: 'api_synopsis_chapter_edit', methods:['PUT'])]
@@ -64,14 +65,15 @@ class ChapterController extends AbstractApiController
             ['groups' => ['index'], AbstractNormalizer::OBJECT_TO_POPULATE => $chapter
         ]);
 
-        $errors = $this->validate($synopsis);
+        $errors = $this->validate($chapter);
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
         $this->entityManager->persist($chapter);
         $this->entityManager->flush();
+        $this->entityManager->refresh($synopsis);
 
-        return $this->json($chapter, Response::HTTP_OK, [], ['groups' => ['index']]);
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
     #[Route('/chapter/{chapterId}', name: 'api_synopsis_chapter_delete', methods:['DELETE'])]

@@ -46,11 +46,11 @@ class Episode
 
     #[ORM\Column(nullable: true)]
     #[Groups(['index'])]
-    private ?bool $valid = null;
+    private ?bool $valid = false;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['index'])]
-    private ?bool $archived = null;
+    private ?bool $archived = false;
 
     #[ORM\ManyToOne(inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]

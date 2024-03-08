@@ -16,3 +16,7 @@ label.required::after {
     display: inline-block;
     margin-left: 5px;
 }
+
+.form-control-color {
+    width: 4rem;
+}
