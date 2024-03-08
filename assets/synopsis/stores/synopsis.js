@@ -92,6 +92,49 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async postChapter(data) {
+            try {
+                const url = Routing.generate("api_synopsis_chapter_create", {id: this.synopsis.id});
+                const response = await axios.post(url, data);
+                this.synopsis.chapters.push(response.data);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async putChapter(data, id) {
+            try {
+                const url = Routing.generate("api_synopsis_chapter_edit", {id: this.synopsis.id, chapterId: id});
+                const response = await axios.put(url, data);
+
+                const index = this.synopsis.chapters.findIndex(element => element.id === id);
+                if (index !== -1) {
+                    this.synopsis.chapters[index] = response.data;
+                }
+
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async deleteChapter(id) {
+            try {
+                const url = Routing.generate("api_synopsis_chapter_delete", {id: this.synopsis.id, chapterId: id});
+                await axios.delete(url);
+
+                const index = this.synopsis.chapters.findIndex(element => element.id === id);
+                if (index !== -1) {
+                    this.synopsis.chapters.splice(index, 1);
+                }
+
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

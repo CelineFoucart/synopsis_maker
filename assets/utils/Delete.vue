@@ -15,8 +15,14 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" @click.prevent="closeModal">Annuler</button>
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent="accept">Confirmer</button>
+                        <button type="button" class="btn btn-secondary btn-sm" @click.prevent="closeModal">
+                            <i class="fa-solid fa-xmark fa-fw"></i> Annuler
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent="accept">
+                            <i class="fa-solid fa-spinner fa-spin fa-fw" v-if="loading"></i>
+                            <i class="fa-solid fa-trash fa-fw" v-else></i>
+                            Confirmer
+                        </button>
                     </div>
                 </div>
             </div>
@@ -30,6 +36,10 @@
 
         props: {
             title: String,
+            loading: {
+                type: Boolean,
+                default: false
+            }
         },
 
         methods: {

@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\Synopsis;
 use App\Service\SynopsisHandler;
 use App\Repository\SynopsisRepository;
+use App\Security\Voter\SynopsisVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,22 +88,18 @@ final class SynopsisController extends AbstractApiController
     #[Route('/{id}', name: 'api_synopsis_show', methods:["GET"])]
     public function showAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis): JsonResponse
     {
+        $this->denyAccessUnlessGranted(SynopsisVoter::VIEW, $synopsis);
+
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
     #[Route('/{id}', name: 'api_synopsis_edit', methods:["PUT"])]
-    public function editAction(
-        #[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, 
-        #[CurrentUser()] User $user, 
-        Request $request,
-        SynopsisHandler $handler
-    ): JsonResponse {
-        if ($user->getId() !== $synopsis->getAuthor()->getId()) {
-            $this->createAccessDeniedException();
-        }
+    public function editAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, Request $request, SynopsisHandler $handler): JsonResponse 
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
 
         $data = json_decode($request->getContent(), true);
-        $errors = $handler->setSynopsis($synopsis)->edit($data, $user)->getErrors();
+        $errors = $handler->setSynopsis($synopsis)->edit($data, $this->getUser())->getErrors();
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
@@ -121,11 +118,9 @@ final class SynopsisController extends AbstractApiController
     }
 
     #[Route('/{id}/legend', name: 'api_synopsis_legend_edit', methods:["PUT"])]
-    public function legentEditAction(Synopsis $synopsis, #[CurrentUser()] User $user, Request $request): JsonResponse
+    public function legentEditAction(Synopsis $synopsis, Request $request): JsonResponse
     {
-        if ($user->getId() !== $synopsis->getAuthor()->getId()) {
-            $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
 
         $data = json_decode($request->getContent(), true);
         if (!isset($data['legend'])) {
@@ -140,12 +135,9 @@ final class SynopsisController extends AbstractApiController
     }
 
     #[Route('/{id}', name: 'api_synopsis_delete', methods:["DELETE"])]
-    public function deleteAction(Synopsis $synopsis, #[CurrentUser()] User $user): JsonResponse
+    public function deleteAction(Synopsis $synopsis): JsonResponse
     {
-        if ($user->getId() !== $synopsis->getAuthor()->getId()) {
-            $this->createAccessDeniedException();
-        }
-
+        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
         $this->entityManager->remove($synopsis);
         $this->entityManager->flush();
 

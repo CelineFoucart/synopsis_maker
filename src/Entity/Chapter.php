@@ -37,6 +37,10 @@ class Chapter
     #[Groups(['index'])]
     private Collection $episodes;
 
+    #[ORM\Column(length: 30, nullable: true)]
+    #[Groups(['index'])]
+    private ?string $color = null;
+
     public function __construct()
     {
         $this->episodes = new ArrayCollection();
@@ -121,6 +125,18 @@ class Chapter
                 $episode->setChapter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
 
         return $this;
     }

@@ -52,7 +52,6 @@
 </template>
 
 <script>
-
 import { mapStores } from "pinia";
 import { useCategoryStore } from '&synopsis/stores/category.js';
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';

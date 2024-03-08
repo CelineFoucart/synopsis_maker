@@ -32,7 +32,7 @@
             </div>
         </div>
         <AddSynopsisModal :synopsis="synopsis" v-if="editInfoModal" @on-close="editInfoModal = false"></AddSynopsisModal>
-        <Delete :title="synopsis.title" v-if="deleteModal" @on-confirm="deleteSynopsis" @on-close="deleteModal = false"></Delete>
+        <Delete :title="synopsis.title" v-if="deleteModal" @on-confirm="deleteSynopsis" @on-cancel="deleteModal = false"></Delete>
     </header>
 </template>
 
