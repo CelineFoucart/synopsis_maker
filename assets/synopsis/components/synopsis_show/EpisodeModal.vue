@@ -9,6 +9,9 @@
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body">
+                        <h4 class="h5 text-center mb-3" v-if="episode.chapter !== null">
+                            Episode inclus dans <span class="fw-bold">{{ episode.chapter.title }}</span>
+                        </h4>
                         <div class="d-flex gap-2">
                             <div class="mb-3 flex-fill">
                                 <label for="title" class="form-label required">Titre</label>
@@ -18,11 +21,8 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="color" class="form-label">Couleur</label>
-                                <input type="color" class="form-control form-control-color" id="color" v-model="color" :class="{ 'is-invalid': v$.color.$errors.length }">
-                                <div class="invalid-feedback">
-                                    Ce champ est obligatoire et doit faire entre 2 et 30 caractères.
-                                </div>
+                                <div class="form-label">Couleur</div>
+                                <color-picker format="hex" v-model:pureColor="color" disable-alpha lang="En"/>
                             </div>
                         </div>
 
@@ -62,10 +62,16 @@ import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
 import { required, maxLength, minLength  } from '@vuelidate/validators';
-import { useVuelidate } from '@vuelidate/core'
+import { useVuelidate } from '@vuelidate/core';
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 export default {
     name: 'EpisodeModal',
+
+    components: {
+        ColorPicker,
+    },
 
     props: {
         episode: Object,
@@ -90,7 +96,6 @@ export default {
         return {
             title: { required, maxLength: maxLength(255), minLength: minLength(2) },
             description: { maxLength: maxLength(1500), minLength: minLength(3) },
-            color: { maxLength: maxLength(30), minLength: minLength(3) },
         }
     },
 

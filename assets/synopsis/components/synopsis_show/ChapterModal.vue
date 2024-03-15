@@ -19,11 +19,8 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="color" class="form-label">Couleur</label>
-                                <input type="color" class="form-control form-control-color" id="color" v-model="color" :class="{ 'is-invalid': v$.color.$errors.length }">
-                                <div class="invalid-feedback">
-                                    Ce champ est obligatoire et doit faire entre 2 et 30 caractères.
-                                </div>
+                                <div for="color" class="form-label">Couleur</div>
+                                <color-picker format="hex" v-model:pureColor="color" disable-alpha lang="En"/>
                             </div>
                         </div>
 
@@ -59,9 +56,15 @@ import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
 import { required, maxLength, minLength  } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core'
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 export default {
     name: 'ChapterModal',
+
+    components: {
+        ColorPicker,
+    },
 
     props: {
         chapter: Object,
@@ -85,7 +88,6 @@ export default {
         return {
             title: { required, maxLength: maxLength(255), minLength: minLength(2) },
             description: { maxLength: maxLength(1500), minLength: minLength(3) },
-            color: { maxLength: maxLength(30), minLength: minLength(3) },
         }
     },
 

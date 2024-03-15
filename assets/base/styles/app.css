@@ -17,6 +17,9 @@ label.required::after {
     margin-left: 5px;
 }
 
-.form-control-color {
-    width: 4rem;
+.vc-color-wrap {
+    width: 4rem !important;
+    height: calc(1.5em + 0.75rem + 2px) !important;
+    border-radius: 0.375rem;
+    margin-right: 0 !important;
 }

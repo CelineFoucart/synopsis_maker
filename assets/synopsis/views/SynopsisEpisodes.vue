@@ -20,7 +20,7 @@
                             <button class="btn btn-sm btn-dark" v-tooltip="'Ajouter un chapitre'" @click="openChapterModal">
                                 <i class="fa-solid fa-folder-plus fa-fw"></i>
                             </button>
-                            <button class="btn btn-sm btn-dark" v-tooltip="'Ajouter un épisode'">
+                            <button class="btn btn-sm btn-dark" v-tooltip="'Ajouter un épisode'" @click="onAppendEpisode(null)">
                                 <i class="fa-solid fa-file-circle-plus fa-fw"></i>
                             </button>
                         </div>
