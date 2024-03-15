@@ -87,7 +87,7 @@ export default {
             loading: false,
             partialLoading: false,
             openAll: true,
-            chapterToEdit: { title: null, description: null, color: null, id: null },
+            chapterToEdit: { title: null, description: null, color: null, content: null, id: null },
             episodeToEdit: {},
             chapterModal: false,
             episodeModal: false
@@ -163,7 +163,7 @@ export default {
         },
 
         onAppendEpisode(chapter = null) {
-            this.episodeToEdit = { id: null, title: null, description: null, color: null, chapter: chapter };
+            this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, chapter: chapter };
             this.episodeModal = true;
         }
     },

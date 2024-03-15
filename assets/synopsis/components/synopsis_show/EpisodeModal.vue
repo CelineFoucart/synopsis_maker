@@ -2,7 +2,7 @@
     <div>
         <div class="modal-backdrop fade show"></div>
         <div class="modal fade show" id="chapterModal" tabindex="-1" aria-labelledby="chapterModalLabel">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title h5" id="chapterModalConfigLabel">Episode</h3>
@@ -36,8 +36,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="content" class="form-label">Contenu</label>
-                            <textarea class="form-control" id="content" rows="3" v-model="content"></textarea>
+                            <label for="content" class="form-label mb-0">Contenu</label>
+                            <Description v-model:data="content" placeholder="Décrivez les événements qui se déroulent dans cette épisode" :saveButton="false"></Description>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -65,12 +65,14 @@ import { required, maxLength, minLength  } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
+import Description from '&synopsis/components/synopsis_show/Description.vue';
 
 export default {
     name: 'EpisodeModal',
 
     components: {
         ColorPicker,
+        Description
     },
 
     props: {
@@ -147,5 +149,14 @@ export default {
 #chapterModal {
     display: block;
     z-index: 3000;
+}
+
+.modal::-webkit-scrollbar {
+    display: none;
+}
+
+.modal {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 </style>

@@ -3,7 +3,10 @@
     <article v-if="!loading && synopsisStore.synopsis !== null">
         <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
         <p class="lead mt-3">{{ synopsisStore.synopsis.pitch }}</p>
-        <Description :data="synopsisStore.synopsis.description" @on-save="onSave"></Description>
+        <section>
+            <h2 class="h5">Description</h2>
+            <Description :data="synopsisStore.synopsis.description" @on-save="onSave"></Description>
+        </section>
         <MetaData :element="synopsisStore.synopsis"></MetaData>
     </article>
     <Loading v-if="loading || partialLoading"></Loading>

@@ -2,7 +2,7 @@
     <div>
         <div class="modal-backdrop fade show"></div>
         <div class="modal fade show" id="chapterModal" tabindex="-1" aria-labelledby="chapterModalLabel">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title h5" id="chapterModalConfigLabel">Chapitre</h3>
