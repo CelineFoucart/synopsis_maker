@@ -9,7 +9,7 @@
             <p style="white-space: pre-wrap;">{{ episode.description }}</p>
         </div>
         <footer class="card-footer text-end">
-            <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit', epiode)"></i>
+            <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
             <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
         </footer>
         <Delete :title="episode.title" :loading="loading" v-if="deleteModal" @on-confirm="onDelete" @on-cancel="deleteModal = false"></Delete>
@@ -28,6 +28,8 @@ export default {
     components: {
         Delete,
     },
+
+    emits: ['on-edit-episode'],
 
     props: {
         episode: Object,

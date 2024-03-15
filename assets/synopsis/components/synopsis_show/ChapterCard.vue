@@ -28,7 +28,7 @@
             </header>
             <div class="row g-2" v-if="isOpen">
                 <div class="col-md-4 col-lg-3" v-for="episode in chapter.episodes">
-                    <EpisodeCard :episode="episode"></EpisodeCard>
+                    <EpisodeCard :episode="episode" @on-edit-episode="onEditEpisode"></EpisodeCard>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@ export default {
         EpisodeCard
     },
 
-    emits: ['on-edit', 'on-append'],
+    emits: ['on-edit', 'on-append', 'on-edit-episode'],
 
     props: {
         chapter: Object,
@@ -81,6 +81,11 @@ export default {
             this.loading = true;
             await this.synopsisStore.deleteChapter(this.chapter.id);
             this.loading = false;
+        },
+
+        onEditEpisode(episode) {
+            episode.chapter = this.chapter;
+            this.$emit('on-edit-episode', episode);
         }
     },
 }

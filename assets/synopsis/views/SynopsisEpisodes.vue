@@ -39,12 +39,12 @@
 
             <div class="row g-3 pt-3">
                 <div class="col-12" v-for="chapter in synopsisStore.synopsis.chapters" :key="chapter.id">
-                    <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
+                    <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit-episode="onEditEpisode" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
                 </div>
             </div>
             <div class="row g-3 m-2" v-if="episodesWithNoChapter.length > 0">
                 <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id">
-                    <EpisodeCard :episode="episode"></EpisodeCard>
+                    <EpisodeCard @on-edit-episode="onEditEpisode" :episode="episode"></EpisodeCard>
                 </div>
             </div>
         </article>
@@ -152,6 +152,14 @@ export default {
         onEditChapter(chapter) {
             this.chapterToEdit = chapter;
             this.chapterModal = true;            
+        },
+
+        onEditEpisode(episode) {
+            if (episode.chapter === undefined) {
+                episode.chapter = null;
+            }
+            this.episodeToEdit = episode;
+            this.episodeModal = true;
         },
 
         onAppendEpisode(chapter = null) {
