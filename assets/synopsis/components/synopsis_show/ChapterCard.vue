@@ -54,6 +54,7 @@ export default {
 
     props: {
         chapter: Object,
+        openAll: Boolean
     },
 
     data() {
@@ -67,6 +68,12 @@ export default {
 
     computed: {
         ...mapStores(useSynopsisStore),
+    },
+
+    watch: {
+        openAll() {
+            this.isOpen = this.openAll;
+        }
     },
 
     methods: {

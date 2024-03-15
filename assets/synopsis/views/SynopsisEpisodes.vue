@@ -12,6 +12,10 @@
                         <button href="#" class="btn btn-sm btn-dark collapsed me-1" v-tooltip="'Afficher la légende'" data-bs-toggle="collapse" data-bs-target="#collapseComment" aria-expanded="true" aria-controls="collapseComment">
                             <i class="fas fa-comment" aria-hidden="true"></i> 
                         </button>
+                        <button class="btn btn-sm btn-dark me-1" @click.prevent="openAll = !openAll" v-tooltip="openAll ? 'Tout ouvrir' : 'Tout fermer'">
+                            <i class="fa-solid fa-folder-open fa-fw" v-if="!openAll"></i>
+                            <i class="fa-solid fa-folder-closed fa-fw" v-if="openAll"></i>
+                        </button>
                         <div class="btn-group">
                             <button class="btn btn-sm btn-dark" v-tooltip="'Ajouter un chapitre'" @click="openChapterModal">
                                 <i class="fa-solid fa-folder-plus fa-fw"></i>
@@ -24,8 +28,9 @@
                 </div>
             </div>
             <div class="collapse" id="collapseComment">
+                <label for="comment">Vous pouvez ajouter des remarques et des commentaires pour vous aider dans votre travail</label>
                 <div class="input-group">
-                    <textarea class="form-control" v-model="legend"></textarea>
+                    <textarea class="form-control" id="comment" v-model="legend"></textarea>
                     <button class="btn btn-success" v-tooltip="'Sauvegarder'" @click="saveLegend">
                         <i class="fa-solid fa-floppy-disk fa-fw"></i>
                     </button>
@@ -34,7 +39,7 @@
 
             <div class="row g-3 pt-3">
                 <div class="col-12" v-for="chapter in synopsisStore.synopsis.chapters" :key="chapter.id">
-                    <ChapterCard :chapter="chapter" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
+                    <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
                 </div>
             </div>
         </article>
@@ -74,6 +79,7 @@ export default {
             legends: null,
             loading: false,
             partialLoading: false,
+            openAll: true,
             chapterToEdit: { title: null, description: null, color: null, id: null },
             episodeToEdit: {},
             chapterModal: false,
