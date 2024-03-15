@@ -42,6 +42,11 @@
                     <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
                 </div>
             </div>
+            <div class="row g-3 m-2" v-if="episodesWithNoChapter.length > 0">
+                <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id">
+                    <EpisodeCard :episode="episode"></EpisodeCard>
+                </div>
+            </div>
         </article>
         <Loading v-if="loading || partialLoading"></Loading>
         <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
@@ -58,6 +63,7 @@ import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
+import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
 import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
 import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
 
@@ -69,6 +75,7 @@ export default {
         HeaderSynopsis,
         Error,
         ChapterCard,
+        EpisodeCard,
         ChapterModal,
         EpisodeModal
     },
@@ -89,6 +96,22 @@ export default {
 
     computed: {
         ...mapStores(useSynopsisStore, useCategoryStore),
+
+        episodesWithNoChapter() {
+            const episodes = [];
+
+            if (this.synopsisStore.synopsis === null) {
+                return episodes;
+            }
+
+            this.synopsisStore.synopsis.episodes.forEach(episode => {
+                if (episode.chapterId === null) {
+                    episodes.push(episode);
+                }
+            });
+
+            return episodes;
+        }
     },
 
     async mounted () {
@@ -97,8 +120,8 @@ export default {
         }
 
         this.loading = true;
-        this.status = await this.synopsisStore.getSynopsis(this.$route.params);
-        if (!this.status) {
+        const status = await this.synopsisStore.getSynopsis(this.$route.params);
+        if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
         }

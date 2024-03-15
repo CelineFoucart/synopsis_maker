@@ -137,7 +137,6 @@ export const useSynopsisStore = defineStore('synopsis', {
             try {
                 const url = Routing.generate("api_synopsis_episode_create", {id: this.synopsis.id, chapter: chapterId});
                 const response = await axios.post(url, data);
-                console.log(response);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
 
@@ -153,6 +152,32 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async deleteEpisode(id, chapterId) {
+            try {
+                const url = Routing.generate("api_synopsis_episode_delete", {id: this.synopsis.id, episodeId: id});
+                await axios.delete(url);
+
+                if (chapterId === null) {
+                    const index = this.synopsis.episodes.findIndex(element => element.id === id);
+                    if (index !== -1) {
+                        this.synopsis.episodes.splice(index, 1);
+                    }
+                } else {
+                    const indexChapter = this.synopsis.chapters.findIndex(element => element.id === chapterId);
+                    if (indexChapter !== -1) {
+                        const index = this.synopsis.chapters[indexChapter].episodes.findIndex(element => element.id === id);
+                        if (index !== -1) {
+                            this.synopsis.chapters[indexChapter].episodes.splice(index, 1);
+                        }
+                    }
+                }
 
                 return true;
             } catch (error) {
