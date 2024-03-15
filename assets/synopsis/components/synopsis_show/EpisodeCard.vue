@@ -8,9 +8,19 @@
             </h3>
             <p style="white-space: pre-wrap;">{{ episode.description }}</p>
         </div>
-        <footer class="card-footer text-end">
-            <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
-            <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
+        <footer class="card-footer">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <span class="button h5" @click.prevent="validate">
+                        <i class="fa-regular fa-square-check text-success" v-tooltip="'Validé'" v-if="episode.valid"></i>
+                        <i class="fa-regular fa-square" v-tooltip="'A faire'" v-else></i>
+                    </span>
+                </div>
+                <div class="col text-end">
+                    <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
+                <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
+                </div>
+            </div>
         </footer>
         <Delete :title="episode.title" :loading="loading" v-if="deleteModal" @on-confirm="onDelete" @on-cancel="deleteModal = false"></Delete>
     </article>
@@ -54,6 +64,10 @@ export default {
                 createToastify("La suppression a échoué.", 'error');
             }
             this.loading = false;
+        },
+
+        validate() {
+            
         }
     },
 }
