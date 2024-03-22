@@ -200,6 +200,18 @@ export default {
             this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, chapter: chapter };
             this.episodeModal = true;
         },
+
+        async deleteSynopsis() {
+            this.loading = true;
+            const status = await this.synopsisStore.deleteSynopsis(this.synopsisStore.synopsis.id);
+            if (status) {
+                createToastify('Le synopsis a été supprimé.', 'success');
+                this.$router.push('/synopsis');
+            } else {
+                createToastify('La suppression a échoué.', 'error');
+            }
+            this.loading = false;
+        }
     },
 }
 </script>
