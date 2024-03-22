@@ -73,6 +73,10 @@ class Synopsis
     #[Groups(['index'])]
     private ?string $legend = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['index'])]
+    private ?string $notes = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -284,6 +288,18 @@ class Synopsis
     public function setLegend(?string $legend): static
     {
         $this->legend = $legend;
+
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): static
+    {
+        $this->notes = $notes;
 
         return $this;
     }

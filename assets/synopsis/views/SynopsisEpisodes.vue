@@ -2,7 +2,7 @@
     <div>
         <Error v-if="error"></Error>
         <article v-if="!loading && synopsisStore.synopsis !== null">
-            <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
+            <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
             <div class="border-top border-bottom my-3 p-2">
                 <div class="row">
                     <div class="col-md-8">

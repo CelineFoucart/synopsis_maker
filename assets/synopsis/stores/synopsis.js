@@ -98,6 +98,22 @@ export const useSynopsisStore = defineStore('synopsis', {
             }
         },
 
+        async putSynopsisNotes(data, id) {
+            this.loading = true;
+            try {
+                const url = Routing.generate("api_synopsis_legend_notes", {id: id});
+                await axios.put(url, { notes: data });
+                if (this.synopsis) {
+                    this.synopsis.notes = data;
+                }
+                this.loading = false;
+                return true;
+            } catch (error) {
+                this.loading = false;
+                return false;
+            }
+        },
+
         async deleteSynopsis(id) {
             this.loading = true;
             try {

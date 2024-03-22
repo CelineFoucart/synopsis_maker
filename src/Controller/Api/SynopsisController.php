@@ -134,6 +134,23 @@ final class SynopsisController extends AbstractApiController
         return $this->json('', Response::HTTP_NO_CONTENT);
     }
 
+    #[Route('/{id}/notes', name: 'api_synopsis_legend_notes', methods:["PUT"])]
+    public function notesEditAction(Synopsis $synopsis, Request $request): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['notes'])) {
+            return $this->json('Le formulaire est incomplet', Response::HTTP_BAD_REQUEST);
+        }
+
+        $synopsis->setNotes($data['notes']);
+        $this->entityManager->persist($synopsis);
+        $this->entityManager->flush();
+
+        return $this->json('', Response::HTTP_NO_CONTENT);
+    }
+
     #[Route('/{id}', name: 'api_synopsis_delete', methods:["DELETE"])]
     public function deleteAction(Synopsis $synopsis): JsonResponse
     {
