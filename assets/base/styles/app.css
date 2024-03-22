@@ -28,3 +28,7 @@ label.required::after {
     background: rgb(200, 235, 251);
     background: linear-gradient(0deg, rgba(200, 235, 251, 1) 21%, rgba(200, 235, 251, 0.4) 52%, rgba(200, 235, 251, 1) 85%);
 }
+
+.handle {
+    cursor: grab;
+}

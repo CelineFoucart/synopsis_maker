@@ -7,6 +7,9 @@ namespace App\Service;
 use App\Entity\Episode;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Reorder an array of Episode object by position and persist in the database.
+ */
 final class ReorderService
 {
     /**

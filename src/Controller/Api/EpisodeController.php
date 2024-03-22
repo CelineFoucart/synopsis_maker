@@ -2,25 +2,21 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
 use App\Entity\Chapter;
-use App\Entity\Synopsis;
-use App\Security\Voter\SynopsisVoter;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Controller\Api\AbstractApiController;
 use App\Entity\Episode;
+use App\Entity\Synopsis;
 use App\Repository\ChapterRepository;
+use App\Security\Voter\SynopsisVoter;
 use App\Service\ReorderService;
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/synopsis/{id}/episode')]
 class EpisodeController extends AbstractApiController
@@ -33,7 +29,7 @@ class EpisodeController extends AbstractApiController
     ) {
     }
 
-    #[Route('', name: 'api_synopsis_episode_create', methods:['POST'])]
+    #[Route('', name: 'api_synopsis_episode_create', methods: ['POST'])]
     public function createAction(Synopsis $synopsis, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
@@ -51,26 +47,25 @@ class EpisodeController extends AbstractApiController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        if ($chapter !== null) {
+        if (null !== $chapter) {
             $position = $chapter->getEpisodes()->count();
         } else {
             $position = $synopsis->getEpisodes()->count();
         }
-        
 
-        $episode->setChapter($chapter)->setSynopsis($synopsis)->setPosition($position)->setCreatedAt(new DateTimeImmutable());
+        $episode->setChapter($chapter)->setSynopsis($synopsis)->setPosition($position)->setCreatedAt(new \DateTimeImmutable());
         $this->entityManager->persist($episode);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);
 
-        if ($chapter !== null) {
+        if (null !== $chapter) {
             $this->entityManager->refresh($chapter);
         }
 
         return $this->json($synopsis, Response::HTTP_CREATED, [], ['groups' => ['index']]);
     }
 
-    #[Route('/{episodeId}', name: 'api_synopsis_episode_edit', methods:['PUT'])]
+    #[Route('/{episodeId}', name: 'api_synopsis_episode_edit', methods: ['PUT'])]
     public function editAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
@@ -79,10 +74,10 @@ class EpisodeController extends AbstractApiController
         }
 
         $this->serializer->deserialize(
-            $request->getContent(), 
-            Episode::class, 
-            'json', 
-            ['groups' => ['index'], AbstractNormalizer::OBJECT_TO_POPULATE => $episode
+            $request->getContent(),
+            Episode::class,
+            'json',
+            ['groups' => ['index'], AbstractNormalizer::OBJECT_TO_POPULATE => $episode,
         ]);
 
         $errors = $this->validate($episode);
@@ -97,7 +92,7 @@ class EpisodeController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
-    #[Route('/{episodeId}/valid', name: 'api_synopsis_episode_validate', methods:['PUT'])]
+    #[Route('/{episodeId}/valid', name: 'api_synopsis_episode_validate', methods: ['PUT'])]
     public function validateAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
@@ -112,7 +107,7 @@ class EpisodeController extends AbstractApiController
         return $this->json('', Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/{episodeId}', name: 'api_synopsis_episode_delete', methods:['DELETE'])]
+    #[Route('/{episodeId}', name: 'api_synopsis_episode_delete', methods: ['DELETE'])]
     public function deleteAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
@@ -126,7 +121,7 @@ class EpisodeController extends AbstractApiController
         return $this->json('', Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/{episodeId}/position', name: 'api_synopsis_episode_position', methods:['PUT'])]
+    #[Route('/{episodeId}/position', name: 'api_synopsis_episode_position', methods: ['PUT'])]
     public function positionAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode, Request $request): JsonResponse
     {
         $oldChapter = $episode->getChapter();
@@ -141,26 +136,26 @@ class EpisodeController extends AbstractApiController
         $position = (isset($data['position'])) ? $data['position'] : null;
         $reorderService = new ReorderService($this->entityManager);
 
-        if ($newChapter !== null) {
-            $position = ($position === null) ? $newChapter->getEpisodes()->count() : $position;
+        if (null !== $newChapter) {
+            $position = (null === $position) ? $newChapter->getEpisodes()->count() : $position;
             $episode->setPosition($position);
             $newChapter->addEpisode($episode);
             $reorderService->setElements($newChapter->getEpisodes()->toArray())->insertToNewPosition($episode->getId(), $position);
         } else {
             $episodes = [];
             foreach ($synopsis->getEpisodes() as $element) {
-                if ($episode->getChapter() === null) {
+                if (null === $episode->getChapter()) {
                     $episodes[] = $element;
                 }
             }
             $episode->setChapter(null);
             $episodes[] = $episode;
-            $position = ($position === null) ? count($episodes) : $position;
+            $position = (null === $position) ? count($episodes) : $position;
             $reorderService->setElements($episodes)->insertToNewPosition($episode->getId(), $position);
         }
-        
+
         $this->entityManager->refresh($synopsis);
-        if ($oldChapter !== null && $oldChapter !== $newChapter) {
+        if (null !== $oldChapter && $oldChapter !== $newChapter) {
             $reorderService->setElements($oldChapter->getEpisodes()->toArray())->sort()->redefineAllPosition();
         }
 
@@ -171,13 +166,13 @@ class EpisodeController extends AbstractApiController
     {
         $target = (isset($data['target'])) ? $data['target'] : null;
 
-        if ($target === null) {
+        if (null === $target) {
             return null;
         }
 
         $newChapter = null;
         foreach ($synopsis->getChapters() as $chapter) {
-            if ($chapter->getId() === (int)$target) {
+            if ($chapter->getId() === (int) $target) {
                 $newChapter = $chapter;
                 break;
             }

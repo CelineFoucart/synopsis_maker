@@ -37,13 +37,13 @@
                 </div>
             </div>
 
-            <div class="row g-3 pt-3">
-                <div class="col-12" v-for="chapter in synopsisStore.synopsis.chapters" :key="chapter.id">
+            <div class="row g-3 pt-3 sortable-chapter">
+                <div class="col-12" v-for="chapter in synopsisStore.synopsis.chapters" :key="chapter.id" :data-id="chapter.id">
                     <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit-episode="onEditEpisode" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
                 </div>
             </div>
             <div class="row g-3 m-2 sortable-list" style="min-height: 167px;" data-list="0">
-                <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id">
+                <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id" :data-id="episode.id">
                     <EpisodeCard @on-edit-episode="onEditEpisode" :episode="episode"></EpisodeCard>
                 </div>
             </div>
@@ -124,18 +124,23 @@ export default {
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
+        } else {
+            this.legend = this.synopsisStore.synopsis.legend;
         }
 
-        await this.categoryStore.getCategories();
-
-        this.legend = this.synopsisStore.synopsis.legend;
+        const statusCategory = await this.categoryStore.getCategories();
+        if (!statusCategory) {
+            createToastify("Le chargement des catégories a échoué.", 'error');
+        }
+        
         this.loading = false;
     },
 
     updated() {
         document.querySelectorAll('.sortable-list').forEach(element => {
             new Sortable(element, {
-                group: 'shared', // set both lists to same group
+                handle: '.handle',
+                group: 'shared',
                 ghostClass: 'blue-background-class',
                 animation: 150,
                 onEnd: async (evt) => {
@@ -148,6 +153,20 @@ export default {
                     }
                 },
             });
+
+            new Sortable(document.querySelector('.sortable-chapter'), {
+                handle: '.handle',
+                ghostClass: 'blue-background-class',
+                animation: 150,
+                onEnd: async (evt) => {
+                    const chapter = evt.item.dataset.id;
+                    const position = evt.newIndex;
+                    const status = await this.synopsisStore.positionChapterAction(chapter, position);
+                    if (!status) {
+                        createToastify("L'opération a échoué.", "error")
+                    }
+                }
+            })
         });
     },
 
@@ -181,18 +200,6 @@ export default {
             this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, chapter: chapter };
             this.episodeModal = true;
         },
-
-        onDragover(e) {
-            e.preventDefault();
-        },
-
-        async onDrop(e) {
-            const episodeId = e.dataTransfer.getData('id');
-            const status = await this.synopsisStore.dropEpisodeToChapter(episodeId, null, this.episodesWithNoChapter.length);
-            if (!status) {
-                createToastify("L'ajout a échoué.", 'error');
-            }
-        }
     },
 }
 </script>

@@ -2,7 +2,7 @@
     <article class="card h-100" :style="{'border-color': episode.color ? episode.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
             <h3 class="card-title h5 fw-bold" :class="{'text-success': episode.valid }">
-                <i class="fas fa-circle fa-fw" :style="{color: episode.color ? episode.color : '#000' }"></i>
+                <span class="handle"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
                 {{ episode.title }}
             </h3>
             <p style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">{{ episode.description }}</p>
@@ -83,9 +83,5 @@ export default {
 <style scoped>
 .button {
     cursor: pointer;
-}
-
-article {
-    cursor: grab;
 }
 </style>

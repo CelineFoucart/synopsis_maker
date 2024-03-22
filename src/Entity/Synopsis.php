@@ -62,6 +62,7 @@ class Synopsis
 
     #[ORM\OneToMany(targetEntity: Chapter::class, mappedBy: 'synopsis', orphanRemoval: true)]
     #[Groups(['index'])]
+    #[ORM\OrderBy(["position" => "ASC"])]
     private Collection $chapters;
 
     #[ORM\Column(nullable: true)]

@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Entity\Chapter;
 use App\Entity\Synopsis;
+use App\Service\ReorderService;
 use App\Security\Voter\SynopsisVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\Api\AbstractApiController;
@@ -14,7 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
@@ -74,6 +74,27 @@ class ChapterController extends AbstractApiController
         $this->entityManager->refresh($synopsis);
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/chapter/{chapterId}/position', name: 'api_synopsis_chapter_position', methods:['PUT'])]
+    public function positionAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'chapterId')] Chapter $chapter, Request $request): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        if ($chapter->getSynopsis()->getId() !== $synopsis->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['position'])) {
+            return $this->json('Missing data', Response::HTTP_BAD_REQUEST);
+        }
+
+        $reorderService = new ReorderService($this->entityManager);
+        $reorderService->setElements($synopsis->getChapters()->toArray())->insertToNewPosition($chapter->getId(), $data['position']);
+        $this->entityManager->refresh($synopsis);
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+
     }
 
     #[Route('/chapter/{chapterId}', name: 'api_synopsis_chapter_delete', methods:['DELETE'])]

@@ -71,16 +71,13 @@ export const useSynopsisStore = defineStore('synopsis', {
         },
 
         async putSynopsis(data, id) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_edit", {id: id});
                 const response = await axios.put(url, data);
                 this.synopsis = response.data;
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
@@ -115,36 +112,29 @@ export const useSynopsisStore = defineStore('synopsis', {
         },
 
         async postChapter(data) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_chapter_create", {id: this.synopsis.id});
                 const response = await axios.post(url, data);
                 this.synopsis.chapters = response.data.chapters;
-                this.loading = false;
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
 
         async putChapter(data, id) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_chapter_edit", {id: this.synopsis.id, chapterId: id});
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
 
         async deleteChapter(id) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_chapter_delete", {id: this.synopsis.id, chapterId: id});
                 await axios.delete(url);
@@ -153,49 +143,40 @@ export const useSynopsisStore = defineStore('synopsis', {
                 if (index !== -1) {
                     this.synopsis.chapters.splice(index, 1);
                 }
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
 
         async postEpisode(data, chapterId) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_create", {id: this.synopsis.id, chapter: chapterId});
                 const response = await axios.post(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
 
         async putEpisode(data, id) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_edit", {id: this.synopsis.id, episodeId: id});
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
 
         async deleteEpisode(id, chapterId) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_delete", {id: this.synopsis.id, episodeId: id});
                 await axios.delete(url);
@@ -214,17 +195,14 @@ export const useSynopsisStore = defineStore('synopsis', {
                         }
                     }
                 }
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
 
         async validateEpisode(id, chapterId) {
-            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_validate", {id: this.synopsis.id, episodeId: id});
                 await axios.put(url);
@@ -243,11 +221,9 @@ export const useSynopsisStore = defineStore('synopsis', {
                         }
                     }
                 }
-                this.loading = false;
 
                 return true;
             } catch (error) {
-                this.loading = false;
                 return false;
             }
         },
@@ -264,6 +240,21 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 this.loading = false;
                 return false;
+            }
+        },
+
+        async positionChapterAction(chapterId, position) {
+            this.loading = true;
+            try {
+                const url = Routing.generate("api_synopsis_chapter_position", {id: this.synopsis.id, chapterId: chapterId});
+                const response = await axios.put(url, { position: position });
+                this.synopsis.chapters = response.data.chapters;
+                this.loading = false;
+                return true;                
+            } catch (error) {
+                this.loading = false;
+                return false;
+                
             }
         }
     }

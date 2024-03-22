@@ -4,7 +4,7 @@
             <header class="row">
                 <div class="col-9">
                     <h2 class="h5">
-                        <i class="fa-solid fa-circle fa-fw" :style="{color: chapter.color ? chapter.color : '#000' }"></i>
+                        <span class="handle"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
                         {{ chapter.title }}
                     </h2>
                 </div>
