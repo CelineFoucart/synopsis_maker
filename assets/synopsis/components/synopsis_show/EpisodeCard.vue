@@ -1,24 +1,26 @@
 <template>
     <article class="card h-100" :style="{'border-color': episode.color ? episode.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
-            <h3 class="card-title h5 fw-bold">
-                <i class="fas fa-circle" :style="{color: episode.color ? episode.color : '#000' }"></i>
+            <h3 class="card-title h5 fw-bold" :class="{'text-success': episode.valid }">
+                <i class="fas fa-circle fa-fw" :style="{color: episode.color ? episode.color : '#000' }"></i>
                 {{ episode.title }}
-                <i class="fas fa-check-circle text-success" aria-label="Validé" v-if="episode.valid"></i>
             </h3>
-            <p style="white-space: pre-wrap;">{{ episode.description }}</p>
+            <p style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">{{ episode.description }}</p>
         </div>
-        <footer class="card-footer">
-            <div class="row justify-content-center">
-                <div class="col">
-                    <span class="button h5" @click.prevent="validate">
-                        <i class="fa-regular fa-square-check text-success" v-tooltip="'Validé'" v-if="episode.valid"></i>
-                        <i class="fa-regular fa-square" v-tooltip="'A faire'" v-else></i>
+        <footer class="card-footer fs-5">
+            <div class="row m-0">
+                <div class="col p-0">
+                    <span class="button" @click.prevent="validate" v-if="!loading">
+                        <i class="fa-solid fa-circle-check text-success fa-fw" v-tooltip="'Validé'" v-if="episode.valid"></i>
+                        <i class="fa-solid fa-circle-xmark text-danger fa-fw" v-tooltip="'Non validé'" v-else></i>
+                    </span>
+                    <span v-else>
+                        <i class="fa-solid fa-spinner fa-spin fa-fw"></i>
                     </span>
                 </div>
-                <div class="col text-end">
-                    <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
-                <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
+                <div class="col p-0 d-flex justify-content-end gap-1 align-items-center">
+                    <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
+                    <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
             </div>
         </footer>
@@ -66,8 +68,13 @@ export default {
             this.loading = false;
         },
 
-        validate() {
-            
+        async validate() {
+            this.loading = true;
+            const status = await this.synopsisStore.validateEpisode(this.episode.id, this.episode.chapterId);
+            if (!status) {
+                createToastify("Le changement de statut de validation a échoué.", 'error');
+            }
+            this.loading = false;
         }
     },
 }

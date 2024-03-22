@@ -183,6 +183,32 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async validateEpisode(id, chapterId) {
+            try {
+                const url = Routing.generate("api_synopsis_episode_validate", {id: this.synopsis.id, episodeId: id});
+                await axios.put(url);
+
+                if (chapterId === null) {
+                    const index = this.synopsis.episodes.findIndex(element => element.id === id);
+                    if (index !== -1) {
+                        this.synopsis.episodes[index].valid = !this.synopsis.episodes[index].valid;
+                    } 
+                } else {
+                    const indexChapter = this.synopsis.chapters.findIndex(element => element.id === chapterId);
+                    if (indexChapter !== -1) {
+                        const index = this.synopsis.chapters[indexChapter].episodes.findIndex(element => element.id === id);
+                        if (index !== -1) {
+                            this.synopsis.chapters[indexChapter].episodes[index].valid = !this.synopsis.chapters[indexChapter].episodes[index].valid;
+                        }
+                    }
+                }
+
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

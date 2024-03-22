@@ -95,6 +95,21 @@ class EpisodeController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
+    #[Route('/{episodeId}/valid', name: 'api_synopsis_episode_validate', methods:['PUT'])]
+    public function validateAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
+        if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $episode->setValid(!$episode->isValid());
+        $this->entityManager->persist($episode);
+        $this->entityManager->flush();
+
+        return $this->json('', Response::HTTP_NO_CONTENT);
+    }
+
     #[Route('/{episodeId}', name: 'api_synopsis_episode_delete', methods:['DELETE'])]
     public function deleteAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
     {
@@ -106,6 +121,6 @@ class EpisodeController extends AbstractApiController
         $this->entityManager->remove($episode);
         $this->entityManager->flush();
 
-        return $this->json('', Response::HTTP_NO_CONTENT, [], ['groups' => ['index']]);
+        return $this->json('', Response::HTTP_NO_CONTENT);
     }
 }

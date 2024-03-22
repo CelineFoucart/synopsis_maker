@@ -8,18 +8,18 @@
                         {{ chapter.title }}
                     </h2>
                 </div>
-                <div class="col-3 text-end">
+                <div class="col-3 fs-5 justify-content-end align-items-center d-flex gap-1">
                     <span class="button" @click.prevent="showComment = !showComment">
-                        <i class="fa-solid fa-comment fa-fw me-1" v-if="!showComment" v-tooltip="'Afficher la description'"></i>
-                        <i class="fa-solid fa-comment-slash fa-fw me-1" v-if="showComment" v-tooltip="'Cacher la description'"></i>
+                        <i class="fa-solid fa-comment fa-fw" v-if="!showComment" v-tooltip="'Afficher la description'"></i>
+                        <i class="fa-solid fa-comment-slash fa-fw" v-if="showComment" v-tooltip="'Cacher la description'"></i>
                     </span>
                     
                     <span class="button" @click.prevent="isOpen = !isOpen">
-                        <i class="fa-solid fa-folder-open fa-fw me-1" v-if="!isOpen" v-tooltip="'Ouvrir'"></i>
-                        <i class="fa-solid fa-folder-closed fa-fw me-1" v-if="isOpen" v-tooltip="'Fermer'"></i>
+                        <i class="fa-solid fa-folder-open fa-fw" v-if="!isOpen" v-tooltip="'Ouvrir'"></i>
+                        <i class="fa-solid fa-folder-closed fa-fw" v-if="isOpen" v-tooltip="'Fermer'"></i>
                     </span>
-                    <i class="fa-solid fa-file-circle-plus button fa-fw me-1" v-tooltip="'Ajouter un épisode'" @click="$emit('on-append', chapter)"></i>
-                    <i class="fa-solid fa-pen fa-fw button me-1" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
+                    <i class="fa-solid fa-file-circle-plus button fa-fw" v-tooltip="'Ajouter un épisode'" @click="$emit('on-append', chapter)"></i>
+                    <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
                 <div class="col-12" v-if="chapter.description && showComment">
