@@ -6,10 +6,12 @@ export const useSynopsisStore = defineStore('synopsis', {
         synopses: [], 
         pagination: {current: 0, limit: 10, totalCount: 0, firstItemNumber: 0, lastItemNumber: 0, last: 0, pagesInRange: []},
         synopsis: null, 
+        loading: false,
     }),
 
     actions: {
         async getSynopses(page = 1, limit = 10, filters) { 
+            this.loading = true;
             try {
                 const params = { page: page, limit: limit };
 
@@ -25,99 +27,124 @@ export const useSynopsisStore = defineStore('synopsis', {
                 this.pagination = response.data.meta;
                 this.pagination.limit = response.data.meta.numItemsPerPage;
                 this.synopsis = null;
+                this.loading = false;
 
                 return true;
             } catch (error) {
                 this.synopses = [];
                 this.pagination = {current: 0, limit: 10, totalCount: 0, firstItemNumber: 0, lastItemNumber: 0, last: 0, pagesInRange: []};
                 this.synopsis = null;
+                this.loading = false;
 
                 return false;
             }
         },
 
         async postSynopsis(data) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_create");
                 const response = await axios.post(url, data);
                 this.synopsis = response.data;
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
+
                 return false;
             }
         },
 
         async getSynopsis(params) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_show", {id: params.id});
                 const response = await axios.get(url);
                 this.synopsis = response.data;
+                this.loading = false;
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async putSynopsis(data, id) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_edit", {id: id});
                 const response = await axios.put(url, data);
                 this.synopsis = response.data;
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async putSynopsisLegend(id, data) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_legend_edit", {id: id});
                 await axios.put(url, data);
                 if (this.synopsis) {
                     this.synopsis.legend = data.legend;
                 }
+                this.loading = false;
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async deleteSynopsis(id) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_delete", {id: id});
                 await axios.delete(url);
+                this.loading = false;
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async postChapter(data) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_chapter_create", {id: this.synopsis.id});
                 const response = await axios.post(url, data);
                 this.synopsis.chapters = response.data.chapters;
+                this.loading = false;
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async putChapter(data, id) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_chapter_edit", {id: this.synopsis.id, chapterId: id});
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async deleteChapter(id) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_chapter_delete", {id: this.synopsis.id, chapterId: id});
                 await axios.delete(url);
@@ -126,40 +153,49 @@ export const useSynopsisStore = defineStore('synopsis', {
                 if (index !== -1) {
                     this.synopsis.chapters.splice(index, 1);
                 }
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async postEpisode(data, chapterId) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_create", {id: this.synopsis.id, chapter: chapterId});
                 const response = await axios.post(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async putEpisode(data, id) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_edit", {id: this.synopsis.id, episodeId: id});
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async deleteEpisode(id, chapterId) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_delete", {id: this.synopsis.id, episodeId: id});
                 await axios.delete(url);
@@ -178,14 +214,17 @@ export const useSynopsisStore = defineStore('synopsis', {
                         }
                     }
                 }
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
 
         async validateEpisode(id, chapterId) {
+            this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_episode_validate", {id: this.synopsis.id, episodeId: id});
                 await axios.put(url);
@@ -204,9 +243,26 @@ export const useSynopsisStore = defineStore('synopsis', {
                         }
                     }
                 }
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
+                return false;
+            }
+        },
+
+        async dropEpisodeToChapter(episodeId, newChapter, position = null) {
+            this.loading = true;
+            try {
+                const url = Routing.generate("api_synopsis_episode_position", {id: this.synopsis.id, episodeId: episodeId});
+                const response = await axios.put(url, { target: newChapter, position: position });
+                this.synopsis.chapters = response.data.chapters;
+                this.synopsis.episodes = response.data.episodes;
+                this.loading = false;
+                return true;
+            } catch (error) {
+                this.loading = false;
                 return false;
             }
         }

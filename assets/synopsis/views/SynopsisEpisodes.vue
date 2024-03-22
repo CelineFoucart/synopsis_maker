@@ -42,13 +42,13 @@
                     <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit-episode="onEditEpisode" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
                 </div>
             </div>
-            <div class="row g-3 m-2" v-if="episodesWithNoChapter.length > 0">
+            <div class="row g-3 m-2 sortable-list" style="min-height: 167px;" data-list="0">
                 <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id">
                     <EpisodeCard @on-edit-episode="onEditEpisode" :episode="episode"></EpisodeCard>
                 </div>
             </div>
         </article>
-        <Loading v-if="loading || partialLoading"></Loading>
+        <Loading v-if="loading || synopsisStore.loading"></Loading>
         <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
         <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
     </div>
@@ -66,6 +66,7 @@ import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
 import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
 import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
 import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
+import Sortable from 'sortablejs';
 
 export default {
     name: 'SynopsisEpisodes',
@@ -83,9 +84,8 @@ export default {
     data() {
         return {
             error: false,
-            legends: null,
+            legend: null,
             loading: false,
-            partialLoading: false,
             openAll: true,
             chapterToEdit: { title: null, description: null, color: null, content: null, id: null },
             episodeToEdit: {},
@@ -132,16 +132,31 @@ export default {
         this.loading = false;
     },
 
+    updated() {
+        document.querySelectorAll('.sortable-list').forEach(element => {
+            new Sortable(element, {
+                group: 'shared', // set both lists to same group
+                ghostClass: 'blue-background-class',
+                animation: 150,
+                onEnd: async (evt) => {
+                    const target = evt.to.dataset.list != 0 ? evt.to.dataset.list : null;
+                    const episode = evt.item.dataset.id;
+                    const position = evt.newIndex;
+                    const status = await this.synopsisStore.dropEpisodeToChapter(episode, target, position);
+                    if (!status) {
+                        createToastify("L'opération a échoué.", "error")
+                    }
+                },
+            });
+        });
+    },
+
     methods: {
         saveLegend() {
-            this.partialLoading = true;
-
             const status = this.synopsisStore.putSynopsisLegend(this.synopsisStore.synopsis.id, {legend: this.legend});
             if (!status) {
                 createToastify('La sauvegarde a échoué.', 'error');
             }
-
-            this.partialLoading = false;
         },
 
         openChapterModal() {
@@ -165,6 +180,18 @@ export default {
         onAppendEpisode(chapter = null) {
             this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, chapter: chapter };
             this.episodeModal = true;
+        },
+
+        onDragover(e) {
+            e.preventDefault();
+        },
+
+        async onDrop(e) {
+            const episodeId = e.dataTransfer.getData('id');
+            const status = await this.synopsisStore.dropEpisodeToChapter(episodeId, null, this.episodesWithNoChapter.length);
+            if (!status) {
+                createToastify("L'ajout a échoué.", 'error');
+            }
         }
     },
 }

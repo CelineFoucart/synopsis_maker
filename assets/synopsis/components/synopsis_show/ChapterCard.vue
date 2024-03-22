@@ -26,8 +26,8 @@
                     <p class="small mb-0" style="white-space: pre-wrap;">{{ chapter.description }}</p>
                 </div>
             </header>
-            <div class="row g-2" v-if="isOpen">
-                <div class="col-md-4 col-lg-3" v-for="episode in chapter.episodes">
+            <div class="row g-2 sortable-list" v-if="isOpen" :data-list="chapter.id">
+                <div class="col-md-4 col-lg-3" v-for="episode in chapter.episodes" :key="episode.id" :data-id="episode.id">
                     <EpisodeCard :episode="episode" @on-edit-episode="onEditEpisode"></EpisodeCard>
                 </div>
             </div>
@@ -86,7 +86,11 @@ export default {
         onEditEpisode(episode) {
             episode.chapter = this.chapter;
             this.$emit('on-edit-episode', episode);
-        }
+        },
+
+        onDragover(e) {
+            e.preventDefault();
+        },
     },
 }
 </script>

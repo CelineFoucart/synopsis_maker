@@ -10,7 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\Api\AbstractApiController;
 use App\Entity\Episode;
 use App\Repository\ChapterRepository;
+use App\Service\ReorderService;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -122,5 +124,65 @@ class EpisodeController extends AbstractApiController
         $this->entityManager->flush();
 
         return $this->json('', Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/{episodeId}/position', name: 'api_synopsis_episode_position', methods:['PUT'])]
+    public function positionAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode, Request $request): JsonResponse
+    {
+        $oldChapter = $episode->getChapter();
+
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $newChapter = $this->getNewChapter($data, $synopsis);
+        $position = (isset($data['position'])) ? $data['position'] : null;
+        $reorderService = new ReorderService($this->entityManager);
+
+        if ($newChapter !== null) {
+            $position = ($position === null) ? $newChapter->getEpisodes()->count() : $position;
+            $episode->setPosition($position);
+            $newChapter->addEpisode($episode);
+            $reorderService->setElements($newChapter->getEpisodes()->toArray())->insertToNewPosition($episode->getId(), $position);
+        } else {
+            $episodes = [];
+            foreach ($synopsis->getEpisodes() as $element) {
+                if ($episode->getChapter() === null) {
+                    $episodes[] = $element;
+                }
+            }
+            $episode->setChapter(null);
+            $episodes[] = $episode;
+            $position = ($position === null) ? count($episodes) : $position;
+            $reorderService->setElements($episodes)->insertToNewPosition($episode->getId(), $position);
+        }
+        
+        $this->entityManager->refresh($synopsis);
+        if ($oldChapter !== null && $oldChapter !== $newChapter) {
+            $reorderService->setElements($oldChapter->getEpisodes()->toArray())->sort()->redefineAllPosition();
+        }
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    private function getNewChapter(array $data, Synopsis $synopsis): ?Chapter
+    {
+        $target = (isset($data['target'])) ? $data['target'] : null;
+
+        if ($target === null) {
+            return null;
+        }
+
+        $newChapter = null;
+        foreach ($synopsis->getChapters() as $chapter) {
+            if ($chapter->getId() === (int)$target) {
+                $newChapter = $chapter;
+                break;
+            }
+        }
+
+        return $newChapter;
     }
 }

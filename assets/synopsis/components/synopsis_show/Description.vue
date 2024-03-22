@@ -75,7 +75,8 @@ export default {
         saveButton: {
             type: Boolean,
             default: true
-        }
+        },
+        label: String
     },
 
     components: {

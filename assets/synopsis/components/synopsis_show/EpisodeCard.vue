@@ -75,7 +75,7 @@ export default {
                 createToastify("Le changement de statut de validation a échoué.", 'error');
             }
             this.loading = false;
-        }
+        },
     },
 }
 </script>
@@ -83,5 +83,9 @@ export default {
 <style scoped>
 .button {
     cursor: pointer;
+}
+
+article {
+    cursor: grab;
 }
 </style>
