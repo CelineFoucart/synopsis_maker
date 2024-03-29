@@ -173,6 +173,7 @@ final class SynopsisController extends AbstractApiController
             }
 
             $tasks[] = (new Task())
+                ->setTitle(isset($row['id']) && $row['id'] !== null ? $row['id'] : uniqid())
                 ->setTitle(isset($row['title']) ? $row['title'] : '')
                 ->setContent(isset($row['content']) ? $row['content'] : '')
                 ->setPosition(isset($row['position']) ? $row['position'] : '')

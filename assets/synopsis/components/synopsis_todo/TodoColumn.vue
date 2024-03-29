@@ -18,6 +18,9 @@
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
+
 export default {
     name: 'TodoColumn',
 
@@ -33,9 +36,41 @@ export default {
         }
     },
 
+    computed: {
+        ...mapStores(useSynopsisStore),
+
+        tasks() {
+            const tasks = [];
+
+            this.synopsis.tasks.forEach(task => {
+                if (task.id === this.id) {
+                    tasks.push(task);
+                }
+            });
+        }
+    },
+
     methods: {
-        onAppend() {
-            
+        async onAppend() {
+            const newTask = {
+                position: this.tasks.length,
+                title: this.newTask,
+                content: '',
+                category: this.id
+            };
+
+            const status = await this.synopsisStore.addTask(newTask);
+            if (!status) {
+                createToastify("L'enregistrement a échoué.", 'error');
+            }
+        },
+
+        onEdit() {
+
+        },
+
+        onDelete(task) {
+
         }
     },
 }
