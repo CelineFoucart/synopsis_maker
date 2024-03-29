@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/synopsis/{id}/episode')]
-class EpisodeController extends AbstractApiController
+final class EpisodeController extends AbstractApiController
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
@@ -158,6 +158,22 @@ class EpisodeController extends AbstractApiController
         if (null !== $oldChapter && $oldChapter !== $newChapter) {
             $reorderService->setElements($oldChapter->getEpisodes()->toArray())->sort()->redefineAllPosition();
         }
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/{elementId}/archive', name: 'api_synopsis_episode_archive', methods: ['PUT'])]
+    public function archiveAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'elementId')] Episode $episode): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $episode->setArchived(!$episode->isArchived());
+        $this->entityManager->persist($episode);
+        $this->entityManager->flush();
+        $this->entityManager->refresh($synopsis);
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }

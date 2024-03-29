@@ -272,6 +272,20 @@ export const useSynopsisStore = defineStore('synopsis', {
                 return false;
                 
             }
+        },
+
+        async archiveAction(elementId, type) {
+            try {
+                const routeName = type === 'chapter' ? 'api_synopsis_echapter_archive' : 'api_synopsis_episode_archive';
+
+                const url = Routing.generate(routeName, {id: this.synopsis.id, elementId: elementId});
+                const response = await axios.put(url);
+                this.synopsis.chapters = response.data.chapters;
+                this.synopsis.episodes = response.data.episodes;
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
 use App\Entity\Synopsis;
-use App\Service\SynopsisHandler;
+use App\Entity\User;
 use App\Repository\SynopsisRepository;
 use App\Security\Voter\SynopsisVoter;
+use App\Service\SynopsisHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/synopsis')]
@@ -24,12 +23,12 @@ final class SynopsisController extends AbstractApiController
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
-        private SluggerInterface $slugger, 
+        private SluggerInterface $slugger,
         protected ValidatorInterface $validator
     ) {
     }
 
-    #[Route('', name: 'api_synopsis_index', methods:['GET'])]
+    #[Route('', name: 'api_synopsis_index', methods: ['GET'])]
     public function index(Request $request, SynopsisRepository $synopsisRepository): JsonResponse
     {
         $user = $this->getUser();
@@ -46,7 +45,7 @@ final class SynopsisController extends AbstractApiController
         ];
 
         $categoriesString = $request->query->get('categories', '-');
-        if ($categoriesString !== '-') {
+        if ('-' !== $categoriesString) {
             $params['categories'] = explode('-', $categoriesString);
         }
 
@@ -54,10 +53,9 @@ final class SynopsisController extends AbstractApiController
         $meta = $pagination->getPaginationData();
 
         return $this->json(['synopses' => $pagination->getItems(), 'meta' => $meta], Response::HTTP_OK, [], ['groups' => ['index']]);
-
     }
 
-    #[Route('', name: 'api_synopsis_create', methods:["POST"])]
+    #[Route('', name: 'api_synopsis_create', methods: ['POST'])]
     public function createAction(Request $request, SynopsisHandler $handler): JsonResponse
     {
         $user = $this->getUser();
@@ -85,7 +83,7 @@ final class SynopsisController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_CREATED, [], ['groups' => 'index']);
     }
 
-    #[Route('/{id}', name: 'api_synopsis_show', methods:["GET"])]
+    #[Route('/{id}', name: 'api_synopsis_show', methods: ['GET'])]
     public function showAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::VIEW, $synopsis);
@@ -93,8 +91,8 @@ final class SynopsisController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
-    #[Route('/{id}', name: 'api_synopsis_edit', methods:["PUT"])]
-    public function editAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, Request $request, SynopsisHandler $handler): JsonResponse 
+    #[Route('/{id}', name: 'api_synopsis_edit', methods: ['PUT'])]
+    public function editAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, Request $request, SynopsisHandler $handler): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
 
@@ -117,7 +115,7 @@ final class SynopsisController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
-    #[Route('/{id}/legend', name: 'api_synopsis_legend_edit', methods:["PUT"])]
+    #[Route('/{id}/legend', name: 'api_synopsis_legend_edit', methods: ['PUT'])]
     public function legentEditAction(Synopsis $synopsis, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
@@ -134,7 +132,7 @@ final class SynopsisController extends AbstractApiController
         return $this->json('', Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/{id}/notes', name: 'api_synopsis_legend_notes', methods:["PUT"])]
+    #[Route('/{id}/notes', name: 'api_synopsis_legend_notes', methods: ['PUT'])]
     public function notesEditAction(Synopsis $synopsis, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
@@ -151,7 +149,7 @@ final class SynopsisController extends AbstractApiController
         return $this->json('', Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/{id}', name: 'api_synopsis_delete', methods:["DELETE"])]
+    #[Route('/{id}', name: 'api_synopsis_delete', methods: ['DELETE'])]
     public function deleteAction(Synopsis $synopsis): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);

@@ -20,6 +20,7 @@
                 </div>
                 <div class="col p-0 d-flex justify-content-end gap-1 align-items-center">
                     <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
+                    <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archiver'" @click="$emit('on-archive-episode', episode)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
             </div>
@@ -41,7 +42,7 @@ export default {
         Delete,
     },
 
-    emits: ['on-edit-episode'],
+    emits: ['on-edit-episode', 'on-archive-episode'],
 
     props: {
         episode: Object,

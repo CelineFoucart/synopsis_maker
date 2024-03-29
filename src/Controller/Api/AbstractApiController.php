@@ -9,21 +9,19 @@ use App\Entity\Chapter;
 use App\Entity\Episode;
 use App\Entity\Synopsis;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class AbstractApiController extends AbstractController
 {
     public function __construct(
-        protected EntityManagerInterface $entityManager, 
+        protected EntityManagerInterface $entityManager,
         protected ValidatorInterface $validator
     ) {
     }
-    
+
     /**
      * @param Synopsis|Category|Chapter|Episode $entity
-     * 
-     * @return array
      */
     protected function validate($entity): array
     {

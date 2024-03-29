@@ -38,19 +38,26 @@
             </div>
 
             <div class="row g-3 pt-3 sortable-chapter">
-                <div class="col-12" v-for="chapter in synopsisStore.synopsis.chapters" :key="chapter.id" :data-id="chapter.id">
-                    <ChapterCard :openAll="openAll" :chapter="chapter" @on-edit-episode="onEditEpisode" @on-edit="onEditChapter" @on-append="onAppendEpisode"></ChapterCard>
+                <div class="col-12" v-for="chapter in chapters" :key="chapter.id" :data-id="chapter.id">
+                    <ChapterCard :openAll="openAll" :chapter="chapter" 
+                        @on-archive-episode="onArchiveEpisode" 
+                        @on-edit-episode="onEditEpisode" 
+                        @on-edit="onEditChapter" 
+                        @on-archive="onArchiveChapter"
+                        @on-append="onAppendEpisode">
+                    </ChapterCard>
                 </div>
             </div>
             <div class="row g-3 m-2 sortable-list" style="min-height: 167px;" data-list="0">
                 <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id" :data-id="episode.id">
-                    <EpisodeCard @on-edit-episode="onEditEpisode" :episode="episode"></EpisodeCard>
+                    <EpisodeCard @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode" :episode="episode"></EpisodeCard>
                 </div>
             </div>
         </article>
         <Loading v-if="loading || synopsisStore.loading"></Loading>
         <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
         <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
+        <ArchiveModal :elementToArchive="elementToArchive"  @on-close="archiveModal = false" v-if="archiveModal"></ArchiveModal>
     </div>
 </template>
 
@@ -66,6 +73,7 @@ import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
 import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
 import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
 import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
+import ArchiveModal from '&synopsis/components/synopsis_show/ArchiveModal.vue';
 import Sortable from 'sortablejs';
 
 export default {
@@ -78,7 +86,8 @@ export default {
         ChapterCard,
         EpisodeCard,
         ChapterModal,
-        EpisodeModal
+        EpisodeModal,
+        ArchiveModal
     },
 
     data() {
@@ -90,12 +99,26 @@ export default {
             chapterToEdit: { title: null, description: null, color: null, content: null, id: null },
             episodeToEdit: {},
             chapterModal: false,
-            episodeModal: false
+            episodeModal: false,
+            archiveModal: false,
+            elementToArchive: { title: null, id: null, archived: false, type: null }
         }
     },
 
     computed: {
         ...mapStores(useSynopsisStore, useCategoryStore),
+
+        chapters() {
+            const chapters = [];
+
+            this.synopsisStore.synopsis.chapters.forEach(chapter => {
+                if (chapter.archived !== true) {
+                    chapters.push(chapter);
+                }
+            });
+
+            return chapters;
+        },
 
         episodesWithNoChapter() {
             const episodes = [];
@@ -105,7 +128,7 @@ export default {
             }
 
             this.synopsisStore.synopsis.episodes.forEach(episode => {
-                if (episode.chapterId === null) {
+                if (episode.chapterId === null && episode.archived !== true) {
                     episodes.push(episode);
                 }
             });
@@ -194,6 +217,16 @@ export default {
             }
             this.episodeToEdit = episode;
             this.episodeModal = true;
+        },
+
+        onArchiveEpisode(episode) {
+            this.elementToArchive = { title: episode.title, id: episode.id, archived: episode.archived, type: 'episode'};
+            this.archiveModal = true;
+        },
+
+        onArchiveChapter(chapter) {
+            this.elementToArchive = { title: chapter.title, id: chapter.id, archived: chapter.archived, type: 'chapter'};
+            this.archiveModal = true;
         },
 
         onAppendEpisode(chapter = null) {

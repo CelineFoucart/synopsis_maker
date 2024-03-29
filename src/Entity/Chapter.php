@@ -42,6 +42,10 @@ class Chapter
     #[Groups(['index'])]
     private ?string $color = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['index'])]
+    private ?bool $archived = false;
+
     public function __construct()
     {
         $this->episodes = new ArrayCollection();
@@ -138,6 +142,18 @@ class Chapter
     public function setColor(?string $color): static
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(?bool $archived): static
+    {
+        $this->archived = $archived;
 
         return $this;
     }

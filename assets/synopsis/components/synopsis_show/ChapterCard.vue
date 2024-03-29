@@ -20,6 +20,7 @@
                     </span>
                     <i class="fa-solid fa-file-circle-plus button fa-fw" v-tooltip="'Ajouter un épisode'" @click="$emit('on-append', chapter)"></i>
                     <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
+                    <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archive'" @click="$emit('on-archive', chapter)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
                 <div class="col-12" v-if="chapter.description && showComment">
@@ -27,8 +28,8 @@
                 </div>
             </header>
             <div class="row g-2 sortable-list" v-if="isOpen" :data-list="chapter.id">
-                <div class="col-md-4 col-lg-3" v-for="episode in chapter.episodes" :key="episode.id" :data-id="episode.id">
-                    <EpisodeCard :episode="episode" @on-edit-episode="onEditEpisode"></EpisodeCard>
+                <div class="col-md-4 col-lg-3" v-for="episode in episodes" :key="episode.id" :data-id="episode.id">
+                    <EpisodeCard :episode="episode" @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode"></EpisodeCard>
                 </div>
             </div>
         </div>
@@ -50,7 +51,7 @@ export default {
         EpisodeCard
     },
 
-    emits: ['on-edit', 'on-append', 'on-edit-episode'],
+    emits: ['on-edit', 'on-append', 'on-edit-episode', 'on-archive-episode', 'on-archive'],
 
     props: {
         chapter: Object,
@@ -68,6 +69,18 @@ export default {
 
     computed: {
         ...mapStores(useSynopsisStore),
+
+        episodes() {
+            const episodes = [];
+
+            this.chapter.episodes.forEach(episode => {
+                if (episode.archived !== true) {
+                    episodes.push(episode);
+                }
+            });
+
+            return episodes;
+        }
     },
 
     watch: {
@@ -86,6 +99,10 @@ export default {
         onEditEpisode(episode) {
             episode.chapter = this.chapter;
             this.$emit('on-edit-episode', episode);
+        },
+
+        onArchiveEpisode(episode) {
+            this.$emit('on-archive-episode', episode);
         },
 
         onDragover(e) {
