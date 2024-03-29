@@ -5,6 +5,7 @@ import SynopsisShow from "&synopsis/views/SynopsisShow.vue";
 import SynopsisEpisodes from "&synopsis/views/SynopsisEpisodes.vue";
 import SynopsisNotes from "&synopsis/views/SynopsisNotes.vue";
 import SynopsisArchive from "&synopsis/views/SynopsisArchive.vue";
+import SynopsisTodoList from "&synopsis/views/SynopsisTodoList.vue";
 
 const routes =  [
     { path: '/', redirect: '/synopsis' },
@@ -35,6 +36,11 @@ const routes =  [
                 path: ':id-:slug/notes',
                 component: SynopsisNotes,
                 name: "SynopsisNotes",
+            },
+            {
+                path: ':id-:slug/todo',
+                component: SynopsisTodoList,
+                name: "SynopsisTodoList",
             },
         ]
     },

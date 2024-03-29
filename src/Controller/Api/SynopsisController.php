@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\Synopsis;
+use App\Entity\Task;
 use App\Entity\User;
 use App\Repository\SynopsisRepository;
 use App\Security\Voter\SynopsisVoter;
@@ -157,5 +158,31 @@ final class SynopsisController extends AbstractApiController
         $this->entityManager->flush();
 
         return $this->json('', Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/{id}/tasks', name: 'api_synopsis_task', methods:['PUT'])]
+    public function editTasksAction(Synopsis $synopsis, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $tasks = [];
+        foreach ($data as $row) {
+            $category = isset($row['category']) ? (int) $row['category'] : 0;
+            if ($category < 0 || $category > 2) {
+                $category = 0;
+            }
+
+            $tasks[] = (new Task())
+                ->setTitle(isset($row['title']) ? $row['title'] : '')
+                ->setContent(isset($row['content']) ? $row['content'] : '')
+                ->setPosition(isset($row['position']) ? $row['position'] : '')
+                ->setCategory($category);
+        }
+
+        $synopsis->setTasks($tasks);
+        $this->entityManager->persist($synopsis);
+        $this->entityManager->flush();
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 }

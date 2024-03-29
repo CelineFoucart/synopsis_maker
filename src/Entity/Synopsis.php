@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SynopsisRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -76,6 +77,13 @@ class Synopsis
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
     private ?string $notes = null;
+
+    /**
+     * @var Task[]
+     */
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[Groups(['index'])]
+    private ?array $tasks = null;
 
     public function __construct()
     {
@@ -300,6 +308,30 @@ class Synopsis
     public function setNotes(?string $notes): static
     {
         $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tasks
+     *
+     * @return Task[]
+     */
+    public function getTasks(): ?array
+    {
+        return $this->tasks !== null ? $this->tasks : [];
+    }
+
+    /**
+     * Set the value of tasks
+     *
+     * @param ?Task[] $tasks
+     *
+     * @return static
+     */
+    public function setTasks(?array $tasks): static
+    {
+        $this->tasks = $tasks !== null ? $tasks : [];
 
         return $this;
     }
