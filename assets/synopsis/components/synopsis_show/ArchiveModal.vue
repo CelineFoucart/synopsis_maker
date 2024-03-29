@@ -10,7 +10,8 @@
                     </div>
                     <div class="modal-body">
                         <p class="fs-5 mb-0">
-                            Voulez-vous vraiment archiver  {{ elementToArchive.type === 'episode' ? "l'épisode" : 'le chapitre' }} 
+                            Voulez-vous vraiment {{elementToArchive.archived ?  'désarchiver' : 'archiver' }} 
+                            {{ elementToArchive.type === 'episode' ? "l'épisode" : 'le chapitre' }} 
                             <span class="fw-bold">{{ elementToArchive.title }}</span> ?
                         </p>
                     </div>
@@ -21,7 +22,7 @@
                         <button type="button" class="btn btn-primary btn-sm" @click.prevent="accept">
                             <i class="fa-solid fa-spinner fa-spin fa-fw" v-if="loading"></i>
                             <i class="fa-solid fa-box-archive fa-fw" v-else></i>
-                            Archiver
+                            Confirmer
                         </button>
                     </div>
                 </div>

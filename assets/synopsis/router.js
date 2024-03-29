@@ -4,6 +4,7 @@ import CategoryIndex from "&synopsis/views/CategoryIndex.vue";
 import SynopsisShow from "&synopsis/views/SynopsisShow.vue";
 import SynopsisEpisodes from "&synopsis/views/SynopsisEpisodes.vue";
 import SynopsisNotes from "&synopsis/views/SynopsisNotes.vue";
+import SynopsisArchive from "&synopsis/views/SynopsisArchive.vue";
 
 const routes =  [
     { path: '/', redirect: '/synopsis' },
@@ -24,6 +25,11 @@ const routes =  [
                 path: ':id-:slug/episodes',
                 component: SynopsisEpisodes,
                 name: "SynopsisEpisodes",
+            },
+            {
+                path: ':id-:slug/archives',
+                component: SynopsisArchive,
+                name: "SynopsisArchive",
             },
             {
                 path: ':id-:slug/notes',

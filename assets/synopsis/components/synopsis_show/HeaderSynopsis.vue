@@ -23,7 +23,6 @@
                     <router-link :to="{ name: 'SynopsisNotes', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Notes'">
                         <i class="fa-solid fa-file-lines fa-fw"></i>
                     </router-link>
-
                     
                     <button type="button" class="btn btn-danger btn-sm" v-tooltip="'Supprimer'" @click="deleteModal = true">
                         <i class="fa-solid fa-trash fa-fw"></i>
@@ -37,13 +36,16 @@
             </div>
         </div>
         <AddSynopsisModal :synopsis="synopsis" v-if="editInfoModal" @on-close="editInfoModal = false"></AddSynopsisModal>
-        <Delete :title="synopsis.title" v-if="deleteModal" @on-confirm="deleteSynopsis" @on-cancel="deleteModal = false"></Delete>
+        <Delete :loading="loading" :title="synopsis.title" v-if="deleteModal" @on-confirm="deleteSynopsis" @on-cancel="deleteModal = false"></Delete>
     </header>
 </template>
 
 <script>
 import AddSynopsisModal from '&synopsis/components/synopsis/AddSynopsisModal.vue';
 import Delete from '&utils/Delete.vue';
+import { mapStores } from "pinia";
+import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
+import { createToastify } from '&utils/toastify.js';
 
 export default {
     name: 'HeaderSynopsis',
@@ -60,16 +62,30 @@ export default {
     data() {
         return {
             editInfoModal: false,
-            deleteModal: false
+            deleteModal: false,
+            loading: false
         }
     },
 
+    computed: {
+        ...mapStores(useSynopsisStore),
+    },
+
     methods: {
-        deleteSynopsis() {
-            this.$emit('on-delete');
+        async deleteSynopsis() {
+            this.loading = true
+            const status = await this.synopsisStore.deleteSynopsis(this.synopsisStore.synopsis.id);
+            if (status) {
+                createToastify('Le synopsis a été supprimé.', 'success');
+                this.$router.push('/synopsis');
+            } else {
+                createToastify('La suppression a échoué.', 'error');
+            }
+            this.loading = false;
             this.deleteModal = false;
         }
     },
+
 }
 </script>
 

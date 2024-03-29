@@ -118,6 +118,12 @@ final class ChapterController extends AbstractApiController
 
         $chapter->setArchived(!$chapter->isArchived());
         $this->entityManager->persist($chapter);
+
+        foreach ($chapter->getEpisodes() as $episode) {
+            $episode->setArchived($chapter->isArchived());
+            $this->entityManager->persist($episode);
+        }
+
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);
 

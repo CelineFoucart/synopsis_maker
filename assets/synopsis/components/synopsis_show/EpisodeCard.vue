@@ -2,8 +2,9 @@
     <article class="card h-100" :style="{'border-color': episode.color ? episode.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
             <h3 class="card-title h5 fw-bold" :class="{'text-success': episode.valid }">
-                <span class="handle"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
+                <span class="handle" v-if="archived === false"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
                 {{ episode.title }}
+                <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archivé'" v-if="episode.archived === true"></i>
             </h3>
             <p style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">{{ episode.description }}</p>
         </div>
@@ -19,8 +20,8 @@
                     </span>
                 </div>
                 <div class="col p-0 d-flex justify-content-end gap-1 align-items-center">
+                    <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archiver'" @click="$emit('on-archive-episode', episode)" v-if="!episode.chapterArchived"></i>
                     <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit-episode', episode)"></i>
-                    <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archiver'" @click="$emit('on-archive-episode', episode)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
             </div>
@@ -46,6 +47,10 @@ export default {
 
     props: {
         episode: Object,
+        archived: {
+            type: Boolean,
+            default: false
+        },
     },
 
     data() {

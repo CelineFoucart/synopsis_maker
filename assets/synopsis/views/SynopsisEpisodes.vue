@@ -2,7 +2,7 @@
     <div>
         <Error v-if="error"></Error>
         <article v-if="!loading && synopsisStore.synopsis !== null">
-            <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
+            <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
             <div class="border-top border-bottom my-3 p-2">
                 <div class="row">
                     <div class="col-md-8">
@@ -16,6 +16,9 @@
                             <i class="fa-solid fa-folder-open fa-fw" v-if="!openAll"></i>
                             <i class="fa-solid fa-folder-closed fa-fw" v-if="openAll"></i>
                         </button>
+                        <router-link class="btn btn-sm btn-dark me-1" v-tooltip="'Archives'" :to="{ name: 'SynopsisArchive', params:{slug: synopsisStore.synopsis.slug, id: synopsisStore.synopsis.id} }">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </router-link>
                         <div class="btn-group">
                             <button class="btn btn-sm btn-dark" v-tooltip="'Ajouter un chapitre'" @click="openChapterModal">
                                 <i class="fa-solid fa-folder-plus fa-fw"></i>
@@ -36,28 +39,10 @@
                     </button>
                 </div>
             </div>
-
-            <div class="row g-3 pt-3 sortable-chapter">
-                <div class="col-12" v-for="chapter in chapters" :key="chapter.id" :data-id="chapter.id">
-                    <ChapterCard :openAll="openAll" :chapter="chapter" 
-                        @on-archive-episode="onArchiveEpisode" 
-                        @on-edit-episode="onEditEpisode" 
-                        @on-edit="onEditChapter" 
-                        @on-archive="onArchiveChapter"
-                        @on-append="onAppendEpisode">
-                    </ChapterCard>
-                </div>
-            </div>
-            <div class="row g-3 m-2 sortable-list" style="min-height: 167px;" data-list="0">
-                <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id" :data-id="episode.id">
-                    <EpisodeCard @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode" :episode="episode"></EpisodeCard>
-                </div>
-            </div>
+            <SynopsisElementList :openAll="openAll" :archived="false"></SynopsisElementList>
+            
         </article>
-        <Loading v-if="loading || synopsisStore.loading"></Loading>
-        <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
-        <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
-        <ArchiveModal :elementToArchive="elementToArchive"  @on-close="archiveModal = false" v-if="archiveModal"></ArchiveModal>
+        <Loading v-if="loading"></Loading>
     </div>
 </template>
 
@@ -69,12 +54,7 @@ import { createToastify } from '&utils/toastify.js';
 import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
-import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
-import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
-import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
-import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
-import ArchiveModal from '&synopsis/components/synopsis_show/ArchiveModal.vue';
-import Sortable from 'sortablejs';
+import SynopsisElementList from '&synopsis/components/synopsis_show/SynopsisElementList.vue';
 
 export default {
     name: 'SynopsisEpisodes',
@@ -83,11 +63,7 @@ export default {
         Loading,
         HeaderSynopsis,
         Error,
-        ChapterCard,
-        EpisodeCard,
-        ChapterModal,
-        EpisodeModal,
-        ArchiveModal
+        SynopsisElementList
     },
 
     data() {
@@ -107,34 +83,6 @@ export default {
 
     computed: {
         ...mapStores(useSynopsisStore, useCategoryStore),
-
-        chapters() {
-            const chapters = [];
-
-            this.synopsisStore.synopsis.chapters.forEach(chapter => {
-                if (chapter.archived !== true) {
-                    chapters.push(chapter);
-                }
-            });
-
-            return chapters;
-        },
-
-        episodesWithNoChapter() {
-            const episodes = [];
-
-            if (this.synopsisStore.synopsis === null) {
-                return episodes;
-            }
-
-            this.synopsisStore.synopsis.episodes.forEach(episode => {
-                if (episode.chapterId === null && episode.archived !== true) {
-                    episodes.push(episode);
-                }
-            });
-
-            return episodes;
-        }
     },
 
     async mounted () {
@@ -159,40 +107,6 @@ export default {
         this.loading = false;
     },
 
-    updated() {
-        document.querySelectorAll('.sortable-list').forEach(element => {
-            new Sortable(element, {
-                handle: '.handle',
-                group: 'shared',
-                ghostClass: 'blue-background-class',
-                animation: 150,
-                onEnd: async (evt) => {
-                    const target = evt.to.dataset.list != 0 ? evt.to.dataset.list : null;
-                    const episode = evt.item.dataset.id;
-                    const position = evt.newIndex;
-                    const status = await this.synopsisStore.dropEpisodeToChapter(episode, target, position);
-                    if (!status) {
-                        createToastify("L'opération a échoué.", "error")
-                    }
-                },
-            });
-
-            new Sortable(document.querySelector('.sortable-chapter'), {
-                handle: '.handle',
-                ghostClass: 'blue-background-class',
-                animation: 150,
-                onEnd: async (evt) => {
-                    const chapter = evt.item.dataset.id;
-                    const position = evt.newIndex;
-                    const status = await this.synopsisStore.positionChapterAction(chapter, position);
-                    if (!status) {
-                        createToastify("L'opération a échoué.", "error")
-                    }
-                }
-            })
-        });
-    },
-
     methods: {
         saveLegend() {
             const status = this.synopsisStore.putSynopsisLegend(this.synopsisStore.synopsis.id, {legend: this.legend});
@@ -200,51 +114,6 @@ export default {
                 createToastify('La sauvegarde a échoué.', 'error');
             }
         },
-
-        openChapterModal() {
-            this.chapterToEdit = { title: null, description: null, color: null, id: null };
-            this.chapterModal = true;
-        },
-
-        onEditChapter(chapter) {
-            this.chapterToEdit = chapter;
-            this.chapterModal = true;            
-        },
-
-        onEditEpisode(episode) {
-            if (episode.chapter === undefined) {
-                episode.chapter = null;
-            }
-            this.episodeToEdit = episode;
-            this.episodeModal = true;
-        },
-
-        onArchiveEpisode(episode) {
-            this.elementToArchive = { title: episode.title, id: episode.id, archived: episode.archived, type: 'episode'};
-            this.archiveModal = true;
-        },
-
-        onArchiveChapter(chapter) {
-            this.elementToArchive = { title: chapter.title, id: chapter.id, archived: chapter.archived, type: 'chapter'};
-            this.archiveModal = true;
-        },
-
-        onAppendEpisode(chapter = null) {
-            this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, chapter: chapter };
-            this.episodeModal = true;
-        },
-
-        async deleteSynopsis() {
-            this.loading = true;
-            const status = await this.synopsisStore.deleteSynopsis(this.synopsisStore.synopsis.id);
-            if (status) {
-                createToastify('Le synopsis a été supprimé.', 'success');
-                this.$router.push('/synopsis');
-            } else {
-                createToastify('La suppression a échoué.', 'error');
-            }
-            this.loading = false;
-        }
     },
 }
 </script>
@@ -252,9 +121,5 @@ export default {
 <style scoped>
 #collapseComment div {
     white-space: pre-wrap
-}
-
-.text-secondary {
-    color: #616a72;
 }
 </style>

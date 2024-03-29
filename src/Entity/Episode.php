@@ -201,4 +201,10 @@ class Episode
     {
         return $this->chapter ? $this->chapter->getId() : null;
     }
+
+    #[Groups(['index'])]
+    public function isChapterArchived(): bool
+    {
+        return $this->chapter ? (bool) $this->chapter->isArchived() : false;
+    }
 }

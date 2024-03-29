@@ -32,3 +32,7 @@ label.required::after {
 .handle {
     cursor: grab;
 }
+
+.text-secondary {
+    color: #616a72;
+}
