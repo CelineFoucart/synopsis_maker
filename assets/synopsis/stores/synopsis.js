@@ -286,6 +286,41 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async addTask(task) {
+            try {
+                const index = this.synopsis.tasks.findIndex((element) => element.id === task.id);
+                if (index !== -1) {
+                    this.synopsis.tasks[index] = task;
+                } else {
+                    this.synopsis.tasks.push(task);
+                }
+
+                const url = Routing.generate("api_synopsis_task", {id: this.synopsis.id});
+                const response = await axios.put(url, this.synopsis.tasks);
+                this.synopsis.tasks = response.data.tasks;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async removeTask(task) {
+            try {
+                const index = this.synopsis.tasks.findIndex((element) => element.id === task.id);
+                if (index !== -1) {
+                    this.synopsis.tasks.splice(index, 1);
+                }
+
+                const url = Routing.generate("api_synopsis_task", {id: this.synopsis.id});
+                const response = await axios.put(url, this.synopsis.tasks);
+                this.synopsis.tasks = response.data.tasks;
+
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

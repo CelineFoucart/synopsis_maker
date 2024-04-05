@@ -8,13 +8,13 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <TodoColumn :title="'À faire'" :id="0" :synopsis="synopsis"></TodoColumn>
+                    <TodoColumn :title="'À faire'" :id="0" :synopsis="synopsisStore.synopsis"></TodoColumn>
                 </div>
                 <div class="col-md-4">
-                    <TodoColumn :title="'En cours'" :id="1" :synopsis="synopsis"></TodoColumn>
+                    <TodoColumn :title="'En cours'" :id="1" :synopsis="synopsisStore.synopsis"></TodoColumn>
                 </div>
                 <div class="col-md-4">
-                    <TodoColumn :title="'Terminé'" :id="2" :synopsis="synopsis"></TodoColumn>
+                    <TodoColumn :title="'Terminé'" :id="2" :synopsis="synopsisStore.synopsis"></TodoColumn>
                 </div>
             </div>
         </article>

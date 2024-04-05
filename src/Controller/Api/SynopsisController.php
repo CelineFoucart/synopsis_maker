@@ -172,15 +172,17 @@ final class SynopsisController extends AbstractApiController
                 $category = 0;
             }
 
-            $tasks[] = (new Task())
-                ->setTitle(isset($row['id']) && $row['id'] !== null ? $row['id'] : uniqid())
-                ->setTitle(isset($row['title']) ? $row['title'] : '')
-                ->setContent(isset($row['content']) ? $row['content'] : '')
-                ->setPosition(isset($row['position']) ? $row['position'] : '')
-                ->setCategory($category);
+            $tasks[] = [
+                'id' => isset($row['id']) && $row['id'] !== null ? $row['id'] : uniqid(),
+                'title' => isset($row['title']) ? $row['title'] : 'Tâche',
+                'content' =>isset($row['content']) ? $row['content'] : '',
+                'position' => isset($row['position']) ? $row['position'] : count($tasks),
+                'category' => $category,
+            ];
         }
 
         $synopsis->setTasks($tasks);
+
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 

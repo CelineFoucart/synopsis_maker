@@ -36,3 +36,7 @@ label.required::after {
 .text-secondary {
     color: #616a72;
 }
+
+.button {
+    cursor: pointer;
+}
