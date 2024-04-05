@@ -20,7 +20,7 @@
                     <router-link :to="{ name: 'SynopsisEpisodes', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Episodes'">
                         <i class="fa-solid fa-copy fa-fw"></i>
                     </router-link>
-                    <router-link :to="{ name: 'SynopsisTodoList', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Episodes'">
+                    <router-link :to="{ name: 'SynopsisTodoList', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Tâches'">
                         <i class="fa-solid fa-table-list fa-fw"></i>
                     </router-link>
                     <router-link :to="{ name: 'SynopsisNotes', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Notes'">
