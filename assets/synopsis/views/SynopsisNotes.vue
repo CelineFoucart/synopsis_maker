@@ -4,8 +4,13 @@
         <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
         
         <section class="mt-4">
-            <h2 class="h5">Notes, remarques et réflexions sur ce synopsis</h2>
-            <Description :data="synopsisStore.synopsis.notes" @on-save="onSave"></Description>
+            <h2 class="h5 d-flex justify-content-between">
+                <span>Notes, remarques et réflexions sur ce synopsis</span>
+                <span class="text-success" role="button" @click="onSave" v-tooltip="'Sauvegarder'">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                </span>
+            </h2>
+            <Description v-model:data="notes"></Description>
         </section>
     </article>
     <Loading v-if="loading || synopsisStore.loading"></Loading>
@@ -34,7 +39,8 @@ export default {
         return {
             error: false,
             loading: false,
-            partialLoading: false
+            partialLoading: false,
+            notes: null
         }
     },
 
@@ -54,12 +60,13 @@ export default {
             this.error = true;
         }
 
+        this.notes = this.synopsisStore.synopsis.notes;
         this.loading = false;
     },
 
     methods: {
-        async onSave(description) {
-            const status = await this.synopsisStore.putSynopsisNotes(description, this.synopsisStore.synopsis.id);
+        async onSave() {
+            const status = await this.synopsisStore.putSynopsisNotes(this.notes, this.synopsisStore.synopsis.id);
             if (!status) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
             }

@@ -4,8 +4,13 @@
         <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
         <p class="lead mt-3">{{ synopsisStore.synopsis.pitch }}</p>
         <section>
-            <h2 class="h5">Description</h2>
-            <Description :data="synopsisStore.synopsis.description" @on-save="onSave"></Description>
+            <h2 class="h5 d-flex justify-content-between">
+                Description
+                <span class="text-success" role="button" @click="onSave" v-tooltip="'Sauvegarder'">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                </span>
+            </h2>
+            <Description v-model:data="description"></Description>
         </section>
         <MetaData :element="synopsisStore.synopsis"></MetaData>
     </article>
@@ -38,7 +43,8 @@ export default {
         return {
             error: false,
             loading: false,
-            partialLoading: false
+            partialLoading: false,
+            description: null
         }
     },
 
@@ -56,6 +62,8 @@ export default {
         if (!this.status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
+        } else {
+            this.description = this.synopsisStore.synopsis.description;
         }
 
         await this.categoryStore.getCategories();
@@ -63,13 +71,13 @@ export default {
     },
 
     methods: {
-        async onSave(description) {
+        async onSave() {
             this.partialLoading = true;
             const data = {
                 title: this.synopsisStore.synopsis.title, 
                 pitch: this.synopsisStore.synopsis.pitch, 
                 categories: this.synopsisStore.synopsis.categories,
-                description: description
+                description: this.description
             };
 
             const status = await this.synopsisStore.putSynopsis(data, this.synopsisStore.synopsis.id);
