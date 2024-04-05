@@ -30,6 +30,7 @@ import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import TodoColumn from '&synopsis/components/synopsis_todo/TodoColumn.vue';
+import Sortable from 'sortablejs';
 
 export default {
     name: 'SynopsisTodoList',
@@ -62,12 +63,30 @@ export default {
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
-        } else {
-            this.legend = this.synopsisStore.synopsis.legend;
         }
         
         this.loading = false;
     },
+
+    updated() {
+        document.querySelectorAll('.sortable-list').forEach(element => {
+            new Sortable(element, {
+                group: 'shared',
+                ghostClass: 'blue-background-class',
+                animation: 150,
+                onEnd: async (evt) => {
+                    const category = evt.to.dataset.list;
+                    const taskId = evt.item.dataset.id;
+                    const position = evt.newIndex;
+
+                    const status = await this.synopsisStore.reorderTask(taskId, category, position);
+                    if (!status) {
+                        createToastify("L'opération a échoué.", "error")
+                    }
+                },
+            });
+        });
+    }
 }
 </script>
 

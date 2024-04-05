@@ -135,21 +135,21 @@ export default {
                     }
                 },
             });
-
-            new Sortable(document.querySelector('.sortable-chapter'), {
-                handle: '.handle',
-                ghostClass: 'blue-background-class',
-                animation: 150,
-                onEnd: async (evt) => {
-                    const chapter = evt.item.dataset.id;
-                    const position = evt.newIndex;
-                    const status = await this.synopsisStore.positionChapterAction(chapter, position);
-                    if (!status) {
-                        createToastify("L'opération a échoué.", "error")
-                    }
-                }
-            })
         });
+        
+        new Sortable(document.querySelector('.sortable-chapter'), {
+            handle: '.handle',
+            ghostClass: 'blue-background-class',
+            animation: 150,
+            onEnd: async (evt) => {
+                const chapter = evt.item.dataset.id;
+                const position = evt.newIndex;
+                const status = await this.synopsisStore.positionChapterAction(chapter, position);
+                if (!status) {
+                    createToastify("L'opération a échoué.", "error")
+                }
+            }
+        })
     },
 
     methods: {

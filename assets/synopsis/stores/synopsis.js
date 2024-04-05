@@ -321,6 +321,18 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async reorderTask(taskId, category, position) {
+            try {
+                const params = {id: this.synopsis.id, task: taskId, category: category, position: position};
+                const url = Routing.generate("api_synopsis_task_reorder", params);
+                const response = await axios.put(url, this.synopsis.tasks);
+                this.synopsis.tasks = response.data.tasks;
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

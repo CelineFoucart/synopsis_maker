@@ -4,8 +4,8 @@
             <h3 class="h5 fw-bold card-title mb-0">{{ title }}</h3>
         </div>
         <div class="card-body bg-light">
-            <div class="d-flex flex-column gap-2">
-                <div class="card card-task shadow-sm bg-white" v-for="task in tasks" :key="task.id">
+            <div class="d-flex flex-column gap-2 sortable-list" :data-list="id">
+                <div class="card handle card-task shadow-sm bg-white" :data-id="task.id" v-for="task in tasks" :key="task.id">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-9">
