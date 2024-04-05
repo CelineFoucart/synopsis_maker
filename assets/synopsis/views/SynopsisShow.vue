@@ -54,6 +54,7 @@ export default {
     
     async mounted () {
         if (this.synopsisStore.synopsis !== null) {
+            this.description = this.synopsisStore.synopsis.description;
             return;
         }
 
