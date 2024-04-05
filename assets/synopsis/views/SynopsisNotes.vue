@@ -50,6 +50,7 @@ export default {
 
     async mounted () {
         if (this.synopsisStore.synopsis !== null) {
+            this.notes = this.synopsisStore.synopsis.notes;
             return;
         }
 
