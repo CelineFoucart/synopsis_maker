@@ -4,7 +4,21 @@
         <article v-if="!loading && synopsisStore.synopsis !== null">
             <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
             <div class="border-top border-bottom my-3 p-2">
-                <h2 class="h5 mb-0 text-secondary">Sur cette page, gérez la liste des tâches à faire pour ce synopsis.</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="h5 mb-0 text-secondary">Sur cette page, gérez la liste des tâches à faire pour ce synopsis.</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" :style="{width: progressPercent}" aria-valuemin="0" aria-valuemax="100">
+                                {{ progressPercent.replace('.', ',') }}
+                            </div>
+                        </div>
+                        <div class="small text-center">
+                            Progression : {{progressPercent.replace('.', ',')}} ({{doneTasks}}/{{ synopsisStore.synopsis.tasks.length }})
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -18,7 +32,7 @@
                 </div>
             </div>
         </article>
-        <Loading v-if="loading"></Loading>
+        <Loading v-if="loading || partialLoading"></Loading>
     </div>
 </template>
 
@@ -46,11 +60,39 @@ export default {
         return {
             error: false,
             loading: false,
+            partialLoading: false
         }
     },
 
     computed: {
         ...mapStores(useSynopsisStore),
+
+        doneTasks() {
+            let doneTasks = 0;
+
+            if (this.synopsisStore.synopsis === null) {
+                return doneTasks;
+            }
+
+            this.synopsisStore.synopsis.tasks.forEach(task => {
+                if (task.category === 2) {
+                    doneTasks++; 
+                }
+            });
+
+            return doneTasks;
+        },
+
+        progressPercent() {
+            if (this.synopsisStore.synopsis === null) {
+                return '0%';
+            }
+
+            let percent = (this.doneTasks / this.synopsisStore.synopsis.tasks.length) * 100;
+            percent = Math.round(percent * 100) / 100
+
+            return `${percent}%`;
+        }
     },
 
     async mounted () {
@@ -75,6 +117,7 @@ export default {
                 ghostClass: 'blue-background-class',
                 animation: 150,
                 onEnd: async (evt) => {
+                    this.partialLoading = true;
                     const category = evt.to.dataset.list;
                     const taskId = evt.item.dataset.id;
                     const position = evt.newIndex;
@@ -83,6 +126,7 @@ export default {
                     if (!status) {
                         createToastify("L'opération a échoué.", "error")
                     }
+                    this.partialLoading = false;
                 },
             });
         });

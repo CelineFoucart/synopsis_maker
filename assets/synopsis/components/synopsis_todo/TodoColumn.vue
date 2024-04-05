@@ -1,10 +1,10 @@
 <template>
     <section class="card shadow-sm">
         <div class="card-header bg-light border-bottom-0 pb-0">
-            <h3 class="h5 fw-bold card-title mb-0">{{ title }}</h3>
+            <h3 class="h5 fw-bold card-title mb-0">{{ title }} ({{ tasks.length }}) </h3>
         </div>
         <div class="card-body bg-light">
-            <div class="d-flex flex-column gap-2 sortable-list" :data-list="id">
+            <div class="d-flex flex-column gap-2 sortable-list" :class="{'scroll-column': tasks.length > 6}" :data-list="id">
                 <div class="card handle card-task shadow-sm bg-white" :data-id="task.id" v-for="task in tasks" :key="task.id">
                     <div class="card-body">
                         <div class="row">
@@ -156,5 +156,11 @@ export default {
 <style scoped>
 .card-task:hover {
     border-color: rgb(13, 110, 253);
+}
+
+.scroll-column {
+    overflow-y: scroll;
+    max-height: 410px;
+    scrollbar-width: thin;
 }
 </style>
