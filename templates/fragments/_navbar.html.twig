@@ -1,7 +1,10 @@
 <header class="main-header-public">
 	<nav class="navbar navbar-expand-md">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="{{ path('app_home') }}">{{app_name}}</a>
+			<a class="navbar-brand" href="{{ path('app_home') }}">
+                <img src="{{ asset('img/feather.svg') }}" width="30" height="24" alt="plume noire">
+                {{app_name}}
+            </a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
