@@ -91,6 +91,10 @@ export default {
             let percent = (this.doneTasks / this.synopsisStore.synopsis.tasks.length) * 100;
             percent = Math.round(percent * 100) / 100
 
+            if (isNaN(percent)) {
+                percent = 0;
+            }
+
             return `${percent}%`;
         }
     },

@@ -53,7 +53,7 @@
             </table>
         </div>
         <PlaceListModal @on-close="placeListModalShow = false" v-if="placeListModalShow"></PlaceListModal>
-        <PlaceModal :data="place" @on-refresh="onRefresh" @on-close="placeModalShow = false" v-if="placeModalShow"></PlaceModal>
+        <PlaceModal :data="place" @on-close="placeModalShow = false" v-if="placeModalShow"></PlaceModal>
         <UnlinkModal :loading="loading" :title="place.title" @on-confirm="unlinkElement" @on-close="unlinkModalShow = false" v-if="unlinkModalShow"></UnlinkModal>
     </section>
 </template>
@@ -90,9 +90,9 @@ export default {
         ...mapStores(useSynopsisStore, usePlaceStore),
     },
 
+
     mounted () {
         this.resetPlace();
-        this.placeStore.setPlaces(this.synopsisStore.synopsis.places);
     },
 
     methods: {
@@ -105,6 +105,7 @@ export default {
                 this.resetPlace();
             } else {
                 this.place = place;
+                this.placeStore.setPlaces(this.synopsisStore.synopsis.places);
             }
 
             this.placeModalShow = true;
@@ -118,15 +119,15 @@ export default {
         substract(value) {
             const MAX_LENGTH = 150;
 
+            if (value === null) {
+                return '';
+            }
+            
             if (value.length <= MAX_LENGTH) {
                 return value;
             }
 
             return value.substring(0, MAX_LENGTH) + '[...]';
-        },
-
-        onRefresh() {
-            this.synopsisStore.refreshSynopsis(this.placeStore.places);
         },
 
         async unlinkElement() {

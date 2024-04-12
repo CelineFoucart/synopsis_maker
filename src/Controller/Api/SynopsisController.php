@@ -171,6 +171,7 @@ final class SynopsisController extends AbstractApiController
         $this->entityManager->persist($place);
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
+        $this->entityManager->refresh($synopsis);
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }

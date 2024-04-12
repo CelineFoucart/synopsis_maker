@@ -28,7 +28,7 @@ class Place
 
     #[ORM\Column(length: 15000, nullable: true)]
     #[Groups(['index'])]
-    #[Assert\Length(min: 10, max: 15000)]
+    #[Assert\Length(max: 15000)]
     private ?string $role = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

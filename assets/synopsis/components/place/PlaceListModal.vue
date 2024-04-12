@@ -9,7 +9,7 @@
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body position-relative">
-                        <div class="row">
+                        <div class="row g-2">
                             <div class="col-6" v-for="place in places">
                                 <section class="border bg-light p-1 button" @click="append(place.id)">
                                     <div class="d-flex justify-content-between align-items-center">

@@ -29,7 +29,7 @@ class Character
 
     #[ORM\Column(length: 2500, nullable: true)]
     #[Groups(['index'])]
-    #[Assert\Length(min: 2, max: 2500)]
+    #[Assert\Length(max: 2500)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -38,12 +38,12 @@ class Character
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
-    #[Assert\Length(min: 2, max: 25000)]
+    #[Assert\Length(max: 25000)]
     private ?string $biography = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['index'])]
-    #[Assert\Length(min: 2, max: 25000)]
+    #[Assert\Length(max: 25000)]
     private ?array $personality = null;
 
     #[ORM\ManyToMany(targetEntity: Synopsis::class, mappedBy: 'characters')]

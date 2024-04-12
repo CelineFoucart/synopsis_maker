@@ -40,3 +40,7 @@ label.required::after {
 .button {
     cursor: pointer;
 }
+
+.choices__list--dropdown, .choices__list[aria-expanded] {
+    z-index: 1111 !important;
+}

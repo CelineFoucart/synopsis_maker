@@ -137,7 +137,6 @@ export default {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
                 this.loading = false;
             } else {
-                this.$emit('on-refresh');
                 this.closeModal();
             }
         },
