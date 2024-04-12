@@ -37,7 +37,7 @@
 
                         <div class="mb-3">
                             <label for="content" class="form-label mb-0">Contenu</label>
-                            <Description v-model:data="content" placeholder="Décrivez les événements qui se déroulent dans cette épisode" :saveButton="false"></Description>
+                            <Description v-model:data="content" :saveButton="false"></Description>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -12,12 +12,20 @@
             </h2>
             <Description v-model:data="description"></Description>
         </section>
+        <div class="row">
+            <div class="col-lg-6">
+                <SynopsisPlace></SynopsisPlace>
+            </div>
+            <div class="col-lg-6">
+
+            </div>
+        </div>
         <MetaData :element="synopsisStore.synopsis"></MetaData>
     </article>
     <Loading v-if="loading || partialLoading"></Loading>
 </template>
 
-<script>
+<script lang="js">
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { useCategoryStore } from '&synopsis/stores/category.js';
@@ -27,6 +35,7 @@ import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import Description from '&utils/Description.vue';
 import MetaData from '&synopsis/components/synopsis_show/MetaData.vue';
+import SynopsisPlace from '&synopsis/components/synopsis_show/SynopsisPlace.vue';
 
 export default {
     name: 'SynopsisShow',
@@ -37,6 +46,7 @@ export default {
         Description,
         Error,
         MetaData,
+        SynopsisPlace
     },
 
     data() {
@@ -44,7 +54,7 @@ export default {
             error: false,
             loading: false,
             partialLoading: false,
-            description: null
+            description: ''
         }
     },
 
@@ -54,7 +64,7 @@ export default {
     
     async mounted () {
         if (this.synopsisStore.synopsis !== null) {
-            this.description = this.synopsisStore.synopsis.description;
+            this.description = this.synopsisStore.synopsis.description ? this.synopsisStore.synopsis.description : '';
             return;
         }
 

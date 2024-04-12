@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place
@@ -14,18 +17,27 @@ class Place
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['index'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 15000, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(min: 10, max: 15000)]
     private ?string $role = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['index'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(min: 5, max: 255)]
     private ?string $link = null;
 
     #[ORM\ManyToOne(inversedBy: 'places')]
@@ -161,5 +173,15 @@ class Place
         }
 
         return $this;
+    }
+
+    #[Groups(['index'])]
+    #[SerializedName('_links')]
+    public function getLinks(): array
+    {
+        return [
+            'delete' => ['href' => '/api/place/'.$this->getId()],
+            'update' => ['href' => '/api/place/'.$this->getId()],
+        ];
     }
 }

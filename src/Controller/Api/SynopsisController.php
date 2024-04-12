@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\Synopsis;
-use App\Entity\Task;
 use App\Entity\User;
-use App\Repository\SynopsisRepository;
-use App\Security\Voter\SynopsisVoter;
+use App\Entity\Place;
+use App\Entity\Synopsis;
 use App\Service\SynopsisHandler;
+use App\Security\Voter\SynopsisVoter;
+use App\Repository\SynopsisRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -117,7 +118,7 @@ final class SynopsisController extends AbstractApiController
     }
 
     #[Route('/{id}/legend', name: 'api_synopsis_legend_edit', methods: ['PUT'])]
-    public function legentEditAction(Synopsis $synopsis, Request $request): JsonResponse
+    public function legendEditAction(Synopsis $synopsis, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
 
@@ -127,10 +128,11 @@ final class SynopsisController extends AbstractApiController
         }
 
         $synopsis->setLegend($data['legend']);
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
-        return $this->json('', Response::HTTP_NO_CONTENT);
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
     #[Route('/{id}/notes', name: 'api_synopsis_legend_notes', methods: ['PUT'])]
@@ -144,10 +146,45 @@ final class SynopsisController extends AbstractApiController
         }
 
         $synopsis->setNotes($data['notes']);
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
-        return $this->json('', Response::HTTP_NO_CONTENT);
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/{id}/places', name: 'api_synopsis_place', methods: ['POST'])]
+    public function appendNewPlaceAction(Synopsis $synopsis, Request $request, SerializerInterface $serializer): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+
+        /** @var Place */
+        $place = $serializer->deserialize($request->getContent(), Place::class, 'json', ['groups' => 'index']);
+
+        $errors = $this->validate($place);
+        if (!empty($errors)) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $place->addSynopsis($synopsis)->setAuthor($this->getUser());
+        $synopsis->setUpdatedAt(new \DateTime());
+        $this->entityManager->persist($place);
+        $this->entityManager->persist($synopsis);
+        $this->entityManager->flush();
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/{id}/places/{placeId}', name: 'api_synopsis_place_append', methods: ['PUT'])]
+    public function appendPlaceAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'placeId')] Place $place): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $synopsis->addPlace($place);
+        $synopsis->setUpdatedAt(new \DateTime());
+        $this->entityManager->persist($place);
+        $this->entityManager->flush();
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
     #[Route('/{id}', name: 'api_synopsis_delete', methods: ['DELETE'])]
@@ -158,85 +195,5 @@ final class SynopsisController extends AbstractApiController
         $this->entityManager->flush();
 
         return $this->json('', Response::HTTP_NO_CONTENT);
-    }
-
-    #[Route('/{id}/tasks', name: 'api_synopsis_task', methods:['PUT'])]
-    public function editTasksAction(Synopsis $synopsis, Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        $tasks = [];
-        foreach ($data as $row) {
-            $category = isset($row['category']) ? (int) $row['category'] : 0;
-            if ($category < 0 || $category > 2) {
-                $category = 0;
-            }
-
-            $tasks[] = [
-                'id' => isset($row['id']) && $row['id'] !== null ? $row['id'] : uniqid(),
-                'title' => isset($row['title']) ? $row['title'] : 'Tâche',
-                'content' =>isset($row['content']) ? $row['content'] : '',
-                'position' => isset($row['position']) ? $row['position'] : count($tasks),
-                'category' => $category,
-            ];
-        }
-
-        $synopsis->setTasks($tasks);
-
-        $this->entityManager->persist($synopsis);
-        $this->entityManager->flush();
-
-        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
-    }
-
-    #[Route('/{id}/tasks/{task}/{category}/{position}', name: 'api_synopsis_task_reorder', methods:['PUT'])]
-    public function reorderTasksAction(Synopsis $synopsis, string $task, int $category, int $position): JsonResponse
-    {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
-
-        $toReorderTasks = [];
-        $notReorderedTasks = [];
-
-        foreach ($synopsis->getTasks() as $element) {
-            if ($element['id'] === $task) {
-                $element['category'] = $category;
-            }
-
-            if ($element['category'] === $category) {
-                $toReorderTasks[] = $element;
-            } else {
-                $notReorderedTasks[] = $element;
-            }
-        }
-
-        $toReorderTasks = $this->reorderTaskArray($toReorderTasks, $task, $position);
-        $tasks = [...$notReorderedTasks, ... $toReorderTasks];
-        $synopsis->setTasks($tasks);
-        $this->entityManager->persist($synopsis);
-        $this->entityManager->flush();
-
-        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
-    }
-
-    private function reorderTaskArray(array $toReorderTasks, string $task, int $position): array
-    {
-        if (!empty($toReorderTasks)) {
-            usort($toReorderTasks, fn(array $a, array $b) => $a['position'] <=> $b['position']);
-        }
-
-        for($i = 0; $i < count($toReorderTasks); $i++){
-            if($toReorderTasks[$i]['id'] === $task){
-                $part2 = array_splice($toReorderTasks, $i, 1);
-                $part1 = array_slice($toReorderTasks, 0, $position);
-                $part3 = array_slice($toReorderTasks, $position);
-                $toReorderTasks = array_merge($part1, $part2, $part3);
-            }
-        }
-
-        for($i = 0; $i < count($toReorderTasks); $i++){
-            $toReorderTasks[$i]['position'] = $i;
-        }
-
-        return $toReorderTasks;
     }
 }

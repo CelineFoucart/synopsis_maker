@@ -333,6 +333,32 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async addPlace(data) {
+            if (this.synopsis === null) {
+                return false;
+            }
+
+            try {
+                const url = Routing.generate("api_synopsis_place", {id: this.synopsis.id});
+                const response = await axios.post(url, data);
+                this.synopsis.places = response.data.places;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async removePlace(placeId) {
+            try {
+                const url = Routing.generate("api_synopsis_place_remove", {id: this.synopsis.id, placeId: placeId});
+                const response = await axios.put(url);
+                this.synopsis.places = response.data.places;
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

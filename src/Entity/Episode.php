@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\EpisodeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
+use App\Repository\EpisodeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -62,6 +63,8 @@ class Episode
     private ?Chapter $chapter = null;
 
     #[ORM\ManyToMany(targetEntity: Place::class, inversedBy: 'episodes')]
+    #[OrderBy(['title' => 'ASC'])]
+    #[Groups(['index'])]
     private Collection $places;
 
     public function __construct()

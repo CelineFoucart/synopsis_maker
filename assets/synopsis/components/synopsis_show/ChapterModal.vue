@@ -125,9 +125,10 @@ export default {
 
             if (!status) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
+                this.loading = false;
+            } else {
+                this.closeModal();
             }
-
-            this.closeModal();
         }
     },
 }
