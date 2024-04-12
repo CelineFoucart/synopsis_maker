@@ -23,7 +23,7 @@ import { createToastify } from '&utils/toastify.js';
 import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
-import Description from '&synopsis/components/synopsis_show/Description.vue';
+import Description from '&utils/Description.vue';
 
 export default {
     name: 'SynopsisNotes',

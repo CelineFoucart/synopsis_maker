@@ -65,7 +65,7 @@ import { required, maxLength, minLength  } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
-import Description from '&synopsis/components/synopsis_show/Description.vue';
+import Description from '&utils/Description.vue';
 
 export default {
     name: 'EpisodeModal',

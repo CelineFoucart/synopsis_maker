@@ -3,12 +3,14 @@
         <ul class="nav nav-pills">
             <li class="nav-item">
                 <router-link :to="{ name: 'SynopsisIndex' }" class="nav-link py-3" :class="{'active' : isSynopsisRoute}">
-                    Mes synopsis
+                    <i class="fa-solid fa-book fa-fw"></i>
+                    <span class="d-none d-md-inline">Mes synopsis</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link :to="{ name: 'CategoryIndex' }" class="nav-link py-3">
-                    Mes catégories
+                    <i class="fa-solid fa-tags fa-fw"></i>
+                    <span class="d-none d-md-inline">Mes catégories</span>
                 </router-link>
             </li>
         </ul>

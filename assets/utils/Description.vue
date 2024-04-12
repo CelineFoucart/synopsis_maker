@@ -35,13 +35,13 @@ export default {
                 "language": "fr"
             },
             buttons: [
-                'undo', 'redo', 'source', '|', 
+                'undo', 'redo', 'source', 'spellcheck', '|', 
                 'bold', 'underline', 'italic', 'strikethrough', 'eraser', '|', 
                 'align', 'indent', 'outdent',  '|', 'ul', 'ol', '|', 
-                'font', 'fontsize', 'brush', 'paragraph', 'lineHeight', 'superscript', 'subscript', '|', 
+                'paragraph', 'font', 'fontsize', 'brush', 'lineHeight', '|', 'superscript', 'subscript', '|', 
                 'image', 'hr', 'table', 'link', 'symbols', '|',
                 'cut', 'copy', 'paste', 'selectall', 'copyformat', '|', 'find', '|', 
-                'spellcheck', 'preview', 'fullsize', 'print', '|', 'about'
+                'preview', 'fullsize', 'print', '|', 'about'
                 
             ]
         }

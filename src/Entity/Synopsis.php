@@ -81,11 +81,15 @@ class Synopsis
     #[Groups(['index'])]
     private ?array $tasks = null;
 
+    #[ORM\ManyToMany(targetEntity: Place::class, inversedBy: 'synopses')]
+    private Collection $places;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->episodes = new ArrayCollection();
         $this->chapters = new ArrayCollection();
+        $this->places = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -324,6 +328,30 @@ class Synopsis
     public function setTasks(?array $tasks): static
     {
         $this->tasks = $tasks !== null ? $tasks : [];
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): static
+    {
+        if (!$this->places->contains($place)) {
+            $this->places->add($place);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): static
+    {
+        $this->places->removeElement($place);
 
         return $this;
     }

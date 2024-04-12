@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -58,6 +60,14 @@ class Episode
 
     #[ORM\ManyToOne(inversedBy: 'episodes')]
     private ?Chapter $chapter = null;
+
+    #[ORM\ManyToMany(targetEntity: Place::class, inversedBy: 'episodes')]
+    private Collection $places;
+
+    public function __construct()
+    {
+        $this->places = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -206,5 +216,29 @@ class Episode
     public function isChapterArchived(): bool
     {
         return $this->chapter ? (bool) $this->chapter->isArchived() : false;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): static
+    {
+        if (!$this->places->contains($place)) {
+            $this->places->add($place);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): static
+    {
+        $this->places->removeElement($place);
+
+        return $this;
     }
 }

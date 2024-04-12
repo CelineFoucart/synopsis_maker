@@ -48,10 +48,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $categories;
 
+    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $places;
+
     public function __construct()
     {
         $this->synopses = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->places = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -202,6 +206,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($category->getAuthor() === $this) {
                 $category->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): static
+    {
+        if (!$this->places->contains($place)) {
+            $this->places->add($place);
+            $place->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): static
+    {
+        if ($this->places->removeElement($place)) {
+            // set the owning side to null (unless already changed)
+            if ($place->getAuthor() === $this) {
+                $place->setAuthor(null);
             }
         }
 
