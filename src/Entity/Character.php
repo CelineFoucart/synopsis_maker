@@ -52,6 +52,10 @@ class Character
     #[ORM\ManyToMany(targetEntity: Episode::class, mappedBy: 'characters')]
     private Collection $episodes;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['index'])]
+    private ?string $link = null;
+
     public function __construct()
     {
         $this->synopses = new ArrayCollection();
@@ -196,5 +200,17 @@ class Character
             'delete' => ['href' => '/api/character/'.$this->getId()],
             'update' => ['href' => '/api/character/'.$this->getId()],
         ];
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): static
+    {
+        $this->link = $link;
+
+        return $this;
     }
 }
