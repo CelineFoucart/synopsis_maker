@@ -10,6 +10,10 @@ export const useSynopsisStore = defineStore('synopsis', {
     }),
 
     actions: {
+        refreshSynopsis(places) {
+            this.synopsis.places = places;
+        },
+
         async getSynopses(page = 1, limit = 10, filters) { 
             this.loading = true;
             try {
@@ -353,7 +357,7 @@ export const useSynopsisStore = defineStore('synopsis', {
         async removePlace(placeId) {
             try {
                 const url = Routing.generate("api_synopsis_place_remove", {id: this.synopsis.id, placeId: placeId});
-                const response = await axios.put(url);
+                const response = await axios.delete(url);
                 this.synopsis.places = response.data.places;
                 return true;
             } catch (error) {

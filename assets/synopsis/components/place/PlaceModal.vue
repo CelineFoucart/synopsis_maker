@@ -57,6 +57,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
+import { usePlaceStore } from '&synopsis/stores/place.js';
 import { createToastify } from '&utils/toastify.js';
 import { required, maxLength, minLength, url  } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
@@ -85,7 +86,7 @@ export default {
     },
 
     computed: {
-        ...mapStores(useSynopsisStore),
+        ...mapStores(useSynopsisStore, usePlaceStore),
     },
 
     validations () {
@@ -127,19 +128,19 @@ export default {
 
             let success = false;
             if (this.data.id) {
-
+                success = await this.placeStore.edit(this.data.id, data);
             } else {
                 success = await this.synopsisStore.addPlace(data);
-
             }
 
             if (!success) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
                 this.loading = false;
             } else {
+                this.$emit('on-refresh');
                 this.closeModal();
             }
-        }
+        },
     },
 }
 </script>

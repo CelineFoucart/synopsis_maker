@@ -6,7 +6,6 @@ namespace App\Controller\Api;
 
 use App\Entity\Synopsis;
 use App\Security\Voter\SynopsisVoter;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,11 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/api/synopsis')]
 final class SynopsisTaskController extends AbstractApiController
 {
-    public function __construct(
-        protected EntityManagerInterface $entityManager,
-    ) {
-    }
-
     #[Route('/{id}/tasks', name: 'api_synopsis_task', methods:['PUT'])]
     public function editTasksAction(Synopsis $synopsis, Request $request): JsonResponse
     {

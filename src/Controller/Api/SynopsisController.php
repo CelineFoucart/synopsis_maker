@@ -181,7 +181,23 @@ final class SynopsisController extends AbstractApiController
         $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
         $synopsis->addPlace($place);
         $synopsis->setUpdatedAt(new \DateTime());
-        $this->entityManager->persist($place);
+        $this->entityManager->persist($synopsis);
+        $this->entityManager->flush();
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/{id}/places/{placeId}', name: 'api_synopsis_place_remove', methods: ['DELETE'])]
+    public function unlinkPlaceAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'placeId')] Place $place): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        if (!$synopsis->getPlaces()->contains($place)) {
+            throw $this->createNotFoundException();
+        }
+
+        $synopsis->removePlace($place);
+        $synopsis->setUpdatedAt(new \DateTime());
+        $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);

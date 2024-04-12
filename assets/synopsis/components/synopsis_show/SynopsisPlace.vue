@@ -32,11 +32,11 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-dark" v-tooltip="'Editer'">
+                                <button type="button" class="btn btn-sm btn-dark" v-tooltip="'Editer'" @click="openPlaceModal(place)">
                                     <i class="fa-solid fa-pen-to-square fa-fw"></i>
                                     <span class="visually-hidden">Editer</span>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger" v-tooltip="'Retirer'">
+                                <button type="button" class="btn btn-sm btn-danger" v-tooltip="'Retirer'" @click="openUnlinkModal(place)">
                                     <i class="fa-solid fa-link-slash fa-fw"></i>
                                     <span class="visually-hidden">Retirer</span>
                                 </button>
@@ -49,35 +49,43 @@
                 </tbody>
             </table>
         </div>
-        <PlaceModal :data="place" @on-close="placeModalShow = false" v-if="placeModalShow"></PlaceModal>
+        <PlaceModal :data="place" @on-refresh="onRefresh" @on-close="placeModalShow = false" v-if="placeModalShow"></PlaceModal>
+        <UnlinkModal :loading="loading" :title="place.title" @on-confirm="unlinkElement" @on-close="unlinkModalShow = false" v-if="unlinkModalShow"></UnlinkModal>
     </section>
 </template>
 
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
+import { usePlaceStore } from '&synopsis/stores/place.js';
 import PlaceModal from '&synopsis/components/place/PlaceModal.vue';
+import UnlinkModal from '&utils/UnlinkModal.vue';
+import { createToastify } from '&utils/toastify.js';
 
 export default {
     name: 'SynopsisPlace',
 
     components: {
         PlaceModal,
+        UnlinkModal
     },
 
     data() {
         return {
             placeModalShow: false,
-            place: null
+            unlinkModalShow: false,
+            place: { title: null},
+            loading: false
         }
     },
 
     computed: {
-        ...mapStores(useSynopsisStore),
+        ...mapStores(useSynopsisStore, usePlaceStore),
     },
 
     mounted () {
         this.resetPlace();
+        this.placeStore.setPlaces(this.synopsisStore.synopsis.places);
     },
 
     methods: {
@@ -95,6 +103,11 @@ export default {
             this.placeModalShow = true;
         },
 
+        openUnlinkModal(place) {
+            this.place = place;
+            this.unlinkModalShow = true;
+        },
+
         substract(value) {
             const MAX_LENGTH = 150;
 
@@ -103,6 +116,29 @@ export default {
             }
 
             return value.substring(0, MAX_LENGTH) + '[...]';
+        },
+
+        onRefresh() {
+            this.synopsisStore.refreshSynopsis(this.placeStore.places);
+        },
+
+        async unlinkElement() {
+            this.loading = true;
+
+            let success = false;
+            if (this.place !== null) {
+                success = await this.synopsisStore.removePlace(this.place.id);
+            }
+
+            if (success) {
+                createToastify("L'élément a été retiré du synopsis.", 'success');
+                this.placeStore.setPlaces(this.synopsisStore.synopsis.places);
+            } else {
+                createToastify("L'opération a échoué.", 'error');
+            }
+
+            this.unlinkModalShow = false;
+            this.loading = false;
         }
     },
 }
