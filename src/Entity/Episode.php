@@ -67,9 +67,15 @@ class Episode
     #[Groups(['index'])]
     private Collection $places;
 
+    #[ORM\ManyToMany(targetEntity: Character::class, inversedBy: 'episodes')]
+    #[OrderBy(['name' => 'ASC'])]
+    #[Groups(['index'])]
+    private Collection $characters;
+
     public function __construct()
     {
         $this->places = new ArrayCollection();
+        $this->characters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -253,6 +259,30 @@ class Episode
     public function removePlace(Place $place): static
     {
         $this->places->removeElement($place);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Character>
+     */
+    public function getCharacters(): Collection
+    {
+        return $this->characters;
+    }
+
+    public function addCharacter(Character $character): static
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters->add($character);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): static
+    {
+        $this->characters->removeElement($character);
 
         return $this;
     }
