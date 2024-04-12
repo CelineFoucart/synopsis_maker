@@ -18,7 +18,7 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="description" class="form-label required">Catégories</label>
+                            <label for="categories" class="form-label required">Catégories</label>
                             <select id="categories" v-model="categories" multiple></select>
                             <div class="text-danger small" v-if="v$.categories.$errors.length">
                                 Ce champ est obligatoire. Veuillez choisir au moins une catégorie.

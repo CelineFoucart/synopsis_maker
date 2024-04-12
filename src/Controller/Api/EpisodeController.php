@@ -2,21 +2,23 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Place;
 use App\Entity\Chapter;
 use App\Entity\Episode;
 use App\Entity\Synopsis;
+use App\Service\ReorderService;
 use App\Repository\ChapterRepository;
 use App\Security\Voter\SynopsisVoter;
-use App\Service\ReorderService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/synopsis/{id}/episode')]
 final class EpisodeController extends AbstractApiController
@@ -42,6 +44,13 @@ final class EpisodeController extends AbstractApiController
 
         /** @var Episode */
         $episode = $this->serializer->deserialize($request->getContent(), Episode::class, 'json', ['groups' => ['index']]);
+        
+        $data = json_decode($request->getContent(), true);
+        if (isset($data['places']) && count($data['places']) > 0) {
+            $places = $this->entityManager->getRepository(Place::class)->findByIds($data['places'], $this->getUser());
+            $episode->setPlaces(new ArrayCollection($places));
+        }
+        
         $errors = $this->validate($episode);
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
@@ -79,6 +88,12 @@ final class EpisodeController extends AbstractApiController
             'json',
             ['groups' => ['index'], AbstractNormalizer::OBJECT_TO_POPULATE => $episode,
         ]);
+
+        $data = json_decode($request->getContent(), true);
+        if (isset($data['places']) && count($data['places']) > 0) {
+            $places = $this->entityManager->getRepository(Place::class)->findByIds($data['places'], $this->getUser());
+            $episode->setPlaces(new ArrayCollection($places));
+        }
 
         $errors = $this->validate($episode);
         if (!empty($errors)) {

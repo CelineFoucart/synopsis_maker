@@ -229,6 +229,18 @@ class Episode
         return $this->places;
     }
 
+    /**
+     * @param Collection<int, Place> $places
+     * 
+     * @return static
+     */
+    public function setPlaces(Collection $places): static
+    {
+        $this->places = $places;
+
+        return $this;
+    }
+
     public function addPlace(Place $place): static
     {
         if (!$this->places->contains($place)) {

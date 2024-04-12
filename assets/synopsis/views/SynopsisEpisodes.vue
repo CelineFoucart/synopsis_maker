@@ -39,10 +39,18 @@
                     </button>
                 </div>
             </div>
-            <SynopsisElementList :openAll="openAll" :archived="false"></SynopsisElementList>
+            <SynopsisElementList 
+                :openAll="openAll" 
+                :archived="false"
+                @on-edit-chapter="onEditChapter"
+                @on-edit-episode="onEditEpisode"
+                @on-append-episode="onAppendEpisode">
+            </SynopsisElementList>
             
         </article>
         <Loading v-if="loading"></Loading>
+        <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
+        <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
     </div>
 </template>
 
@@ -55,6 +63,8 @@ import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import SynopsisElementList from '&synopsis/components/synopsis_show/SynopsisElementList.vue';
+import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
+import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
 
 export default {
     name: 'SynopsisEpisodes',
@@ -63,7 +73,9 @@ export default {
         Loading,
         HeaderSynopsis,
         Error,
-        SynopsisElementList
+        SynopsisElementList,
+        ChapterModal,
+        EpisodeModal,
     },
 
     data() {
@@ -113,6 +125,29 @@ export default {
             if (!status) {
                 createToastify('La sauvegarde a échoué.', 'error');
             }
+        },
+
+        openChapterModal() {
+            this.chapterToEdit = { title: null, description: null, color: null, id: null };
+            this.chapterModal = true;
+        },
+
+        onEditChapter(chapter) {
+            this.chapterToEdit = chapter;
+            this.chapterModal = true;            
+        },
+
+        onEditEpisode(episode) {
+            if (episode.chapter === undefined) {
+                episode.chapter = null;
+            }
+            this.episodeToEdit = episode;
+            this.episodeModal = true;
+        },
+        
+        onAppendEpisode(chapter = null) {
+            this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, places: [], chapter: chapter };
+            this.episodeModal = true;
         },
     },
 }

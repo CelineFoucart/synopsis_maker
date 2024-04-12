@@ -6,7 +6,13 @@
                 {{ episode.title }}
                 <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archivé'" v-if="episode.archived === true"></i>
             </h3>
-            <p style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">{{ episode.description }}</p>
+            <p v-if="episode.places.length > 0">
+                <i class="fa-solid fa-location-dot fa-fw"></i>
+                <span v-for="place in episode.places" class="badge text-bg-secondary me-1">{{ place.title }}</span>
+            </p>
+            <p style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">
+                {{ substract(episode.description) }}
+            </p>
         </div>
         <footer class="card-footer fs-5">
             <div class="row m-0">
@@ -65,6 +71,16 @@ export default {
     },
 
     methods: {
+        substract(value) {
+            const MAX_LENGTH = 200;
+
+            if (value.length <= MAX_LENGTH) {
+                return value;
+            }
+
+            return value.substring(0, MAX_LENGTH) + '[...]';
+        },
+
         async onDelete() {
             this.loading = true;
             const status = await this.synopsisStore.deleteEpisode(this.episode.id, this.episode.chapterId);

@@ -36,6 +36,11 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="places" class="form-label required">Lieux</label>
+                            <select id="places" v-model="places" multiple></select>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="content" class="form-label mb-0">Contenu</label>
                             <Description v-model:data="content" :saveButton="false"></Description>
                         </div>
@@ -66,6 +71,8 @@ import { useVuelidate } from '@vuelidate/core';
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
 import Description from '&utils/Description.vue';
+import 'choices.js/public/assets/styles/choices.css';
+import Choices from 'choices.js';
 
 export default {
     name: 'EpisodeModal',
@@ -85,6 +92,7 @@ export default {
             description: null,
             color: null,
             content: null,
+            places: [],
             v$: useVuelidate(),
             loading: false,
         }
@@ -106,6 +114,27 @@ export default {
         this.description = this.episode.description;
         this.color = this.episode.color;
         this.content = this.episode.content;
+
+        this.episode.places.forEach(place => {
+            this.places.push(place.id);
+        });
+
+        const choice = new Choices('#places', {
+            allowHTML: true,
+            loadingText: 'Chargement...',
+            removeItemButton: true,
+            noResultsText: 'Aucun résultat',
+            noChoicesText: 'Aucun élément',
+            itemSelectText: 'Cliquer pour sélectionner',
+        });
+
+        const options = [];
+        this.synopsisStore.synopsis.places.forEach(element => {
+            const isSelected = this.places.includes(element.id) ? true : false;
+            options.push({value: element.id, label: element.title, selected: isSelected});
+        });
+        choice.clearChoices();
+        choice.setChoices(options);
     },
 
     methods: {
@@ -124,7 +153,11 @@ export default {
             }
 
             const data = {
-                title: this.title, description: this.description, color: this.color, content: this.content
+                title: this.title, 
+                description: this.description, 
+                color: this.color, 
+                content: this.content,
+                places: this.places
             };
 
             let status;
@@ -137,9 +170,9 @@ export default {
 
             if (!status) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
+            } else {
+                this.closeModal();
             }
-
-            this.closeModal();
         }
     },
 }

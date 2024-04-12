@@ -37,6 +37,17 @@ class PlaceRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByIds(array $ids, User $user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.author' , 'u')
+            ->andWhere('u.id = :id')->setParameter('id', $user->getId())
+            ->andWhere('p.id IN (:ids)')->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    public function findOneBySomeField($value): ?Place
 //    {
 //        return $this->createQueryBuilder('p')

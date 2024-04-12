@@ -18,8 +18,6 @@
         </div>
         
         <Loading v-if="synopsisStore.loading"></Loading>
-        <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
-        <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
         <ArchiveModal :elementToArchive="elementToArchive"  @on-close="archiveModal = false" v-if="archiveModal"></ArchiveModal>
     </div>
 </template>
@@ -31,8 +29,6 @@ import { useCategoryStore } from '&synopsis/stores/category.js';
 import { createToastify } from '&utils/toastify.js';
 import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
 import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
-import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
-import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
 import ArchiveModal from '&synopsis/components/synopsis_show/ArchiveModal.vue';
 import Loading from '&utils/Loading.vue';
 import Sortable from 'sortablejs';
@@ -44,8 +40,6 @@ export default {
         Loading,
         ChapterCard,
         EpisodeCard,
-        ChapterModal,
-        EpisodeModal,
         ArchiveModal
     },
 
@@ -62,10 +56,6 @@ export default {
 
     data() {
         return {
-            chapterToEdit: { title: null, description: null, color: null, content: null, id: null },
-            episodeToEdit: {},
-            chapterModal: false,
-            episodeModal: false,
             archiveModal: false,
             elementToArchive: { title: null, id: null, archived: false, type: null }
         }
@@ -161,22 +151,16 @@ export default {
             return element.archived !== true;
         },
 
-        openChapterModal() {
-            this.chapterToEdit = { title: null, description: null, color: null, id: null };
-            this.chapterModal = true;
-        },
-
-        onEditChapter(chapter) {
-            this.chapterToEdit = chapter;
-            this.chapterModal = true;            
+        onEditChapter(chapter) {       
+            this.$emit('on-edit-chapter', chapter);   
         },
 
         onEditEpisode(episode) {
-            if (episode.chapter === undefined) {
-                episode.chapter = null;
-            }
-            this.episodeToEdit = episode;
-            this.episodeModal = true;
+            this.$emit('on-edit-episode', episode);  
+        },
+        
+        onAppendEpisode(chapter = null) {
+            this.$emit('on-append-episode', chapter); 
         },
 
         onArchiveEpisode(episode) {
@@ -187,11 +171,6 @@ export default {
         onArchiveChapter(chapter) {
             this.elementToArchive = { title: chapter.title, id: chapter.id, archived: chapter.archived, type: 'chapter'};
             this.archiveModal = true;
-        },
-
-        onAppendEpisode(chapter = null) {
-            this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, chapter: chapter };
-            this.episodeModal = true;
         },
     },
 }
