@@ -363,6 +363,21 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
+        },
+
+        async appendPlaceFromList(placeId) {
+            if (this.synopsis === null) {
+                return false;
+            }
+
+            try {
+                const url = Routing.generate("api_synopsis_place_append", {id: this.synopsis.id, placeId: placeId});
+                const response = await axios.put(url);
+                this.synopsis.places = response.data.places;
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 })

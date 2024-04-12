@@ -4,8 +4,11 @@
             <div class="row">
                 <div class="col-9"><h2 class="h5 mb-0 card-title">Lieux associés</h2></div>
                 <div class="col-3 text-end">
+                    <button type="button" class="btn btn-sm btn-success me-1" v-tooltip="'Ajouter depuis la liste'" @click="placeListModalShow = true">
+                        <i class="fa-solid fa-list fa-fw"></i>
+                    </button>
                     <button type="button" class="btn btn-sm btn-success" v-tooltip="'Ajouter'" @click="openPlaceModal(null)">
-                        <i class="fa-solid fa-plus"></i>
+                        <i class="fa-solid fa-plus fa-fw"></i>
                     </button>
                 </div>
             </div>
@@ -49,6 +52,7 @@
                 </tbody>
             </table>
         </div>
+        <PlaceListModal @on-close="placeListModalShow = false" v-if="placeListModalShow"></PlaceListModal>
         <PlaceModal :data="place" @on-refresh="onRefresh" @on-close="placeModalShow = false" v-if="placeModalShow"></PlaceModal>
         <UnlinkModal :loading="loading" :title="place.title" @on-confirm="unlinkElement" @on-close="unlinkModalShow = false" v-if="unlinkModalShow"></UnlinkModal>
     </section>
@@ -59,6 +63,7 @@ import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { usePlaceStore } from '&synopsis/stores/place.js';
 import PlaceModal from '&synopsis/components/place/PlaceModal.vue';
+import PlaceListModal from '&synopsis/components/place/PlaceListModal.vue';
 import UnlinkModal from '&utils/UnlinkModal.vue';
 import { createToastify } from '&utils/toastify.js';
 
@@ -67,13 +72,15 @@ export default {
 
     components: {
         PlaceModal,
-        UnlinkModal
+        UnlinkModal,
+        PlaceListModal
     },
 
     data() {
         return {
             placeModalShow: false,
             unlinkModalShow: false,
+            placeListModalShow: false,
             place: { title: null},
             loading: false
         }
