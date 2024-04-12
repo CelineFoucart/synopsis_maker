@@ -4,13 +4,19 @@
             <li class="nav-item">
                 <router-link :to="{ name: 'SynopsisIndex' }" class="nav-link py-3" :class="{'active' : isSynopsisRoute}">
                     <i class="fa-solid fa-book fa-fw"></i>
-                    <span class="d-none d-md-inline">Mes synopsis</span>
+                    <span class="d-none d-md-inline">Synopsis</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link :to="{ name: 'CategoryIndex' }" class="nav-link py-3">
                     <i class="fa-solid fa-tags fa-fw"></i>
-                    <span class="d-none d-md-inline">Mes catégories</span>
+                    <span class="d-none d-md-inline">Catégories</span>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link :to="{ name: 'PlaceIndex' }" class="nav-link py-3">
+                    <i class="fa-solid fa-location-dot fa-fw"></i>
+                    <span class="d-none d-md-inline">Lieux</span>
                 </router-link>
             </li>
         </ul>

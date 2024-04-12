@@ -6,6 +6,7 @@ import SynopsisEpisodes from "&synopsis/views/SynopsisEpisodes.vue";
 import SynopsisNotes from "&synopsis/views/SynopsisNotes.vue";
 import SynopsisArchive from "&synopsis/views/SynopsisArchive.vue";
 import SynopsisTodoList from "&synopsis/views/SynopsisTodoList.vue";
+import PlaceIndex from "&synopsis/views/PlaceIndex.vue";
 
 const routes =  [
     { path: '/', redirect: '/synopsis' },
@@ -48,6 +49,11 @@ const routes =  [
         path: "/category",
         name: "CategoryIndex",
         component: CategoryIndex
+    },
+    {
+        path: "/place",
+        name: "PlaceIndex",
+        component: PlaceIndex
     }
 ];
 

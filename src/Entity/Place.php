@@ -176,6 +176,17 @@ class Place
     }
 
     #[Groups(['index'])]
+    public function getParents(): array
+    {
+        $parents = [];
+        foreach ($this->getSynopses() as $synopsis) {
+            $parents[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
+        }
+
+        return $parents;
+    }
+
+    #[Groups(['index'])]
     #[SerializedName('_links')]
     public function getLinks(): array
     {

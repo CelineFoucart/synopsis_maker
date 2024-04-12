@@ -7,19 +7,19 @@
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <div class="input-group">
                         <span class="input-group-text">
+                            <label for="searchValue">Recherche</label>
+                        </span>
+                        <input type="text" class="form-control w-auto input-sm" id="searchValue" v-model="searchValue" />
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-text">
                             <label for="searchField">Champ</label>
                         </span>
                         <select v-model="searchField" id="searchField" class="form-control w-auto input-sm">
                             <option value="title">Titre</option>
                             <option value="description">Description</option>
                         </select>
-                    </div>
-        
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <label for="searchValue">Recherche</label>
-                        </span>
-                        <input type="text" class="form-control w-auto input-sm" id="searchValue" v-model="searchValue" />
                     </div>
                 </div>
             </div>
