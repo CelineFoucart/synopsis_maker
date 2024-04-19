@@ -9,20 +9,28 @@
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body bg-light">
-                        <div class="mb-3">
-                            <label for="title" class="form-label required">Nom</label>
-                            <input type="text" class="form-control" id="title" v-model="title" :class="{ 'is-invalid': v$.title.$errors.length }">
-                            <div class="invalid-feedback">
-                                Ce champ est obligatoire et doit faire entre 2 et 255 caractères.
+                        <div class="d-flex gap-2 mb-3">
+                            <div class="rounded element-form-icon">
+                                <i class="fa-solid fa-building fa-8x"></i>
+                            </div>
+                            <div class="flex-fill">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label required">Nom</label>
+                                    <input type="text" class="form-control" id="title" v-model="title" :class="{ 'is-invalid': v$.title.$errors.length }">
+                                    <div class="invalid-feedback">
+                                        Ce champ est obligatoire et doit faire entre 2 et 255 caractères.
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="role" class="form-label">Rôle dans l'histoire</label>
+                                    <textarea class="form-control" id="role" v-model="role" :class="{ 'is-invalid': v$.role.$errors.length }"></textarea>
+                                    <div class="invalid-feedback">
+                                        Ce champ doit faire entre 5 et 15000 caractères.
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Rôle dans l'histoire</label>
-                            <textarea class="form-control" id="role" v-model="role" :class="{ 'is-invalid': v$.role.$errors.length }"></textarea>
-                            <div class="invalid-feedback">
-                                Ce champ doit faire entre 5 et 15000 caractères.
-                            </div>
-                        </div>
+
                         <div class="mb-3">
                             <label for="description" class="form-label mb-0">Description (géographie, histoire, caractéristiques...)</label>
                             <Description v-model:data="description" :saveButton="false"></Description>

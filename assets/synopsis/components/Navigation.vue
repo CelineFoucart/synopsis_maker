@@ -14,6 +14,12 @@
                 </router-link>
             </li>
             <li class="nav-item">
+                <router-link :to="{ name: 'CharacterIndex' }" class="nav-link py-3">
+                    <i class="fas fa-user fa-fw"></i>
+                    <span class="d-none d-md-inline">Personnages</span>
+                </router-link>
+            </li>
+            <li class="nav-item">
                 <router-link :to="{ name: 'PlaceIndex' }" class="nav-link py-3">
                     <i class="fa-solid fa-location-dot fa-fw"></i>
                     <span class="d-none d-md-inline">Lieux</span>

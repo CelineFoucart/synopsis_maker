@@ -44,3 +44,11 @@ label.required::after {
 .choices__list--dropdown, .choices__list[aria-expanded] {
     z-index: 1111 !important;
 }
+
+.element-form-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: fit-content;
+}

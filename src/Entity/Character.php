@@ -185,6 +185,18 @@ class Character
         return $this;
     }
 
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
     #[Groups(['index'])]
     public function getParents(): array
     {
@@ -216,17 +228,5 @@ class Character
             'delete' => ['href' => '/api/character/'.$this->getId()],
             'update' => ['href' => '/api/character/'.$this->getId()],
         ];
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): static
-    {
-        $this->author = $author;
-
-        return $this;
     }
 }

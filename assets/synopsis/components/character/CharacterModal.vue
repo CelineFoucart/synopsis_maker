@@ -10,7 +10,7 @@
                     </div>
                     <div class="modal-body bg-light">
                         <div class="d-flex gap-2 mb-3">
-                            <div class="rounded image-character">
+                            <div class="rounded element-form-icon">
                                 <i class="fa-solid fa-circle-user fa-8x"></i>
                             </div>
                             <div class="flex-fill">
@@ -240,13 +240,5 @@ export default {
 
 .input-group-text {
     width: 105px;
-}
-
-.image-character {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    width: fit-content;
 }
 </style>
