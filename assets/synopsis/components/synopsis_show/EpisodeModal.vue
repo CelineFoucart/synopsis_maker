@@ -35,9 +35,19 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="places" class="form-label required">Lieux</label>
-                            <select id="places" v-model="places" multiple></select>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="places" class="form-label required">Lieux</label>
+                                    <select id="places" v-model="places" multiple></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="characters" class="form-label required">Personnages</label>
+                                    <select id="characters" v-model="characters" multiple></select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -93,6 +103,7 @@ export default {
             color: null,
             content: null,
             places: [],
+            characters: [],
             v$: useVuelidate(),
             loading: false,
         }
@@ -114,32 +125,51 @@ export default {
         this.description = this.episode.description;
         this.color = this.episode.color;
         this.content = this.episode.content;
-
-        this.episode.places.forEach(place => {
-            this.places.push(place.id);
-        });
-
-        const choice = new Choices('#places', {
-            allowHTML: true,
-            loadingText: 'Chargement...',
-            removeItemButton: true,
-            noResultsText: 'Aucun résultat',
-            noChoicesText: 'Aucun élément',
-            itemSelectText: 'Cliquer pour sélectionner',
-        });
-
-        const options = [];
-        this.synopsisStore.synopsis.places.forEach(element => {
-            const isSelected = this.places.includes(element.id) ? true : false;
-            options.push({value: element.id, label: element.title, selected: isSelected});
-        });
-        choice.clearChoices();
-        choice.setChoices(options);
+        this.hydratePlacesSelect();
+        this.hydrateCharacterSelect();
     },
 
     methods: {
         closeModal() {
             this.$emit('on-close');
+        },
+
+        hydratePlacesSelect() {
+            this.episode.places.forEach(place => {
+                this.places.push(place.id);
+            });
+            const placeOptions = [];
+            this.synopsisStore.synopsis.places.forEach(element => {
+                const isSelected = this.places.includes(element.id) ? true : false;
+                placeOptions.push({value: element.id, label: element.title, selected: isSelected});
+            });
+            this.setChoices('#places', placeOptions);
+        },
+
+        hydrateCharacterSelect() {
+            this.episode.characters.forEach(character => {
+                this.characters.push(character.id);
+            });
+            const characterOptions = [];
+            this.synopsisStore.synopsis.characters.forEach(element => {
+                const isSelected = this.characters.includes(element.id) ? true : false;
+                characterOptions.push({value: element.id, label: element.name, selected: isSelected});
+            });
+            this.setChoices('#characters', characterOptions);
+        },
+
+        setChoices(id, options) {
+            const choice = new Choices(id, {
+                allowHTML: true,
+                loadingText: 'Chargement...',
+                removeItemButton: true,
+                noResultsText: 'Aucun résultat',
+                noChoicesText: 'Aucun élément',
+                itemSelectText: 'Cliquer pour sélectionner',
+            });
+
+            choice.clearChoices();
+            choice.setChoices(options);
         },
 
         async save() {
@@ -157,7 +187,8 @@ export default {
                 description: this.description, 
                 color: this.color, 
                 content: this.content,
-                places: this.places
+                places: this.places,
+                characters: this.characters
             };
 
             let status;

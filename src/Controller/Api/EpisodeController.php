@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Place;
 use App\Entity\Chapter;
+use App\Entity\Character;
 use App\Entity\Episode;
 use App\Entity\Synopsis;
 use App\Service\ReorderService;
@@ -50,6 +51,11 @@ final class EpisodeController extends AbstractApiController
             $places = $this->entityManager->getRepository(Place::class)->findByIds($data['places'], $this->getUser());
             $episode->setPlaces(new ArrayCollection($places));
         }
+
+        if (isset($data['characters']) && count($data['characters']) > 0) {
+            $characters = $this->entityManager->getRepository(Character::class)->findByIds($data['characters'], $this->getUser());
+            $episode->setCharacters(new ArrayCollection($characters));
+        }
         
         $errors = $this->validate($episode);
         if (!empty($errors)) {
@@ -93,6 +99,11 @@ final class EpisodeController extends AbstractApiController
         if (isset($data['places']) && count($data['places']) > 0) {
             $places = $this->entityManager->getRepository(Place::class)->findByIds($data['places'], $this->getUser());
             $episode->setPlaces(new ArrayCollection($places));
+        }
+
+        if (isset($data['characters']) && count($data['characters']) > 0) {
+            $characters = $this->entityManager->getRepository(Character::class)->findByIds($data['characters'], $this->getUser());
+            $episode->setCharacters(new ArrayCollection($characters));
         }
 
         $errors = $this->validate($episode);

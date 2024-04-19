@@ -286,4 +286,16 @@ class Episode
 
         return $this;
     }
+
+    /**
+     * @param Collection<int, Character> $characters
+     * 
+     * @return static
+     */
+    public function setCharacters(Collection $characters): static
+    {
+        $this->characters = $characters;
+
+        return $this;
+    }
 }

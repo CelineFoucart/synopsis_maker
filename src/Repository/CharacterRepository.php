@@ -37,13 +37,14 @@ class CharacterRepository extends ServiceEntityRepository
         ;
     }
 
-//    public function findOneBySomeField($value): ?Character
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByIds(array $ids, User $user): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.author' , 'u')
+            ->andWhere('u.id = :id')->setParameter('id', $user->getId())
+            ->andWhere('c.id IN (:ids)')->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

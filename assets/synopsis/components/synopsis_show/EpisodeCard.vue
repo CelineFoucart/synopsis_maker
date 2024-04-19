@@ -6,11 +6,15 @@
                 {{ episode.title }}
                 <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archivé'" v-if="episode.archived === true"></i>
             </h3>
-            <p v-if="episode.places.length > 0">
+            <p v-if="episode.characters.length > 0" class="mb-0">
+                <i class="fa-solid fa-user fa-fw"></i>
+                <span v-for="character in episode.characters" class="badge text-bg-secondary me-1">{{ character.name }}</span>
+            </p>
+            <p v-if="episode.places.length > 0" class="mb-0">
                 <i class="fa-solid fa-location-dot fa-fw"></i>
                 <span v-for="place in episode.places" class="badge text-bg-secondary me-1">{{ place.title }}</span>
             </p>
-            <p style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">
+            <p class="mt-2" style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">
                 {{ substract(episode.description) }}
             </p>
         </div>

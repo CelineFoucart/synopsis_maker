@@ -146,7 +146,16 @@ export default {
         },
         
         onAppendEpisode(chapter = null) {
-            this.episodeToEdit = { id: null, title: null, description: null, color: null, content: null, places: [], chapter: chapter };
+            this.episodeToEdit = { 
+                id: null, 
+                title: null, 
+                description: null, 
+                color: null, 
+                content: null, 
+                places: [], 
+                characters: [], 
+                chapter: chapter 
+            };
             this.episodeModal = true;
         },
     },
