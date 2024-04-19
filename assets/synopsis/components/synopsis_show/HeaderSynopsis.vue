@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="row">
-            <div class="col-7">
+            <div class="col-6">
                 <h1 class="display-5">
                     <span class="me-2">{{ synopsis.title }}</span>
                     <span class="action-btn-header text-success h5 me-2" role="button" v-tooltip="'Editer les informations'" @click="editInfoModal = true">
@@ -9,28 +9,25 @@
                     </span>
                 </h1>
             </div>
-            <div class="col-5 text-end">
+            <div class="col-6 text-end">
                 <router-link :to="{ name: 'SynopsisIndex' }" class="btn btn-sm btn-dark" v-tooltip="'Liste'">
                     <i class="fa-solid fa-arrow-left fa-fw"></i>
+                    <span class="visually-hidden">Liste</span>
                 </router-link>
-                <div class="btn-group ms-1">
-                    <router-link :to="{ name: 'SynopsisShow', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Gérer le synopsis'">
+                <div class="btn-group mx-1">
+                    <router-link :to="{ name: 'SynopsisShow', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Informations'">
                         <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                        <span class="visually-hidden">Informations générales</span>
                     </router-link>
-                    <router-link :to="{ name: 'SynopsisEpisodes', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Episodes'">
+                    <router-link :to="{ name: 'SynopsisEpisodes', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Scènes'">
                         <i class="fa-solid fa-copy fa-fw"></i>
+                        <span class="visually-hidden">Scènes</span>
                     </router-link>
-                    <router-link :to="{ name: 'SynopsisTodoList', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Tâches'">
-                        <i class="fa-solid fa-table-list fa-fw"></i>
-                    </router-link>
-                    <router-link :to="{ name: 'SynopsisNotes', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Notes'">
-                        <i class="fa-solid fa-file-lines fa-fw"></i>
-                    </router-link>
-                    
-                    <button type="button" class="btn btn-danger btn-sm" v-tooltip="'Supprimer'" @click="deleteModal = true">
-                        <i class="fa-solid fa-trash fa-fw"></i>
-                    </button>
                 </div>
+                <button class="btn btn-sm btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" v-tooltip="'Menu'">
+                    <i class="fa-solid fa-ellipsis"></i>
+                    <span class="visually-hidden">Menu</span>
+                </button>
             </div>
             <div class="col-12">
                 <span v-for="category in synopsis.categories" :key="category.id" class="badge me-1 bg-secondary">
@@ -38,6 +35,66 @@
                 </span>
             </div>
         </div>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 id="offcanvasRightLabel">Menu</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <h6 class="fw-bold small"><i class="fa-solid fa-circle-info fa-fw"></i> A propos de ce synopsis</h6>
+                <p class="small" style="margin-left: 20px;">{{ synopsisStore.synopsis.pitch ? synopsisStore.synopsis.pitch : 'Aucun pitch' }}</p>
+                <hr class="mb-1">
+                <h6 class="text-muted small mb-3">Conception</h6>
+                <ul class="list-unstyled" style="margin-left: 20px;">
+                    <li class="pb-2">
+                        <router-link :to="{ name: 'SynopsisShow', params:{slug: synopsis.slug, id: synopsis.id} }" class="text-decoration-none">
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i> Informations générales
+                        </router-link>
+                    </li>
+                    <li class="pb-2">
+                        <router-link :to="{ name: 'SynopsisEpisodes', params:{slug: synopsis.slug, id: synopsis.id} }" class="text-decoration-none">
+                            <i class="fa-solid fa-copy fa-fw"></i> Scènes
+                        </router-link>
+                    </li>
+                    <li class="pb-2">
+                        <router-link :to="{ name: 'WorldBuilding', params:{slug: synopsis.slug, id: synopsis.id} }" class="text-decoration-none">
+                            <i class="fa-solid fa-book-open fa-fw"></i> Construction du monde
+                        </router-link>
+                    </li>
+                    <li class="pb-2">
+                        <router-link :to="{ name: 'SynopsisTodoList', params:{slug: synopsis.slug, id: synopsis.id} }" class="text-decoration-none">
+                            <i class="fa-solid fa-table-list fa-fw"></i> Liste de tâches 
+                        </router-link>
+                    </li>
+                    <li class="pb-2">
+                        <router-link :to="{ name: 'SynopsisNotes', params:{slug: synopsis.slug, id: synopsis.id} }" class="text-decoration-none">
+                            <i class="fa-solid fa-file-lines fa-fw"></i> Prises de note
+                        </router-link>
+                    </li>
+                </ul>
+                <hr class="mb-1">
+                <h6 class="text-muted small mb-3">Actions</h6>
+                <ul class="list-unstyled" style="margin-left: 20px;">
+                    <li class="pb-2">
+                        <a href="" class="text-decoration-none">
+                            <i class="fa-solid fa-print fa-fw"></i> Générer le pdf
+                        </a>
+                    </li>
+                    <li class="pb-2">
+                        <a href="" class="text-decoration-none">
+                            <i class="fa-solid fa-file-word fa-fw"></i> Exporter le fichier word
+                        </a>
+                    </li>
+                    <li class="pb-2">
+                        <a href="#" class="text-danger text-decoration-none fw-bold" @click.prevent="deleteModal = true">
+                            <i class="fa-solid fa-trash fa-fw"></i> Suppression
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <AddSynopsisModal :synopsis="synopsis" v-if="editInfoModal" @on-close="editInfoModal = false"></AddSynopsisModal>
         <Delete :loading="loading" :title="synopsis.title" v-if="deleteModal" @on-confirm="deleteSynopsis" @on-cancel="deleteModal = false"></Delete>
     </header>

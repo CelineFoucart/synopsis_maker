@@ -2,8 +2,8 @@
     <section class="card mt-4">
         <header class="card-header">
             <div class="row">
-                <div class="col-9"><h2 class="h5 mb-0 card-title">Lieux associés</h2></div>
-                <div class="col-3 text-end">
+                <div class="col-8"><h2 class="h5 mb-0 card-title">Lieux associés</h2></div>
+                <div class="col-4 text-end">
                     <button type="button" class="btn btn-sm btn-success me-1" v-tooltip="'Ajouter depuis la liste'" @click="placeListModalShow = true">
                         <i class="fa-solid fa-list fa-fw"></i>
                     </button>

@@ -87,7 +87,7 @@
                         <div class="mb-3">
                             <label for="link" class="form-label">Lien</label>
                             <input type="url" class="form-control" id="link" v-model="link" :class="{ 'is-invalid': v$.link.$errors.length }">
-                            <div class="form-text">Ajoutez un lien vers un article ou une page de blog sur ce lieu.</div>
+                            <div class="form-text">Ajoutez un lien vers un article ou une page de blog sur ce personnage.</div>
                             <div class="invalid-feedback">
                                 Ce champ doit faire entre 10 et 255 caractères et est être une URL valide.
                             </div>

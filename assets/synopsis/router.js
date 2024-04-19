@@ -8,6 +8,7 @@ import SynopsisArchive from "&synopsis/views/SynopsisArchive.vue";
 import SynopsisTodoList from "&synopsis/views/SynopsisTodoList.vue";
 import PlaceIndex from "&synopsis/views/PlaceIndex.vue";
 import CharacterIndex from "&synopsis/views/CharacterIndex.vue";
+import WorldBuilding from "&synopsis/views/WorldBuilding.vue";
 
 const routes =  [
     { path: '/', redirect: '/synopsis' },
@@ -43,6 +44,11 @@ const routes =  [
                 path: ':id-:slug/todo',
                 component: SynopsisTodoList,
                 name: "SynopsisTodoList",
+            },
+            {
+                path: ':id-:slug/worldbuilding',
+                component: WorldBuilding,
+                name: "WorldBuilding",
             },
         ]
     },
