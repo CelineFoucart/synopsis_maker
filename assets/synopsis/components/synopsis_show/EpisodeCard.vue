@@ -14,7 +14,7 @@
                 <i class="fa-solid fa-location-dot fa-fw"></i>
                 <span v-for="place in episode.places" class="badge text-bg-secondary me-1">{{ place.title }}</span>
             </p>
-            <p class="mt-2" style="white-space: pre-wrap;" :class="{'text-success': episode.valid }">
+            <p class="mt-2" style="white-space: pre-wrap;" :class="{'text-success': episode.valid }" v-if="showDescription">
                 {{ substract(episode.description) }}
             </p>
         </div>
@@ -61,6 +61,7 @@ export default {
             type: Boolean,
             default: false
         },
+        showDescription: Boolean,
     },
 
     data() {

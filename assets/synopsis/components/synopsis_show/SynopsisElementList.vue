@@ -1,8 +1,10 @@
 <template>
     <div class="position-relative">
-        <div class="row g-3 pt-3 sortable-chapter">
-            <div class="col-12" v-for="chapter in chapters" :key="chapter.id" :data-id="chapter.id">
-                <ChapterCard :openAll="openAll" :chapter="chapter" :archived="archived"
+        <div class="row g-3 pb-3 sortable-chapter mt-0">
+            <div class="col-12 mt-0 mb-2" v-for="chapter in chapters" :key="chapter.id" :data-id="chapter.id">
+                <ChapterCard :openAll="openAll" :chapter="chapter" :archived="archived" 
+                    :showDescription="showChapterDescription"
+                    :showEpisodeDescription="showEpisodeDescription"
                     @on-archive-episode="onArchiveEpisode" 
                     @on-edit-episode="onEditEpisode" 
                     @on-edit="onEditChapter" 
@@ -13,7 +15,13 @@
         </div>
         <div class="row g-3 m-2 sortable-list" style="min-height: 167px;" data-list="0">
             <div class="col-md-4 col-lg-3" v-for="episode in episodesWithNoChapter" :key="episode.id" :data-id="episode.id">
-                <EpisodeCard @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode" :archived="archived" :episode="episode"></EpisodeCard>
+                <EpisodeCard 
+                    @on-archive-episode="onArchiveEpisode" 
+                    @on-edit-episode="onEditEpisode" 
+                    :showDescription="showEpisodeDescription"
+                    :archived="archived" 
+                    :episode="episode">
+                </EpisodeCard>
             </div>
         </div>
         
@@ -52,6 +60,14 @@ export default {
             type: Boolean,
             default: true
         },
+        showEpisodeDescription: {
+            type: Boolean,
+            default: true
+        },
+        showChapterDescription: {
+            type: Boolean,
+            default: true
+        }
     },
 
     data() {

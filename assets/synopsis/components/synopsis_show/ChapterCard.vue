@@ -8,13 +8,8 @@
                         {{ chapter.title }}
                         <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archivé'" v-if="chapter.archived === true"></i>
                     </h2>
-                </div>
-                <div class="col-3 fs-5 justify-content-end align-items-center d-flex gap-1">
-                    <span class="button" @click.prevent="showComment = !showComment">
-                        <i class="fa-solid fa-comment fa-fw" v-if="!showComment" v-tooltip="'Afficher la description'"></i>
-                        <i class="fa-solid fa-comment-slash fa-fw" v-if="showComment" v-tooltip="'Cacher la description'"></i>
-                    </span>
-                    
+                </div>                  
+                <div class="col-3 fs-5 justify-content-end align-items-center d-flex gap-1">                    
                     <span class="button" @click.prevent="isOpen = !isOpen">
                         <i class="fa-solid fa-folder-open fa-fw" v-if="!isOpen" v-tooltip="'Ouvrir'"></i>
                         <i class="fa-solid fa-folder-closed fa-fw" v-if="isOpen" v-tooltip="'Fermer'"></i>
@@ -24,13 +19,13 @@
                     <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
                 </div>
-                <div class="col-12" v-if="chapter.description && showComment">
+                <div class="col-12" v-if="chapter.description && showDescription">
                     <p class="small mb-0" style="white-space: pre-wrap;">{{ chapter.description }}</p>
                 </div>
             </header>
             <div class="row g-2 sortable-list" v-if="isOpen" :data-list="chapter.id">
                 <div class="col-md-4 col-lg-3" v-for="episode in episodes" :key="episode.id" :data-id="episode.id">
-                    <EpisodeCard :archived="archived" :episode="episode" @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode"></EpisodeCard>
+                    <EpisodeCard :showDescription="showEpisodeDescription" :archived="archived" :episode="episode" @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode"></EpisodeCard>
                 </div>
             </div>
         </div>
@@ -61,12 +56,13 @@ export default {
             type: Boolean,
             default: false
         },
+        showDescription: Boolean,
+        showEpisodeDescription: Boolean
     },
 
     data() {
         return {
             isOpen: true,
-            showComment: false,
             deleteModal: false,
             loading: false
         }

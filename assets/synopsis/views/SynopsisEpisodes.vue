@@ -39,9 +39,21 @@
                     </button>
                 </div>
             </div>
+            <aside class="d-flex gap-3 justify-content-end">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="chapterDesc" v-model="showChapterDescription">
+                    <label class="form-check-label" for="chapterDesc">Descriptions des chapitres</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="episodeDesc" v-model="showEpisodeDescription">
+                    <label class="form-check-label" for="episodeDesc">Descriptions des épisodes</label>
+                </div>
+            </aside>
             <SynopsisElementList 
                 :openAll="openAll" 
                 :archived="false"
+                :showChapterDescription="showChapterDescription"
+                :showEpisodeDescription="showEpisodeDescription"
                 @on-edit-chapter="onEditChapter"
                 @on-edit-episode="onEditEpisode"
                 @on-append-episode="onAppendEpisode">
@@ -89,7 +101,9 @@ export default {
             chapterModal: false,
             episodeModal: false,
             archiveModal: false,
-            elementToArchive: { title: null, id: null, archived: false, type: null }
+            elementToArchive: { title: null, id: null, archived: false, type: null },
+            showEpisodeDescription: false,
+            showChapterDescription: false
         }
     },
 
