@@ -15,7 +15,7 @@ export default {
     props: {
         data: {
             type: String,
-            default: null
+            default: ''
         },
         placeholder: {
             type: String,
@@ -30,7 +30,7 @@ export default {
 
     data() {
         return {
-            content: null,
+            content: '',
             config: {
                 "language": "fr"
             },

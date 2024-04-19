@@ -5,10 +5,10 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title h5" id="placeModalConfigLabel">Lieu</h3>
+                        <h3 class="modal-title h5" id="placeModalLabel">Lieu</h3>
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body bg-light">
                         <div class="mb-3">
                             <label for="title" class="form-label required">Nom</label>
                             <input type="text" class="form-control" id="title" v-model="title" :class="{ 'is-invalid': v$.title.$errors.length }">
@@ -54,7 +54,7 @@
     </div>
 </template>
 
-<script>
+<script lang="js">
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { usePlaceStore } from '&synopsis/stores/place.js';

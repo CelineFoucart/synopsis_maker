@@ -1,20 +1,20 @@
 <template>
     <div>
         <div class="modal-backdrop fade show"></div>
-        <div class="modal fade show" id="placeListModal" tabindex="-1" aria-labelledby="placeListModalLabel">
+        <div class="modal fade show" id="characterListModal" tabindex="-1" aria-labelledby="characterListModalLabel">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title h5" id="placeListModalLabel">Liste des lieux</h3>
+                        <h3 class="modal-title h5" id="characterListModalLabel">Liste des personnages</h3>
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body position-relative">
                         <div class="row g-2">
-                            <div class="col-6" v-for="place in places">
-                                <section class="border bg-light p-1 button" @click="append(place.id)">
+                            <div class="col-6" v-for="character in characters">
+                                <section class="border bg-light p-1 button" @click="append(character.id)">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h4 class="fs-6 mb-0">
-                                            {{ place.title }}
+                                            {{ character.name }}
                                         </h4>
                                         <span class="fs-6">
                                             <i class="fa-solid fa-plus fa-fw"></i> 
@@ -34,12 +34,12 @@
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
-import { usePlaceStore } from '&synopsis/stores/place.js';
+import { useCharacterStore } from '&synopsis/stores/character.js';
 import { createToastify } from '&utils/toastify.js';
 import Loading from '&utils/Loading.vue';
 
 export default {
-    name: 'PlaceListModal',
+    name: 'CharacterListModal',
 
     components: {
         Loading,
@@ -56,26 +56,26 @@ export default {
     },
 
     computed: {
-        ...mapStores(useSynopsisStore, usePlaceStore),
+        ...mapStores(useSynopsisStore, useCharacterStore),
 
-        places() {
-            const places = [];
+        characters() {
+            const characters = [];
 
-            this.placeStore.places.forEach(place => {
-                const index = this.synopsisStore.synopsis.places.findIndex(element => element.id === place.id);
+            this.characterStore.characters.forEach(character => {
+                const index = this.synopsisStore.synopsis.characters.findIndex(element => element.id === character.id);
                 if (index === -1) {
-                    places.push(place);
+                    characters.push(character);
                 }
             });
 
-            return places;
+            return characters;
         }
     },
 
     async mounted () {
         this.loading = true;
 
-        const status = await this.placeStore.getAll();
+        const status = await this.characterStore.getAll();
         if (!status) {
             createToastify('Le chargement a échoué', 'error');
         }
@@ -88,14 +88,14 @@ export default {
             this.$emit('on-close');
         },
 
-        async append(placeId) {
+        async append(characterId) {
             this.loading = true;
 
-            const status = await this.synopsisStore.appendPlaceFromList(placeId);
+            const status = await this.synopsisStore.appendCharacterFromList(characterId);
             if (!status) {
                 createToastify("L'ajout a échoué.", 'error');
             } else {
-                createToastify("Le lieu a été ajouté.", 'success');
+                createToastify("Le personnage a été ajouté.", 'success');
             }
 
             this.loading = false;
@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style scoped>
-#placeListModal {
+#characterListModal {
     display: block;
     z-index: 3000;
 }

@@ -17,7 +17,7 @@
                 <SynopsisPlace></SynopsisPlace>
             </div>
             <div class="col-lg-6">
-
+                <SynopsisCharacter></SynopsisCharacter>
             </div>
         </div>
         <MetaData :element="synopsisStore.synopsis"></MetaData>
@@ -36,6 +36,7 @@ import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vu
 import Description from '&utils/Description.vue';
 import MetaData from '&synopsis/components/synopsis_show/MetaData.vue';
 import SynopsisPlace from '&synopsis/components/synopsis_show/SynopsisPlace.vue';
+import SynopsisCharacter from '&synopsis/components/synopsis_show/SynopsisCharacter.vue';
 
 export default {
     name: 'SynopsisShow',
@@ -46,7 +47,8 @@ export default {
         Description,
         Error,
         MetaData,
-        SynopsisPlace
+        SynopsisPlace,
+        SynopsisCharacter
     },
 
     data() {

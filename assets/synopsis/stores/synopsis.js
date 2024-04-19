@@ -378,6 +378,47 @@ export const useSynopsisStore = defineStore('synopsis', {
             } catch (error) {
                 return false;
             }
-        }
+        },
+
+        async addCharacter(data) {
+            if (this.synopsis === null) {
+                return false;
+            }
+
+            try {
+                const url = Routing.generate("api_synopsis_character", {id: this.synopsis.id});
+                const response = await axios.post(url, data);
+                this.synopsis.characters = response.data.characters;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async appendCharacterFromList(characterId) {
+            if (this.synopsis === null) {
+                return false;
+            }
+
+            try {
+                const url = Routing.generate("api_synopsis_character_append", {id: this.synopsis.id, characterId: characterId});
+                const response = await axios.put(url);
+                this.synopsis.characters = response.data.characters;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async removeCharacter(characterId) {
+            try {
+                const url = Routing.generate("api_synopsis_character_remove", {id: this.synopsis.id, characterId: characterId});
+                const response = await axios.delete(url);
+                this.synopsis.characters = response.data.characters;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
     }
 })

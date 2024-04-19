@@ -34,6 +34,7 @@ class Character
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
+    #[Assert\Length(max: 25000)]
     private ?string $appearance = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -43,7 +44,6 @@ class Character
 
     #[ORM\Column(nullable: true)]
     #[Groups(['index'])]
-    #[Assert\Length(max: 25000)]
     private ?array $personality = null;
 
     #[ORM\ManyToMany(targetEntity: Synopsis::class, mappedBy: 'characters')]
@@ -55,6 +55,10 @@ class Character
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['index'])]
     private ?string $link = null;
+
+    #[ORM\ManyToOne(inversedBy: 'characters')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
 
     public function __construct()
     {
@@ -192,6 +196,18 @@ class Character
         return $parents;
     }
 
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): static
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
     #[Groups(['index'])]
     #[SerializedName('_links')]
     public function getLinks(): array
@@ -202,14 +218,14 @@ class Character
         ];
     }
 
-    public function getLink(): ?string
+    public function getAuthor(): ?User
     {
-        return $this->link;
+        return $this->author;
     }
 
-    public function setLink(?string $link): static
+    public function setAuthor(?User $author): static
     {
-        $this->link = $link;
+        $this->author = $author;
 
         return $this;
     }
