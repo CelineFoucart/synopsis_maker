@@ -76,12 +76,15 @@ export const useSynopsisStore = defineStore('synopsis', {
 
         async putSynopsis(data, id) {
             try {
+                this.loading = true;
                 const url = Routing.generate("api_synopsis_edit", {id: id});
                 const response = await axios.put(url, data);
                 this.synopsis = response.data;
+                this.loading = false;
 
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },
@@ -329,12 +332,15 @@ export const useSynopsisStore = defineStore('synopsis', {
 
         async reorderTask(taskId, category, position) {
             try {
+                this.loading = true;
                 const params = {id: this.synopsis.id, task: taskId, category: category, position: position};
                 const url = Routing.generate("api_synopsis_task_reorder", params);
                 const response = await axios.put(url, this.synopsis.tasks);
                 this.synopsis.tasks = response.data.tasks;
+                this.loading = false;
                 return true;
             } catch (error) {
+                this.loading = false;
                 return false;
             }
         },

@@ -1,7 +1,7 @@
 <template>
     <Error v-if="error"></Error>
-    <article v-if="!loading && synopsisStore.synopsis !== null">
-        <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
+    <article v-if="synopsisStore.synopsis !== null">
+        <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
         
         <section class="mt-4">
             <h2 class="h5 d-flex justify-content-between">
@@ -13,14 +13,12 @@
             <Description v-model:data="notes"></Description>
         </section>
     </article>
-    <Loading v-if="loading || synopsisStore.loading"></Loading>
 </template>
 
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
-import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import Description from '&utils/Description.vue';
@@ -29,7 +27,6 @@ export default {
     name: 'SynopsisNotes',
 
     components: {
-        Loading,
         HeaderSynopsis,
         Description,
         Error,
@@ -38,8 +35,6 @@ export default {
     data() {
         return {
             error: false,
-            loading: false,
-            partialLoading: false,
             notes: null
         }
     },
@@ -53,8 +48,7 @@ export default {
             this.notes = this.synopsisStore.synopsis.notes;
             return;
         }
-
-        this.loading = true;
+        
         this.status = await this.synopsisStore.getSynopsis(this.$route.params);
         if (!this.status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
@@ -62,7 +56,6 @@ export default {
         }
 
         this.notes = this.synopsisStore.synopsis.notes;
-        this.loading = false;
     },
 
     methods: {
@@ -72,18 +65,6 @@ export default {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
             }
         },
-
-        async deleteSynopsis() {
-            this.loading = true;
-            const status = await this.synopsisStore.deleteSynopsis(this.synopsisStore.synopsis.id);
-            if (status) {
-                createToastify('Le synopsis a été supprimé.', 'success');
-                this.$router.push('/synopsis');
-            } else {
-                createToastify('La suppression a échoué.', 'error');
-            }
-            this.loading = false;
-        }
     },
 }
 </script>

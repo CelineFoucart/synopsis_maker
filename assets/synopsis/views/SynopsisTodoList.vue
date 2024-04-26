@@ -1,7 +1,7 @@
 <template>
     <div>
         <Error v-if="error"></Error>
-        <article v-if="!loading && synopsisStore.synopsis !== null">
+        <article v-if="synopsisStore.synopsis !== null">
             <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
             <div class="border-top border-bottom my-3 p-2">
                 <div class="row">
@@ -32,7 +32,6 @@
                 </div>
             </div>
         </article>
-        <Loading v-if="loading || partialLoading"></Loading>
     </div>
 </template>
 
@@ -40,7 +39,6 @@
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
-import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import TodoColumn from '&synopsis/components/synopsis_todo/TodoColumn.vue';
@@ -50,7 +48,6 @@ export default {
     name: 'SynopsisTodoList',
 
     components: {
-        Loading,
         HeaderSynopsis,
         TodoColumn,
         Error
@@ -59,8 +56,6 @@ export default {
     data() {
         return {
             error: false,
-            loading: false,
-            partialLoading: false
         }
     },
 
@@ -103,15 +98,12 @@ export default {
         if (this.synopsisStore.synopsis !== null) {
             return;
         }
-
-        this.loading = true;
+        
         const status = await this.synopsisStore.getSynopsis(this.$route.params);
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
         }
-        
-        this.loading = false;
     },
 
     updated() {
@@ -121,7 +113,6 @@ export default {
                 ghostClass: 'blue-background-class',
                 animation: 150,
                 onEnd: async (evt) => {
-                    this.partialLoading = true;
                     const category = evt.to.dataset.list;
                     const taskId = evt.item.dataset.id;
                     const position = evt.newIndex;
@@ -130,7 +121,6 @@ export default {
                     if (!status) {
                         createToastify("L'opération a échoué.", "error")
                     }
-                    this.partialLoading = false;
                 },
             });
         });

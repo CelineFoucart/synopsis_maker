@@ -105,6 +105,7 @@ import AddSynopsisModal from '&synopsis/components/synopsis/AddSynopsisModal.vue
 import Delete from '&utils/Delete.vue';
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
+import { useCategoryStore } from '&synopsis/stores/category.js';
 import { createToastify } from '&utils/toastify.js';
 
 export default {
@@ -128,7 +129,11 @@ export default {
     },
 
     computed: {
-        ...mapStores(useSynopsisStore),
+        ...mapStores(useSynopsisStore, useCategoryStore),
+    },
+
+    async mounted() {
+        await this.categoryStore.getCategories();
     },
 
     methods: {

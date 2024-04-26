@@ -1,7 +1,7 @@
 <template>
     <div>
         <Error v-if="error"></Error>
-        <article v-if="!loading && synopsisStore.synopsis !== null">
+        <article v-if="synopsisStore.synopsis !== null">
             <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
             <div class="border-top border-bottom my-3 p-2">
                 <div class="row">
@@ -58,9 +58,7 @@
                 @on-edit-episode="onEditEpisode"
                 @on-append-episode="onAppendEpisode">
             </SynopsisElementList>
-            
         </article>
-        <Loading v-if="loading"></Loading>
         <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
         <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
     </div>
@@ -71,7 +69,6 @@ import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { useCategoryStore } from '&synopsis/stores/category.js';
 import { createToastify } from '&utils/toastify.js';
-import Loading from '&utils/Loading.vue';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import SynopsisElementList from '&synopsis/components/synopsis_show/SynopsisElementList.vue';
@@ -82,7 +79,6 @@ export default {
     name: 'SynopsisEpisodes',
 
     components: {
-        Loading,
         HeaderSynopsis,
         Error,
         SynopsisElementList,
@@ -94,7 +90,6 @@ export default {
         return {
             error: false,
             legend: null,
-            loading: false,
             openAll: true,
             chapterToEdit: { title: null, description: null, color: null, content: null, id: null },
             episodeToEdit: {},
@@ -115,8 +110,7 @@ export default {
         if (this.synopsisStore.synopsis !== null) {
             return;
         }
-
-        this.loading = true;
+        
         const status = await this.synopsisStore.getSynopsis(this.$route.params);
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
@@ -129,8 +123,6 @@ export default {
         if (!statusCategory) {
             createToastify("Le chargement des catégories a échoué.", 'error');
         }
-        
-        this.loading = false;
     },
 
     methods: {
