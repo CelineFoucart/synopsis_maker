@@ -4,25 +4,25 @@
             <li class="nav-item">
                 <router-link :to="{ name: 'SynopsisIndex' }" class="nav-link py-3" :class="{'active' : isSynopsisRoute}">
                     <i class="fa-solid fa-book fa-fw"></i>
-                    <span class="d-none d-md-inline">Synopsis</span>
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link :to="{ name: 'CategoryIndex' }" class="nav-link py-3">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                    <span class="d-none d-md-inline">Catégories</span>
+                    <span class="d-none d-md-inline ps-1">Synopsis</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link :to="{ name: 'CharacterIndex' }" class="nav-link py-3">
                     <i class="fas fa-user fa-fw"></i>
-                    <span class="d-none d-md-inline">Personnages</span>
+                    <span class="d-none d-md-inline ps-1">Personnages</span>
                 </router-link>
             </li>
             <li class="nav-item">
                 <router-link :to="{ name: 'PlaceIndex' }" class="nav-link py-3">
                     <i class="fa-solid fa-location-dot fa-fw"></i>
-                    <span class="d-none d-md-inline">Lieux</span>
+                    <span class="d-none d-md-inline ps-1">Lieux</span>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link :to="{ name: 'Settings' }" class="nav-link py-3">
+                    <i class="fa-solid fa-gears fa-fw"></i>
+                    <span class="d-none d-md-inline ps-1">Configuration</span>
                 </router-link>
             </li>
         </ul>

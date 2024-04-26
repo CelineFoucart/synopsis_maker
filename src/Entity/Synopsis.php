@@ -92,6 +92,9 @@ class Synopsis
     #[Groups(['index'])]
     private Collection $characters;
 
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'synopsis')]
+    private Collection $articles;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -99,6 +102,7 @@ class Synopsis
         $this->chapters = new ArrayCollection();
         $this->places = new ArrayCollection();
         $this->characters = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -385,6 +389,33 @@ class Synopsis
     public function removeCharacter(Character $character): static
     {
         $this->characters->removeElement($character);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->addSynopsi($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            $article->removeSynopsi($this);
+        }
 
         return $this;
     }

@@ -11,23 +11,21 @@
                     </button>
                 </div>
                 <div class="flex-fill">
-                    <SynopsisList v-if="!loading"></SynopsisList>
+                    <SynopsisList v-if="loading === false"></SynopsisList>
                 </div>
                 <Pagination :pagination="synopsisStore.pagination" @on-change="onPaginationChange"></Pagination>
             </div>
         </div>
         <div class="col-md-4 border-start p-3">
-            <AsideSynopsis @on-loading="onLoading" v-model:filters="filters" @on-change="onChangeFilters"></AsideSynopsis>
+            <AsideSynopsis v-model:filters="filters" @on-change="onChangeFilters"></AsideSynopsis>
         </div>
     </div>
     <AddSynopsisModal v-if="showAddModal" @on-close="showAddModal = false"></AddSynopsisModal>
-    <Loading v-if="loading"></Loading>
 </template>
 
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
-import Loading from '&utils/Loading.vue';
 import { createToastify } from '&utils/toastify.js';
 import Pagination from '&utils/Pagination.vue';
 import AsideSynopsis from '&synopsis/components/synopsis/AsideSynopsis.vue';
@@ -39,7 +37,6 @@ export default {
 
     components: {
         Pagination,
-        Loading,
         AsideSynopsis,
         SynopsisList,
         AddSynopsisModal
@@ -63,10 +60,6 @@ export default {
     },
 
     methods: {
-        onLoading(loading) {
-            this.loading = loading;
-        },
-
         async getSynopses() {
             this.loading = true;
             const status = await this.synopsisStore.getSynopses(this.page, this.limit, this.filters);

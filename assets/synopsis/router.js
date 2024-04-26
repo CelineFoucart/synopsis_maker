@@ -1,14 +1,14 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import SynopsisIndex from "&synopsis/views/SynopsisIndex.vue";
-import CategoryIndex from "&synopsis/views/CategoryIndex.vue";
-import SynopsisShow from "&synopsis/views/SynopsisShow.vue";
-import SynopsisEpisodes from "&synopsis/views/SynopsisEpisodes.vue";
-import SynopsisNotes from "&synopsis/views/SynopsisNotes.vue";
-import SynopsisArchive from "&synopsis/views/SynopsisArchive.vue";
-import SynopsisTodoList from "&synopsis/views/SynopsisTodoList.vue";
+import SynopsisIndex from "&synopsis/views/synopsis/SynopsisIndex.vue";
+import SynopsisShow from "&synopsis/views/synopsis/SynopsisShow.vue";
+import SynopsisEpisodes from "&synopsis/views/synopsis/SynopsisEpisodes.vue";
+import SynopsisNotes from "&synopsis/views/synopsis/SynopsisNotes.vue";
+import SynopsisArchive from "&synopsis/views/synopsis/SynopsisArchive.vue";
+import SynopsisTodoList from "&synopsis/views/synopsis/SynopsisTodoList.vue";
+import WorldBuilding from "&synopsis/views/synopsis/WorldBuilding.vue";
+import Settings from "&synopsis/views/Settings.vue";
 import PlaceIndex from "&synopsis/views/PlaceIndex.vue";
 import CharacterIndex from "&synopsis/views/CharacterIndex.vue";
-import WorldBuilding from "&synopsis/views/WorldBuilding.vue";
 
 const routes =  [
     { path: '/', redirect: '/synopsis' },
@@ -53,9 +53,9 @@ const routes =  [
         ]
     },
     {
-        path: "/category",
-        name: "CategoryIndex",
-        component: CategoryIndex
+        path: "/settings",
+        name: "Settings",
+        component: Settings
     },
     {
         path: "/place",

@@ -41,7 +41,7 @@ export default {
         ...mapStores(useSynopsisStore),
 
         isEmpty() {
-            return this.synopsisStore.synopses.length === 0;
+            return this.synopsisStore.synopses.length === 0 && this.synopsisStore.loading === false;
         },
     },
 

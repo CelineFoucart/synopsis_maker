@@ -1,6 +1,6 @@
 <template>
-    <article>
-        <h1 class="display-5 mb-5">Catégories de synopsis</h1>
+    <section>
+        <h2 class="mb-5 mt-3 fw-normal">Catégories de synopsis</h2>
 
         <div class="row align-items-center">
             <div class="col-8">
@@ -60,7 +60,7 @@
         <Loading v-if="loading"></Loading>
         <CategoryModal :category="category" v-if="showEditModal" @on-close="showEditModal = false"></CategoryModal>
         <Delete :title="category.title" v-if="showDeleteModal" @on-confirm="deleteCategory" @on-close="showDeleteModal = false"></Delete>
-    </article>
+    </section>
 </template>
 
 <script>

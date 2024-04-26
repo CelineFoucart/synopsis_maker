@@ -41,6 +41,9 @@ export default {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
         }
+
+
+        
     },
 }
 </script>

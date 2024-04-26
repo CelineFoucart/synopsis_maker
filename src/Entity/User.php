@@ -54,12 +54,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $characters;
 
+    #[ORM\OneToMany(targetEntity: WorldBuildingCategory::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $worldBuildingCategories;
+
+    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $articles;
+
     public function __construct()
     {
         $this->synopses = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->places = new ArrayCollection();
         $this->characters = new ArrayCollection();
+        $this->worldBuildingCategories = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -270,6 +278,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($character->getAuthor() === $this) {
                 $character->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WorldBuildingCategory>
+     */
+    public function getWorldBuildingCategories(): Collection
+    {
+        return $this->worldBuildingCategories;
+    }
+
+    public function addWorldBuildingCategory(WorldBuildingCategory $worldBuildingCategory): static
+    {
+        if (!$this->worldBuildingCategories->contains($worldBuildingCategory)) {
+            $this->worldBuildingCategories->add($worldBuildingCategory);
+            $worldBuildingCategory->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorldBuildingCategory(WorldBuildingCategory $worldBuildingCategory): static
+    {
+        if ($this->worldBuildingCategories->removeElement($worldBuildingCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($worldBuildingCategory->getAuthor() === $this) {
+                $worldBuildingCategory->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getAuthor() === $this) {
+                $article->setAuthor(null);
             }
         }
 

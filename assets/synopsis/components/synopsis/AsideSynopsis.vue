@@ -49,7 +49,6 @@ export default {
     },
 
     async mounted () {
-        this.$emit('on-loading', true);
         const status = await this.categoryStore.getCategories();
         if (!status) {
             createToastify("Le chargement des catégories a échoué", 'error');
