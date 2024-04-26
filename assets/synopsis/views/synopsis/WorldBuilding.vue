@@ -3,6 +3,14 @@
     <article v-if="synopsisStore.synopsis !== null">
         <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
 
+        <div class="row">
+            <div class="col-md-8 col-lg-9">
+
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <Summary></Summary>
+            </div>
+        </div>
     </article>
 </template>
 
@@ -12,13 +20,16 @@ import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
+import { useArticleCategoryStore } from '&synopsis/stores/articleCategory.js';
+import Summary from '&synopsis/components/synopsis_article/Summary.vue';
 
 export default {
     name: 'WorldBuilding',
 
     components: {
         HeaderSynopsis,
-        Error
+        Error,
+        Summary
     },
 
     data() {
@@ -28,7 +39,7 @@ export default {
     },
 
     computed: {
-        ...mapStores(useSynopsisStore),
+        ...mapStores(useSynopsisStore, useArticleCategoryStore),
     },
 
     async mounted () {
@@ -42,8 +53,10 @@ export default {
             this.error = true;
         }
 
-
-        
+        const statusCategory = await this.articleCategoryStore.getCategories();
+        if (!statusCategory) {
+            createToastify('Le chargement des catégories a échoué', 'error');
+        }
     },
 }
 </script>

@@ -5,7 +5,7 @@
             <router-view></router-view>
         </div>
         
-        <Loading v-if="synopsisStore.loading || categoryStore.loading"></Loading>
+        <Loading v-if="synopsisStore.loading || categoryStore.loading || articleCategoryStore.loading"></Loading>
     </div>
 </template>
 
@@ -15,6 +15,7 @@ import Loading from '&utils/Loading.vue';
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { useCategoryStore } from '&synopsis/stores/category.js';
+import { useArticleCategoryStore } from '&synopsis/stores/articleCategory.js';
 
 export default {
     name: 'Synopsis',
@@ -25,7 +26,7 @@ export default {
     },
 
     computed: {
-        ...mapStores(useSynopsisStore, useCategoryStore),
+        ...mapStores(useSynopsisStore, useCategoryStore, useArticleCategoryStore),
     },
 }
 </script>
