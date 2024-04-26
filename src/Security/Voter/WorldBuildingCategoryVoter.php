@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Security\Voter;
 
-use App\Entity\User;
-use App\Entity\Character;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-final class CharacterVoter extends Voter
+final class WorldBuildingCategoryVoter extends Voter
 {
     protected function supports(string $attribute, mixed $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [VoterAction::EDIT, VoterAction::DELETE])
-            && $subject instanceof \App\Entity\Character;
+            && $subject instanceof \App\Entity\WorldBuildingCategory;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool

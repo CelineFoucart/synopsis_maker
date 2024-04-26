@@ -1,23 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Security\Voter;
 
 use App\Entity\User;
-use App\Entity\Character;
+use App\Entity\Episode;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-final class CharacterVoter extends Voter
+class EpisodeVoter extends Voter
 {
     protected function supports(string $attribute, mixed $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [VoterAction::EDIT, VoterAction::DELETE])
-            && $subject instanceof \App\Entity\Character;
+            && $subject instanceof \App\Entity\Episode;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -31,12 +29,17 @@ final class CharacterVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case VoterAction::EDIT:
-                return VoterAction::isAuthor($subject, $user);
+                return $this->canHandle($subject, $user);
 
             case VoterAction::DELETE:
-                return VoterAction::isAuthor($subject, $user);
+                return $this->canHandle($subject, $user);
         }
 
         return false;
+    }
+
+    private function canHandle(Episode $episode, User $user): bool
+    {
+        return VoterAction::isAuthor($episode->getSynopsis(), $user);
     }
 }

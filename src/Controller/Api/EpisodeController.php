@@ -2,24 +2,24 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Place;
 use App\Entity\Chapter;
 use App\Entity\Character;
 use App\Entity\Episode;
+use App\Entity\Place;
 use App\Entity\Synopsis;
-use App\Service\ReorderService;
 use App\Repository\ChapterRepository;
-use App\Security\Voter\SynopsisVoter;
+use App\Security\Voter\VoterAction;
+use App\Service\ReorderService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/synopsis/{id}/episode')]
 final class EpisodeController extends AbstractApiController
@@ -27,7 +27,7 @@ final class EpisodeController extends AbstractApiController
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected ValidatorInterface $validator,
-        private SerializerInterface $serializer,
+        protected SerializerInterface $serializer,
         private ChapterRepository $chapterRepository
     ) {
     }
@@ -35,7 +35,7 @@ final class EpisodeController extends AbstractApiController
     #[Route('', name: 'api_synopsis_episode_create', methods: ['POST'])]
     public function createAction(Synopsis $synopsis, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         $chapterId = $request->query->getInt('chapter', 0);
         $chapter = null;
@@ -45,7 +45,7 @@ final class EpisodeController extends AbstractApiController
 
         /** @var Episode */
         $episode = $this->serializer->deserialize($request->getContent(), Episode::class, 'json', ['groups' => ['index']]);
-        
+
         $data = json_decode($request->getContent(), true);
         if (isset($data['places']) && count($data['places']) > 0) {
             $places = $this->entityManager->getRepository(Place::class)->findByIds($data['places'], $this->getUser());
@@ -56,7 +56,7 @@ final class EpisodeController extends AbstractApiController
             $characters = $this->entityManager->getRepository(Character::class)->findByIds($data['characters'], $this->getUser());
             $episode->setCharacters(new ArrayCollection($characters));
         }
-        
+
         $errors = $this->validate($episode);
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
@@ -83,7 +83,7 @@ final class EpisodeController extends AbstractApiController
     #[Route('/{episodeId}', name: 'api_synopsis_episode_edit', methods: ['PUT'])]
     public function editAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }
@@ -121,7 +121,7 @@ final class EpisodeController extends AbstractApiController
     #[Route('/{episodeId}/valid', name: 'api_synopsis_episode_validate', methods: ['PUT'])]
     public function validateAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::DELETE, $synopsis);
         if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }
@@ -134,17 +134,9 @@ final class EpisodeController extends AbstractApiController
     }
 
     #[Route('/{episodeId}', name: 'api_synopsis_episode_delete', methods: ['DELETE'])]
-    public function deleteAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
+    public function deleteAction(#[MapEntity(id: 'episodeId')] Episode $episode): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
-        if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
-            throw $this->createNotFoundException();
-        }
-
-        $this->entityManager->remove($episode);
-        $this->entityManager->flush();
-
-        return $this->json('', Response::HTTP_NO_CONTENT);
+        return $this->deleteEntity($episode);
     }
 
     #[Route('/{episodeId}/position', name: 'api_synopsis_episode_position', methods: ['PUT'])]
@@ -152,7 +144,7 @@ final class EpisodeController extends AbstractApiController
     {
         $oldChapter = $episode->getChapter();
 
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }
@@ -191,7 +183,7 @@ final class EpisodeController extends AbstractApiController
     #[Route('/{elementId}/archive', name: 'api_synopsis_episode_archive', methods: ['PUT'])]
     public function archiveAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'elementId')] Episode $episode): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         if ($episode->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }

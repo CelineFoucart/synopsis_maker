@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\Place;
-use App\Security\Voter\PlaceVoter;
+use App\Security\Voter\VoterAction;
 use App\Repository\PlaceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ final class PlaceController extends AbstractApiController
     #[Route('/{id}', name: 'api_place_edit', methods: ['PUT'])]
     public function editAction(Place $place, SerializerInterface $serializer, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PlaceVoter::EDIT, $place);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $place);
 
         /** @var Place */
         $place = $serializer->deserialize(
@@ -49,10 +49,6 @@ final class PlaceController extends AbstractApiController
     #[Route('/{id}', name: 'api_place_delete', methods: ['DELETE'])]
     public function deleteAction(Place $place): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PlaceVoter::DELETE, $place);
-        $this->entityManager->remove($place);
-        $this->entityManager->flush();
-
-        return $this->json('', Response::HTTP_NO_CONTENT, [], ['groups' => ['index']]);
+        return $this->deleteEntity($place);
     }
 }

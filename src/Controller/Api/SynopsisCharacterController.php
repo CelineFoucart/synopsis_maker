@@ -6,7 +6,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Synopsis;
 use App\Entity\Character;
-use App\Security\Voter\SynopsisVoter;
+use App\Security\Voter\VoterAction;
 use App\Controller\Api\AbstractApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ final class SynopsisCharacterController extends AbstractApiController
     #[Route('/{id}/characters', name: 'api_synopsis_character', methods: ['POST'])]
     public function appendNewPlaceAction(Synopsis $synopsis, Request $request, SerializerInterface $serializer): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         /** @var Place */
         $character = $serializer->deserialize($request->getContent(), Character::class, 'json', ['groups' => 'index']);
@@ -44,7 +44,7 @@ final class SynopsisCharacterController extends AbstractApiController
     #[Route('/{id}/characters/{characterId}', name: 'api_synopsis_character_append', methods: ['PUT'])]
     public function appendAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'characterId')] Character $character): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         $synopsis->addCharacter($character);
         $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
@@ -56,7 +56,7 @@ final class SynopsisCharacterController extends AbstractApiController
     #[Route('/{id}/characters/{characterId}', name: 'api_synopsis_character_remove', methods: ['DELETE'])]
     public function unlinkAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'characterId')] Character $character): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         if (!$synopsis->getCharacters()->contains($character)) {
             throw $this->createNotFoundException();
         }

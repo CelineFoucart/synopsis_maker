@@ -4,43 +4,33 @@ namespace App\Controller\Api;
 
 use App\Entity\Chapter;
 use App\Entity\Synopsis;
-use App\Security\Voter\SynopsisVoter;
+use App\Security\Voter\VoterAction;
 use App\Service\ReorderService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/synopsis/{id}')]
 final class ChapterController extends AbstractApiController
 {
-    public function __construct(
-        protected EntityManagerInterface $entityManager,
-        protected ValidatorInterface $validator,
-        private SerializerInterface $serializer
-    ) {
-    }
-
     #[Route('/chapter', name: 'api_synopsis_chapter_create', methods: ['POST'])]
     public function createAction(Synopsis $synopsis, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         /** @var Chapter */
         $chapter = $this->serializer->deserialize($request->getContent(), Chapter::class, 'json', ['groups' => ['index']]);
+        $position = $synopsis->getChapters()->count();
+        $chapter->setSynopsis($synopsis)->setPosition($position);
+
         $errors = $this->validate($chapter);
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $position = $synopsis->getChapters()->count();
-
-        $chapter->setSynopsis($synopsis)->setPosition($position);
         $this->entityManager->persist($chapter);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);
@@ -51,7 +41,7 @@ final class ChapterController extends AbstractApiController
     #[Route('/chapter/{chapterId}', name: 'api_synopsis_chapter_edit', methods: ['PUT'])]
     public function editAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'chapterId')] Chapter $chapter, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $chapter);
         if ($chapter->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }
@@ -77,7 +67,7 @@ final class ChapterController extends AbstractApiController
     #[Route('/chapter/{chapterId}/position', name: 'api_synopsis_chapter_position', methods: ['PUT'])]
     public function positionAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'chapterId')] Chapter $chapter, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $chapter);
         if ($chapter->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }
@@ -95,23 +85,15 @@ final class ChapterController extends AbstractApiController
     }
 
     #[Route('/chapter/{chapterId}', name: 'api_synopsis_chapter_delete', methods: ['DELETE'])]
-    public function deleteAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'chapterId')] Chapter $chapter): JsonResponse
+    public function deleteAction(#[MapEntity(id: 'chapterId')] Chapter $chapter): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
-        if ($chapter->getSynopsis()->getId() !== $synopsis->getId()) {
-            throw $this->createNotFoundException();
-        }
-
-        $this->entityManager->remove($chapter);
-        $this->entityManager->flush();
-
-        return $this->json('', Response::HTTP_NO_CONTENT, [], ['groups' => ['index']]);
+        return $this->deleteEntity($chapter);
     }
 
     #[Route('/{elementId}/archive', name: 'api_synopsis_echapter_archive', methods: ['PUT'])]
     public function archiveAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'elementId')] Chapter $chapter): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::DELETE, $synopsis);
         if ($chapter->getSynopsis()->getId() !== $synopsis->getId()) {
             throw $this->createNotFoundException();
         }

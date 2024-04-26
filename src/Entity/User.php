@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,6 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $characters;
 
     #[ORM\OneToMany(targetEntity: WorldBuildingCategory::class, mappedBy: 'author', orphanRemoval: true)]
+    #[OrderBy(['title' => 'ASC'])]
     private Collection $worldBuildingCategories;
 
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'author', orphanRemoval: true)]

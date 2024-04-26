@@ -57,18 +57,16 @@
                 </div>
             </template>
         </DataTable>
-        <Loading v-if="loading"></Loading>
         <CategoryModal :category="category" v-if="showEditModal" @on-close="showEditModal = false"></CategoryModal>
-        <Delete :title="category.title" v-if="showDeleteModal" @on-confirm="deleteCategory" @on-close="showDeleteModal = false"></Delete>
+        <Delete :loading="loading" :title="category.title" v-if="showDeleteModal" @on-confirm="deleteCategory" @on-close="showDeleteModal = false"></Delete>
     </section>
 </template>
 
 <script>
 import { mapStores } from "pinia";
 import { useCategoryStore } from '&synopsis/stores/category.js';
-import Loading from '&utils/Loading.vue';
 import { createToastify } from '&utils/toastify.js';
-import CategoryModal from '&synopsis/components/CategoryModal.vue';
+import CategoryModal from '&synopsis/components/settings/CategoryModal.vue';
 import Delete from '&utils/Delete.vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
@@ -78,14 +76,13 @@ export default {
 
     components: {
         DataTable: Vue3EasyDataTable,
-        Loading,
         CategoryModal,
         Delete
     },
 
     data() {
         return {
-            loading: true,
+            loading: false,
             headers: [ 
                 {text: 'Titre', value: 'title', sortable: true},
                 {text: 'Description', value: 'description', sortable: true},
@@ -94,7 +91,7 @@ export default {
             category: {id: null, title: null, description: null},
             showEditModal: false,
             showDeleteModal: false,
-            searchField: null,
+            searchField: 'title',
             searchValue: ''
         }
     },
@@ -104,14 +101,10 @@ export default {
     },
 
     async mounted () {
-        this.loading = true;
-
         const status = await this.categoryStore.getCategories();
         if (!status) {
             createToastify('Le chargement a échoué', 'error');
         }
-        
-        this.loading = false;
     },
 
     methods: {
@@ -128,17 +121,16 @@ export default {
         openDeleteModal(data) {
             this.category = {id: data.id, title: data.title, description: data.description};
             this.showDeleteModal = true;
-
         },
 
         async deleteCategory() {
             this.loading = true;
-            this.showDeleteModal = false;
             const status = await this.categoryStore.deleteCategory(this.category.id);
             if (status) {
                 createToastify('La catégorie a été supprimée', 'success');
             }
-
+            
+            this.showDeleteModal = false;
             this.category = {id: null, title: null, description: null};
             this.loading = false;
         }

@@ -4,32 +4,20 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
-use App\Entity\Place;
 use App\Entity\Synopsis;
-use App\Service\SynopsisHandler;
-use App\Security\Voter\SynopsisVoter;
+use App\Entity\User;
 use App\Repository\SynopsisRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Security\Voter\VoterAction;
+use App\Service\SynopsisHandler;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/synopsis')]
 final class SynopsisController extends AbstractApiController
 {
-    public function __construct(
-        protected EntityManagerInterface $entityManager,
-        private SluggerInterface $slugger,
-        protected ValidatorInterface $validator
-    ) {
-    }
-
     #[Route('', name: 'api_synopsis_index', methods: ['GET'])]
     public function index(Request $request, SynopsisRepository $synopsisRepository): JsonResponse
     {
@@ -88,7 +76,7 @@ final class SynopsisController extends AbstractApiController
     #[Route('/{id}', name: 'api_synopsis_show', methods: ['GET'])]
     public function showAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::VIEW, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::VIEW, $synopsis);
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
@@ -96,7 +84,7 @@ final class SynopsisController extends AbstractApiController
     #[Route('/{id}', name: 'api_synopsis_edit', methods: ['PUT'])]
     public function editAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, Request $request, SynopsisHandler $handler): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         $data = json_decode($request->getContent(), true);
         $errors = $handler->setSynopsis($synopsis)->edit($data, $this->getUser())->getErrors();
@@ -120,7 +108,7 @@ final class SynopsisController extends AbstractApiController
     #[Route('/{id}/legend', name: 'api_synopsis_legend_edit', methods: ['PUT'])]
     public function legendEditAction(Synopsis $synopsis, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         $data = json_decode($request->getContent(), true);
         if (!isset($data['legend'])) {
@@ -138,7 +126,7 @@ final class SynopsisController extends AbstractApiController
     #[Route('/{id}/notes', name: 'api_synopsis_legend_notes', methods: ['PUT'])]
     public function notesEditAction(Synopsis $synopsis, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         $data = json_decode($request->getContent(), true);
         if (!isset($data['notes'])) {
@@ -152,14 +140,10 @@ final class SynopsisController extends AbstractApiController
 
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
-    
+
     #[Route('/{id}', name: 'api_synopsis_delete', methods: ['DELETE'])]
     public function deleteAction(Synopsis $synopsis): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::DELETE, $synopsis);
-        $this->entityManager->remove($synopsis);
-        $this->entityManager->flush();
-
-        return $this->json('', Response::HTTP_NO_CONTENT);
+        return $this->deleteEntity($synopsis);
     }
 }

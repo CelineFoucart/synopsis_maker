@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\Synopsis;
-use App\Security\Voter\SynopsisVoter;
+use App\Security\Voter\VoterAction;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/api/synopsis')]
 final class SynopsisTaskController extends AbstractApiController
 {
-    #[Route('/{id}/tasks', name: 'api_synopsis_task', methods:['PUT'])]
+    #[Route('/{id}/tasks', name: 'api_synopsis_task', methods: ['PUT'])]
     public function editTasksAction(Synopsis $synopsis, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -27,9 +27,9 @@ final class SynopsisTaskController extends AbstractApiController
             }
 
             $tasks[] = [
-                'id' => isset($row['id']) && $row['id'] !== null ? $row['id'] : uniqid(),
+                'id' => isset($row['id']) && null !== $row['id'] ? $row['id'] : uniqid(),
                 'title' => isset($row['title']) ? $row['title'] : 'Tâche',
-                'content' =>isset($row['content']) ? $row['content'] : '',
+                'content' => isset($row['content']) ? $row['content'] : '',
                 'position' => isset($row['position']) ? $row['position'] : count($tasks),
                 'category' => $category,
             ];
@@ -43,10 +43,10 @@ final class SynopsisTaskController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
-    #[Route('/{id}/tasks/{task}/{category}/{position}', name: 'api_synopsis_task_reorder', methods:['PUT'])]
+    #[Route('/{id}/tasks/{task}/{category}/{position}', name: 'api_synopsis_task_reorder', methods: ['PUT'])]
     public function reorderTasksAction(Synopsis $synopsis, string $task, int $category, int $position): JsonResponse
     {
-        $this->denyAccessUnlessGranted(SynopsisVoter::EDIT, $synopsis);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
 
         $toReorderTasks = [];
         $notReorderedTasks = [];
@@ -64,7 +64,7 @@ final class SynopsisTaskController extends AbstractApiController
         }
 
         $toReorderTasks = $this->reorderTaskArray($toReorderTasks, $task, $position);
-        $tasks = [...$notReorderedTasks, ... $toReorderTasks];
+        $tasks = [...$notReorderedTasks, ...$toReorderTasks];
         $synopsis->setTasks($tasks);
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -75,11 +75,11 @@ final class SynopsisTaskController extends AbstractApiController
     private function reorderTaskArray(array $toReorderTasks, string $task, int $position): array
     {
         if (!empty($toReorderTasks)) {
-            usort($toReorderTasks, fn(array $a, array $b) => $a['position'] <=> $b['position']);
+            usort($toReorderTasks, fn (array $a, array $b) => $a['position'] <=> $b['position']);
         }
 
-        for($i = 0; $i < count($toReorderTasks); $i++){
-            if($toReorderTasks[$i]['id'] === $task){
+        for ($i = 0; $i < count($toReorderTasks); ++$i) {
+            if ($toReorderTasks[$i]['id'] === $task) {
                 $part2 = array_splice($toReorderTasks, $i, 1);
                 $part1 = array_slice($toReorderTasks, 0, $position);
                 $part3 = array_slice($toReorderTasks, $position);
@@ -87,7 +87,7 @@ final class SynopsisTaskController extends AbstractApiController
             }
         }
 
-        for($i = 0; $i < count($toReorderTasks); $i++){
+        for ($i = 0; $i < count($toReorderTasks); ++$i) {
             $toReorderTasks[$i]['position'] = $i;
         }
 

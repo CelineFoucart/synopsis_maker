@@ -6,14 +6,13 @@ namespace App\Controller\Api;
 
 use App\Entity\Character;
 use App\Repository\CharacterRepository;
-use App\Controller\Api\AbstractApiController;
-use App\Security\Voter\CharacterVoter;
+use App\Security\Voter\VoterAction;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/character')]
 final class CharacterController extends AbstractApiController
@@ -27,7 +26,7 @@ final class CharacterController extends AbstractApiController
     #[Route('/{id}', name: 'api_character_edit', methods: ['PUT'])]
     public function editAction(Character $character, SerializerInterface $serializer, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(CharacterVoter::EDIT, $character);
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $character);
 
         /** @var Character */
         $character = $serializer->deserialize(
@@ -50,10 +49,6 @@ final class CharacterController extends AbstractApiController
     #[Route('/{id}', name: 'api_character_delete', methods: ['DELETE'])]
     public function deleteAction(Character $character): JsonResponse
     {
-        $this->denyAccessUnlessGranted(CharacterVoter::DELETE, $character);
-        $this->entityManager->remove($character);
-        $this->entityManager->flush();
-
-        return $this->json('', Response::HTTP_NO_CONTENT, [], ['groups' => ['index']]);
+        return $this->deleteEntity($character);
     }
 }

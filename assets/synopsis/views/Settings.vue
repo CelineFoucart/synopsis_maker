@@ -1,8 +1,8 @@
 <template>
     <article>
         <header class="mb-2">
-            <h1 class="display-5 mb-4">Réglage et configuration</h1>
-            <p class="lead">Gérer sur cette page vos réglages et les configurations de vos synopsis.</p>
+            <h1 class="display-5 mb-4">Réglages et configuration</h1>
+            <p class="lead">Sur cette page, gérez vos réglages et les configurations de vos synopsis.</p>
             <hr>
 
             <nav class="settings-navbar">
@@ -24,17 +24,20 @@
         </header>
 
         <CategoryIndex v-if="showCategorySynopsis"></CategoryIndex>
+        <ArticleCategoryIndex v-if="showArticleCategory"></ArticleCategoryIndex>
     </article>
 </template>
 
 <script>
 import CategoryIndex from '&synopsis/components/settings/CategoryIndex.vue';
+import ArticleCategoryIndex from '&synopsis/components/settings/ArticleCategoryIndex.vue';
 
 export default {
     name: 'Settings',
 
     components: {
         CategoryIndex,
+        ArticleCategoryIndex
     },
 
     data() {

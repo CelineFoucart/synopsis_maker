@@ -6,6 +6,9 @@ use App\Repository\WorldBuildingCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: WorldBuildingCategoryRepository::class)]
 class WorldBuildingCategory
@@ -13,15 +16,24 @@ class WorldBuildingCategory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['index'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['index'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
     private ?string $icon = null;
 
     #[ORM\Column(length: 400, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(min: 2, max: 400)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'worldBuildingCategories')]
@@ -117,5 +129,16 @@ class WorldBuildingCategory
         }
 
         return $this;
+    }
+
+    #[Groups(['index'])]
+    #[SerializedName('_links')]
+    public function getLinks(): array
+    {
+        return [
+            'self' => ['href' => '/api/article-category/'.$this->getId()],
+            'delete' => ['href' => '/api/article-category/'.$this->getId()],
+            'update' => ['href' => '/api/article-category/'.$this->getId()],
+        ];
     }
 }
