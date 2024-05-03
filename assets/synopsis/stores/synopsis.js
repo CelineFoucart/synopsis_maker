@@ -426,5 +426,46 @@ export const useSynopsisStore = defineStore('synopsis', {
                 return false;
             }
         },
+
+        async addArticle(data) {
+            if (this.synopsis === null) {
+                return false;
+            }
+
+            try {
+                const url = Routing.generate("api_synopsis_article", {id: this.synopsis.id});
+                const response = await axios.post(url, data);
+                this.synopsis.articles = response.data.articles;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async appendArticleFromList(articleId) {
+            if (this.synopsis === null) {
+                return false;
+            }
+
+            try {
+                const url = Routing.generate("api_synopsis_article_append", {id: this.synopsis.id, articleId: articleId});
+                const response = await axios.put(url);
+                this.synopsis.articles = response.data.articles;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async removeArticle(articleId) {
+            try {
+                const url = Routing.generate("api_synopsis_article_remove", {id: this.synopsis.id, articleId: articleId});
+                const response = await axios.delete(url);
+                this.synopsis.articles = response.data.articles;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        },
     }
 })

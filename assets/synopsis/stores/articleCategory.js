@@ -8,6 +8,7 @@ export const useArticleCategoryStore = defineStore('articleCategory', {
         async getCategories() { 
             try {
                 this.loading = true;
+                this.categories = [];
                 const url = Routing.generate("api_article_category_index");
                 const response = await axios.get(url);
                 this.categories = response.data;

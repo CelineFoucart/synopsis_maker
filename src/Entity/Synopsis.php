@@ -92,8 +92,14 @@ class Synopsis
     #[Groups(['index'])]
     private Collection $characters;
 
-    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'synopsis')]
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'synopses')]
+    #[OrderBy(['title' => 'ASC'])]
+    #[Groups(['index'])]
     private Collection $articles;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['index'])]
+    private ?string $worldbuildingHome = null;
 
     public function __construct()
     {
@@ -405,7 +411,7 @@ class Synopsis
     {
         if (!$this->articles->contains($article)) {
             $this->articles->add($article);
-            $article->addSynopsi($this);
+            $article->addSynopsis($this);
         }
 
         return $this;
@@ -414,8 +420,20 @@ class Synopsis
     public function removeArticle(Article $article): static
     {
         if ($this->articles->removeElement($article)) {
-            $article->removeSynopsi($this);
+            $article->removeSynopsis($this);
         }
+
+        return $this;
+    }
+
+    public function getWorldbuildingHome(): ?string
+    {
+        return $this->worldbuildingHome;
+    }
+
+    public function setWorldbuildingHome(?string $worldbuildingHome): static
+    {
+        $this->worldbuildingHome = $worldbuildingHome;
 
         return $this;
     }

@@ -53,8 +53,13 @@ label.required::after {
     width: fit-content;
 }
 
-
 a.active {
     color: #0a58ca;
     font-weight: bold;
+}
+
+.scrollable-container {
+    height: 290px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
 }

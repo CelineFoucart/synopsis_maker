@@ -1,17 +1,17 @@
 <template>
     <div>
         <div class="modal-backdrop fade show"></div>
-        <div class="modal fade show" id="characterListModal" tabindex="-1" aria-labelledby="characterListModalLabel">
+        <div class="modal fade show" id="articleListeModal" tabindex="-1" aria-labelledby="articleListeModalLabel">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title h5" id="characterListModalLabel">Liste des personnages</h3>
+                        <h3 class="modal-title h5" id="articleListeModalLabel">Liste des articles</h3>
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body position-relative">
                         <div class="row">
                             <div class="col-6 fw-bold">
-                                Ajouter un personnage
+                                Ajouter un article
                             </div>
                             <div class="col-6">
                                 <div class="input-group input-group-sm mb-3">
@@ -20,13 +20,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-2 pb-2 border" :class="{'scrollable-container': characters.length > 12}">
-                            <div class="col-6" v-for="character in characters">
-                                <section class="border bg-light p-1 button" @click="append(character.id)">
+                        <div class="row g-2 pb-2 border" :class="{'scrollable-container': articles.length > 12}">
+                            <div class="col-6" v-for="article in articles">
+                                <section class="border bg-light p-1 button" @click="append(article.id)">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h4 class="fs-6 mb-0">
-                                            {{ character.name }}
-                                        </h4>
+                                        <div>
+                                            <span class="badge bg-secondary">
+                                                <i :class="'fa-solid ' + article.category.icon + ' fa-fw'"></i> {{ article.category.title }}
+                                            </span>
+                                            <h4 class="fs-6 mb-0">{{ article.title }}</h4>
+                                        </div>
+                                        
                                         <span class="fs-6">
                                             <i class="fa-solid fa-plus fa-fw"></i> 
                                         </span>
@@ -45,12 +49,12 @@
 <script>
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
-import { useCharacterStore } from '&synopsis/stores/character.js';
+import { useArticleStore } from '&synopsis/stores/article.js';
 import { createToastify } from '&utils/toastify.js';
 import Loading from '&utils/Loading.vue';
 
 export default {
-    name: 'CharacterListModal',
+    name: 'ArticleListModal',
 
     components: {
         Loading,
@@ -68,37 +72,36 @@ export default {
     },
 
     computed: {
-        ...mapStores(useSynopsisStore, useCharacterStore),
+        ...mapStores(useSynopsisStore, useArticleStore),
 
-        characters() {
-            const characters = [];
+        articles() {
+            const articles = [];
 
-            for (let i = 0; i < this.characterStore.characters.length; i++) {
-                const character = this.characterStore.characters[i];
+            for (let i = 0; i < this.articleStore.articles.length; i++) {
+                const article = this.articleStore.articles[i];
 
-                const index = this.synopsisStore.synopsis.characters.findIndex(element => element.id === character.id);
+                const index = this.synopsisStore.synopsis.articles.findIndex(element => element.id === article.id);
                 if (index !== -1) {
                     continue;
                 }
 
                 if (this.search !== null && this.search.length > 2) {
-                    if (character.name.toLowerCase().indexOf(this.search.toLowerCase()) === -1) {
+                    if (article.title.toLowerCase().indexOf(this.search.toLowerCase()) === -1) {
                         continue;
                     }
                 }
 
-                characters.push(character);
+                articles.push(article);
             }
-            
 
-            return characters;
+            return articles;
         }
     },
 
     async mounted () {
         this.loading = true;
 
-        const status = await this.characterStore.getAll();
+        const status = await this.articleStore.getAll();
         if (!status) {
             createToastify('Le chargement a échoué', 'error');
         }
@@ -111,14 +114,14 @@ export default {
             this.$emit('on-close');
         },
 
-        async append(characterId) {
+        async append(articleId) {
             this.loading = true;
 
-            const status = await this.synopsisStore.appendCharacterFromList(characterId);
+            const status = await this.synopsisStore.appendArticleFromList(articleId);
             if (!status) {
                 createToastify("L'ajout a échoué.", 'error');
             } else {
-                createToastify("Le personnage a été ajouté.", 'success');
+                createToastify("L'article a été ajouté.", 'success');
             }
 
             this.loading = false;
@@ -128,7 +131,7 @@ export default {
 </script>
 
 <style scoped>
-#characterListModal {
+#articleListeModal {
     display: block;
     z-index: 3000;
 }

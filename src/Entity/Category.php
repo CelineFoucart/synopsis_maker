@@ -115,7 +115,6 @@ class Category
     public function getLinks(): array
     {
         return [
-            'self' => ['href' => '/api/category/'.$this->getId()],
             'delete' => ['href' => '/api/category/'.$this->getId()],
             'update' => ['href' => '/api/category/'.$this->getId()],
         ];

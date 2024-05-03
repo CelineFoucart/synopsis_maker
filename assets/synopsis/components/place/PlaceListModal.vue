@@ -9,7 +9,18 @@
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body position-relative">
-                        <div class="row g-2">
+                        <div class="row">
+                            <div class="col-6 fw-bold">
+                                Ajouter un lieu
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text"><label for="search">Filtrer</label></span>
+                                    <input v-model="search" type="text" class="form-control" id="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-2 pb-2 border" :class="{'scrollable-container': places.length > 12}">
                             <div class="col-6" v-for="place in places">
                                 <section class="border bg-light p-1 button" @click="append(place.id)">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -52,6 +63,7 @@ export default {
     data() {
         return {
             loading: false,
+            search: null
         }
     },
 
@@ -61,12 +73,22 @@ export default {
         places() {
             const places = [];
 
-            this.placeStore.places.forEach(place => {
+            for (let i = 0; i < this.placeStore.places.length; i++) {
+                const place = this.placeStore.places[i];
+
                 const index = this.synopsisStore.synopsis.places.findIndex(element => element.id === place.id);
-                if (index === -1) {
-                    places.push(place);
+                if (index !== -1) {
+                    continue;
                 }
-            });
+
+                if (this.search !== null && this.search.length > 2) {
+                    if (place.title.toLowerCase().indexOf(this.search.toLowerCase()) === -1) {
+                        continue;
+                    }
+                }
+
+                places.push(place);
+            }
 
             return places;
         }

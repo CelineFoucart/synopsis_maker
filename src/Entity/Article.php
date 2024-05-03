@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -14,19 +17,31 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['index'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['index'])]
+    #[Assert\NotBlank]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[Groups(['index'])]
     private ?WorldBuildingCategory $category = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(min: 5, max: 255)]
+    private ?string $link = null;
+
     #[ORM\ManyToMany(targetEntity: Synopsis::class, inversedBy: 'articles')]
-    private Collection $synopsis;
+    private Collection $synopses;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,7 +49,7 @@ class Article
 
     public function __construct()
     {
-        $this->synopsis = new ArrayCollection();
+        $this->synopses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,23 +96,35 @@ class Article
     /**
      * @return Collection<int, Synopsis>
      */
-    public function getSynopsis(): Collection
+    public function getSynopses(): Collection
     {
-        return $this->synopsis;
+        return $this->synopses;
     }
 
-    public function addSynopsi(Synopsis $synopsi): static
+    public function addSynopsis(Synopsis $synopsis): static
     {
-        if (!$this->synopsis->contains($synopsi)) {
-            $this->synopsis->add($synopsi);
+        if (!$this->synopses->contains($synopsis)) {
+            $this->synopses->add($synopsis);
         }
 
         return $this;
     }
 
-    public function removeSynopsi(Synopsis $synopsi): static
+    public function removeSynopsis(Synopsis $synopsis): static
     {
-        $this->synopsis->removeElement($synopsi);
+        $this->synopses->removeElement($synopsis);
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): static
+    {
+        $this->link = $link;
 
         return $this;
     }
@@ -112,5 +139,15 @@ class Article
         $this->author = $author;
 
         return $this;
+    }
+
+    #[Groups(['index'])]
+    #[SerializedName('_links')]
+    public function getLinks(): array
+    {
+        return [
+            'delete' => ['href' => '/api/article/'.$this->getId()],
+            'update' => ['href' => '/api/article/'.$this->getId()],
+        ];
     }
 }

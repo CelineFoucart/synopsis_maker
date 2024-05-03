@@ -90,7 +90,6 @@ export default {
         ...mapStores(useSynopsisStore, usePlaceStore),
     },
 
-
     mounted () {
         this.resetPlace();
     },
