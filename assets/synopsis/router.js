@@ -9,6 +9,7 @@ import WorldBuilding from "&synopsis/views/synopsis/WorldBuilding.vue";
 import Settings from "&synopsis/views/Settings.vue";
 import PlaceIndex from "&synopsis/views/PlaceIndex.vue";
 import CharacterIndex from "&synopsis/views/CharacterIndex.vue";
+import ArticleIndex from "&synopsis/views/ArticleIndex.vue";
 
 const routes =  [
     { path: '/', redirect: '/synopsis' },
@@ -66,6 +67,11 @@ const routes =  [
         path: "/character",
         name: "CharacterIndex",
         component: CharacterIndex
+    },
+    {
+        path: "/article",
+        name: "ArticleIndex",
+        component: ArticleIndex
     }
 ];
 

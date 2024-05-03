@@ -20,6 +20,12 @@
                 </router-link>
             </li>
             <li class="nav-item">
+                <router-link :to="{ name: 'ArticleIndex' }" class="nav-link py-3">
+                    <i class="fas fa-file fa-fw"></i>
+                    <span class="d-none d-md-inline ps-1">Articles</span>
+                </router-link>
+            </li>
+            <li class="nav-item">
                 <router-link :to="{ name: 'Settings' }" class="nav-link py-3">
                     <i class="fa-solid fa-gears fa-fw"></i>
                     <span class="d-none d-md-inline ps-1">Configuration</span>

@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div v-html="selectedArticle.content"></div>
-                    <ArticleModal :data="selectedArticle" @on-refresh="onRefresh" @on-close="ediModal = false" v-if="ediModal"></ArticleModal>
+                    <ArticleModal :data="selectedArticle" @on-refresh="onRefresh" @on-close="editModal = false" v-if="editModal"></ArticleModal>
                     <UnlinkModal 
                         :loading="loading" 
                         :title="selectedArticle.title" 
@@ -86,7 +86,7 @@ export default {
         return {
             error: false,
             selectedArticle: null,
-            ediModal: false,
+            editModal: false,
             unlinkModal: false,
             loading: false
         }
@@ -139,7 +139,7 @@ export default {
             }
 
             this.articleStore.setArticles(this.synopsisStore.synopsis.articles);
-            this.ediModal = true;
+            this.editModal = true;
         },
 
         async unlinkElement() {

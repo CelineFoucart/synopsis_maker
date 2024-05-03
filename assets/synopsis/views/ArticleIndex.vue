@@ -1,8 +1,8 @@
 <template>
     <article>
-        <h1 class="display-5 mb-5">Personnages</h1>
+        <h1 class="display-5 mb-5">Articles</h1>
         <div class="row align-items-center mb-3">
-            <div class="col-6 text-end">
+            <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-text">
                         <label for="searchValue">Recherche</label>
@@ -10,23 +10,39 @@
                     <input type="text" class="form-control w-auto input-sm" id="searchValue" v-model="searchValue" />
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <label for="searchField">Champ</label>
+                    </span>
+                    <select v-model="searchField" id="searchField" class="form-control w-auto input-sm">
+                        <option value="title">Titre</option>
+                        <option value="categoryName">Catégorie</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <DataTable :items="characterStore.characters" 
+        <DataTable :items="articleStore.articles" 
             :headers="headers" 
             :rows-items="[10, 25, 50, 100]"
             empty-message="Aucun résultat"
             rows-per-page-message="Elément par page"
             rows-of-page-separator-message="sur"
-            search-field="title"
+            :search-field="searchField"
             :search-value="searchValue"
-            :buttons-pagination="true"
+            :buttons-pagination="true"  
             show-index
             theme-color="#0d6efd"
             sort-by="title"
             alternating>
             <template #item-link="{ link }">
                 <a :href="link" target="_blank">{{ link }}</a>
+            </template>
+            <template #item-category="{ category }">
+                <span class="badge bg-secondary">
+                    <i :class="'fa-solid ' + category.icon + ' fa-fw'"></i> {{ category.title }}
+                </span>
             </template>
             <template #item-parents="{ parents }">
                 <div v-for="parent in parents">
@@ -46,84 +62,82 @@
                 </div>
             </template>
         </DataTable>
-        <Loading v-if="loading"></Loading>
-        <CharacterModal :data="character" v-if="showEditModal" @on-close="showEditModal = false"></CharacterModal>
-        <Delete :title="character.name" v-if="showDeleteModal" @on-confirm="deleteAction" @on-close="showDeleteModal = false"></Delete>
     </article>
+    <ArticleModal :data="article"  @on-close="showEditModal = false" v-if="showEditModal"></ArticleModal>
+    <Delete :title="article.title" v-if="showDeleteModal" @on-confirm="deleteAction" @on-close="showDeleteModal = false"></Delete>
 </template>
 
 <script>
 import { mapStores } from "pinia";
-import { useCharacterStore } from '&synopsis/stores/character.js';
-import Loading from '&utils/Loading.vue';
+import { useArticleStore } from '&synopsis/stores/article.js';
 import { createToastify } from '&utils/toastify.js';
-import CharacterModal from '&synopsis/components/character/CharacterModal.vue';
 import Delete from '&utils/Delete.vue';
+import ArticleModal from '&synopsis/components/synopsis_article/ArticleModal.vue';
+import { useArticleCategoryStore } from '&synopsis/stores/articleCategory.js';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 
 export default {
-    name: 'CharacterIndex',
+    name: 'ArticleIndex',
 
     components: {
         DataTable: Vue3EasyDataTable,
-        Loading,
-        CharacterModal,
-        Delete
+        Delete,
+        ArticleModal
     },
 
     data() {
         return {
-            loading: true,
             headers: [ 
-                {text: 'Nom', value: 'name', sortable: true},
+                {text: 'Titre', value: 'title', sortable: true},
+                {text: 'Catégorie', value: 'category', sortable: true},
                 {text: 'Lien', value: 'link', sortable: true},
                 {text: 'Synopsis', value: 'parents', sortable: true},
                 {text: "Actions", value: "operation"},
             ],
-            character: {id: null, name: null, description: null, link: null, biography: '', appearance: '', personality: []},
+            character: {id: null, title: null, link: null, category: null, content: ''},
             showEditModal: false,
             showDeleteModal: false,
+            searchField: 'title',
             searchValue: ''
         }
     },
 
     computed: {
-        ...mapStores(useCharacterStore),
+        ...mapStores(useArticleStore, useArticleCategoryStore),
     },
 
     async mounted () {
-        this.loading = true;
-
-        const status = await this.characterStore.getAll();
+        const status = await this.articleStore.getAll();
         if (!status) {
             createToastify('Le chargement a échoué', 'error');
         }
-        
-        this.loading = false;
+
+        const statusCategory = await this.articleCategoryStore.getCategories();
+        if (!statusCategory) {
+            createToastify('Le chargement des catégories a échoué', 'error');
+        }
     },
 
     methods: {
         edit(data) {
-            this.character = data;
+            this.article = data;
             this.showEditModal = true;
         },
 
         openDeleteModal(data) {
-            this.character = data;
+            this.article = data;
             this.showDeleteModal = true;
         },
 
         async deleteAction() {
-            this.loading = true;
             this.showDeleteModal = false;
-            const status = await this.characterStore.delete(this.character.id);
+            const status = await this.articleStore.delete(this.article.id);
             if (status) {
-                createToastify('La catégorie a été supprimée', 'success');
+                createToastify("L'article a été supprimé", 'success');
             }
 
-            this.character = {id: null, name: null, description: null, link: null, biography: '', appearance: '', personality: []};
-            this.loading = false;
+            this.character = {id: null, title: null, link: null, category: null, content: ''};
         }
     },
 }

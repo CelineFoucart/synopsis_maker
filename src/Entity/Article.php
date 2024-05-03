@@ -93,6 +93,12 @@ class Article
         return $this;
     }
 
+    #[Groups(['index'])]
+    public function getCategoryName(): string
+    {
+        return $this->category ? $this->category->getTitle() : '';
+    }
+
     /**
      * @return Collection<int, Synopsis>
      */
@@ -115,6 +121,17 @@ class Article
         $this->synopses->removeElement($synopsis);
 
         return $this;
+    }
+
+    #[Groups(['index'])]
+    public function getParents(): array
+    {
+        $parents = [];
+        foreach ($this->getSynopses() as $synopsis) {
+            $parents[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
+        }
+
+        return $parents;
     }
 
     public function getLink(): ?string

@@ -155,5 +155,6 @@ export default {
     --easy-table-header-item-padding: 0.5rem 0.5rem;
     --easy-table-body-item-padding: 0.5rem 0.5rem;
     --easy-table-footer-padding: 0.5rem 0.5rem;
+    --easy-table-footer-font-size: 12px;
 }
 </style>
