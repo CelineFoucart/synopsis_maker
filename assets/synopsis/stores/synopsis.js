@@ -467,5 +467,23 @@ export const useSynopsisStore = defineStore('synopsis', {
                 return false;
             }
         },
+
+        async editHomePage(synopsisId, data) {
+            try {
+                this.loading = true;
+                const url = Routing.generate("api_synopsis_homepage_edit", {id: synopsisId});
+                await axios.put(url, {homepage: data});
+                if (this.synopsis) {
+                    this.synopsis.worldbuildingHome = data;
+                }
+                this.loading = false;
+
+                return true;
+            } catch (error) {
+                this.loading = false;
+
+                return false;
+            }
+        }
     }
 })

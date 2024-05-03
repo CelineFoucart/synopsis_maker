@@ -5,18 +5,28 @@
 
         <div class="row mt-4">
             <div class="col-md-8 col-lg-9">
-                <article v-if="(homepage === null || homepage.length < 1) && selectedArticle === null" class="text-center">
-                    <h2 class="mb-3 ">Bienvenue dans le concepteur d'univers de ce projet</h2>
-                    <p class="h5 text-muted mb-4">
-                        Gérez les articles qui présentent l'univers du projet et le worldbuilding. Depuis la page 
-                        configuration, ajoutez des catégories d'articles.
-                    </p>
-                    <button type="button" class="btn btn-success btn-sm">Modifier le contenu de la page d'accueil</button>
+                <article v-if="selectedArticle === null">
+                    <div class="text-center" v-if="homepage === null || homepage.length < 1">
+                        <h2 class="mb-3 ">Bienvenue dans le concepteur d'univers de ce projet</h2>
+                        <p class="h5 text-muted mb-4">
+                            Gérez les articles qui présentent l'univers du projet et le worldbuilding. Depuis la page 
+                            configuration, ajoutez des catégories d'articles.
+                        </p>
+                        <button type="button" @click="homepageModal = true" class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-plus fa-fw"></i>
+                            Définir une page d'accueil
+                        </button>
+                    </div>
+                    <div v-else>
+                        <div v-html="homepage"></div>
+                        <footer class="text-center border-top pt-3">
+                            <button type="button" @click="homepageModal = true" class="btn btn-success btn-sm">
+                                <i class="fa-solid fa-pen-to-square fa-fw"></i> Modifier
+                            </button>
+                        </footer>
+                    </div>
                 </article>
-                <div v-else-if="homepage !== null && homepage.length > 0 && selectedArticle === null">
-                    <div v-html="homepage"></div>
-                </div>
-                <article v-else>
+                <article v-if="selectedArticle !== null">
                     <header class="border-bottom">
                         <h2>
                             <a :href="selectedArticle.link" v-if="selectedArticle.link !== null" class="text-decoration-none">
@@ -56,6 +66,7 @@
                 <Summary @on-select="onSelect"></Summary>
             </div>
         </div>
+        <HomePageModal :synopsis="synopsisStore.synopsis" @on-close="homepageModal = false" v-if="homepageModal"></HomePageModal>
     </article>
 </template>
 
@@ -69,6 +80,7 @@ import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import Summary from '&synopsis/components/synopsis_article/Summary.vue';
 import ArticleModal from '&synopsis/components/synopsis_article/ArticleModal.vue';
+import HomePageModal from '&synopsis/components/synopsis_article/HomePageModal.vue';
 import UnlinkModal from '&utils/UnlinkModal.vue';
 
 export default {
@@ -79,7 +91,8 @@ export default {
         Error,
         Summary,
         ArticleModal,
-        UnlinkModal
+        UnlinkModal,
+        HomePageModal
     },
 
     data() {
@@ -88,6 +101,7 @@ export default {
             selectedArticle: null,
             editModal: false,
             unlinkModal: false,
+            homepageModal: false,
             loading: false
         }
     },

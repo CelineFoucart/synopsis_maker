@@ -28,7 +28,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label mb-0">Contenu</label>
-                            <Description v-model:data="content" :saveButton="false"></Description>
+                            <Description v-model:data="content"></Description>
                         </div>
                         <div class="mb-3">
                             <label for="link" class="form-label">Lien</label>
