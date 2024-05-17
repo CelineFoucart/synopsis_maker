@@ -11,7 +11,7 @@
                     <div class="modal-body">
                         <p class="text-danger fs-5 mb-0">
                             Attention, cette action est définitive ! Voulez-vous vraiment retirer 
-                            l'élément <span class="fw-bold">{{ title }}</span> de ce synopsis ?
+                            l'élément <span class="fw-bold">{{ title }}</span> de ce synopsis&nbsp;?
                         </p>
                     </div>
                     <div class="modal-footer">

@@ -1,10 +1,10 @@
 <template>
-    <div class="row border-top pt-2 m-0 align-items-center">
-        <div class="col-md-5">
+    <div class="row g-1 border-top pt-2 m-0 align-items-center">
+        <div class="col-md-5 text-center text-md-start">
             Affichage de l'élément {{ pagination ? pagination.firstItemNumber : 0 }} à {{  pagination ? pagination.lastItemNumber : 0 }}
             sur {{ totalCount }} élément{{ totalCount > 1 ? 's' : '' }}
         </div>
-        <div class="col-md-7 d-flex gap-1 justify-content-end">
+        <div class="col-md-7 d-flex gap-1 justify-content-center justify-content-md-end">
             <div class="d-flex justify-content-end align-items-center gap-2">
                 <label for="length">Par page</label>
                 <select id="length" class="custom-select custom-select-sm form-control w-auto  h-100" v-model="currentLimit">

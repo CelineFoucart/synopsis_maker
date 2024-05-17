@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row g-2">
                 <div class="col-md-4">
                     <TodoColumn :title="'À faire'" :id="0" :synopsis="synopsisStore.synopsis"></TodoColumn>
                 </div>

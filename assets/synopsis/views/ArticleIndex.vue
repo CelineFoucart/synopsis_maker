@@ -1,7 +1,7 @@
 <template>
     <article>
         <h1 class="display-5 mb-5">Articles</h1>
-        <div class="row align-items-center mb-3">
+        <div class="row align-items-center mb-3 g-2">
             <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-text">

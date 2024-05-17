@@ -3,7 +3,10 @@
     <article v-if="synopsisStore.synopsis !== null">
         <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
 
-        <div class="row mt-4">
+        <div class="row flex-md-row-reverse mt-4 g-2">
+            <div class="col-md-4 col-lg-3">
+                <Summary @on-select="onSelect"></Summary>
+            </div>
             <div class="col-md-8 col-lg-9">
                 <article v-if="selectedArticle === null">
                     <div class="text-center" v-if="homepage === null || homepage.length < 1">
@@ -61,9 +64,6 @@
                         v-if="unlinkModal">
                     </UnlinkModal>
                 </article>
-            </div>
-            <div class="col-md-4 col-lg-3">
-                <Summary @on-select="onSelect"></Summary>
             </div>
         </div>
         <HomePageModal :synopsis="synopsisStore.synopsis" @on-close="homepageModal = false" v-if="homepageModal"></HomePageModal>

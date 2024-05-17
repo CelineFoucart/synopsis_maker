@@ -33,35 +33,66 @@
 
                         <ul class="nav nav-tabs">
                             <li class="nav-item" @click.prevent="toggleTab('informations')">
-                                <a class="nav-link" :class="{active: tabs.informations}" role="button">Informations</a>
+                                <a class="nav-link" :class="{active: tabs.informations}" role="button">
+                                    <i class="fa-solid fa-circle-info fa-fw"></i>
+                                    <span class="d-none d-md-inline">
+                                        Informations
+                                    </span>
+                                </a>
                             </li>
                             <li class="nav-item" @click.prevent="toggleTab('biography')">
-                                <a class="nav-link" :class="{active: tabs.biography}" role="button">Biographie</a>
+                                <a class="nav-link" :class="{active: tabs.biography}" role="button">
+                                    <i class="fa-solid fa-file-lines fa-fw"></i>
+                                    <span class="d-none d-md-inline">
+                                        Biographie
+                                    </span>
+                                </a>
                             </li>
                             <li class="nav-item" @click.prevent="toggleTab('appearance')">
-                                <a class="nav-link" :class="{active: tabs.appearance}" role="button">Apparence</a>
+                                <a class="nav-link" :class="{active: tabs.appearance}" role="button">
+                                    <i class="fa-solid fa-address-card fa-fw"></i>
+                                    <span class="d-none d-md-inline">
+                                        Apparence
+                                    </span>
+                                </a>
                             </li>
                             <li class="nav-item" @click.prevent="toggleTab('personality')">
-                                <a class="nav-link" :class="{active: tabs.personality}" role="button">Personnalité</a>
+                                <a class="nav-link" :class="{active: tabs.personality}" role="button">
+                                    <i class="fa-solid fa-icons fa-fw"></i>
+                                    <span class="d-none d-md-inline">
+                                        Personnalité
+                                    </span>
+                                </a>
                             </li>
                             <li class="nav-item" @click.prevent="toggleTab('relations')">
-                                <a class="nav-link" :class="{active: tabs.relations}" role="button">Relations</a>
+                                <a class="nav-link" :class="{active: tabs.relations}" role="button">
+                                    <i class="fa-solid fa-people-group fa-fw"></i>
+                                    <span class="d-none d-md-inline">
+                                        Relations
+                                    </span>
+                                </a>
                             </li>
                         </ul>
                         <div class="mb-3 bg-white p-3 border-start border-end border-bottom">
                             <div v-if="tabs.biography">
-                                <label for="biography" class="visually-hidden">Biographie</label>
+                                <label for="biography" class="d-md-none fw-bold">Biographie</label>
                                 <Description v-model:data="biography" :saveButton="false"></Description>
                             </div>
                             
                             <div v-if="tabs.appearance">
-                                <label for="appearance" class="visually-hidden">Apparence</label>
+                                <label for="appearance" class="d-md-none fw-bold">Apparence</label>
                                 <Description v-model:data="appearance" :saveButton="false"></Description>
                             </div>
                             
                             <div v-if="tabs.personality">
                                 <template v-for="itemPersonality in personality" :key="itemPersonality.id">
                                     <div class="row g-3 align-items-end">
+                                        <div class="col-12 text-end">
+                                            <button type="button" class="btn btn-link p-0" @click="removePersonality(itemPersonality.id)">
+                                                    <i class="fa-solid fa-trash text-danger fa-lg"></i>
+                                                    <span class="visually-hidden">Retirer</span>
+                                                </button>
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="text" v-model="itemPersonality.key" class="form-control" id="key" placeholder="Par exemple, but, motivation...">
@@ -69,12 +100,6 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <div class="text-end pb-1">
-                                                <button type="button" class="btn btn-link p-0" @click="removePersonality(itemPersonality.id)">
-                                                    <i class="fa-solid fa-trash text-danger fa-lg"></i>
-                                                    <span class="visually-hidden">Retirer</span>
-                                                </button>
-                                            </div>
                                             <div class="form-floating">
                                                 <textarea id="content" placeholder="Ajouter une description" v-model="itemPersonality.content" class="form-control"></textarea>
                                                 <label for="content">Contenu</label>

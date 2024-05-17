@@ -2,7 +2,7 @@
     <article>
         <h1 class="display-5 mb-5">Personnages</h1>
         <div class="row align-items-center mb-3">
-            <div class="col-6 text-end">
+            <div class="col-lg-6 text-end">
                 <div class="input-group">
                     <span class="input-group-text">
                         <label for="searchValue">Recherche</label>

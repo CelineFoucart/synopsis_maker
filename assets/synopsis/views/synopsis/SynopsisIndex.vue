@@ -1,7 +1,8 @@
 <template>
-    <div class="row">
-        <div class="col-12">
-            <h1 class="display-5 mb-3">Mes synopsis</h1>
+    <h1 class="display-5 mb-3">Mes synopsis</h1>
+    <div class="row flex-md-row-reverse">
+        <div class="col-md-4 border-start p-3">
+            <AsideSynopsis v-model:filters="filters" @on-change="onChangeFilters"></AsideSynopsis>
         </div>
         <div class="col-md-8">
             <div class="d-flex justify-content between flex-column h-100">
@@ -15,9 +16,6 @@
                 </div>
                 <Pagination :pagination="synopsisStore.pagination" @on-change="onPaginationChange"></Pagination>
             </div>
-        </div>
-        <div class="col-md-4 border-start p-3">
-            <AsideSynopsis v-model:filters="filters" @on-change="onChangeFilters"></AsideSynopsis>
         </div>
     </div>
     <AddSynopsisModal v-if="showAddModal" @on-close="showAddModal = false"></AddSynopsisModal>
