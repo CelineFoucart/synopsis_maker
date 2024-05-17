@@ -124,14 +124,15 @@ class Article
     }
 
     #[Groups(['index'])]
-    public function getParents(): array
+    public function getRelations(): array
     {
-        $parents = [];
+        $relations = [];
+
         foreach ($this->getSynopses() as $synopsis) {
-            $parents[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
+            $relations[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
         }
 
-        return $parents;
+        return $relations;
     }
 
     public function getLink(): ?string

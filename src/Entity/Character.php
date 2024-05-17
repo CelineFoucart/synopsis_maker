@@ -54,7 +54,78 @@ class Character
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['index'])]
+    #[Assert\Length(max: 255)]
     private ?string $link = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $nationality = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $job = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $birthday = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $birthdayPlace = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $deathDate = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $deathPlace = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $parents = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $children = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $siblings = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $partner = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $species = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $gender = null;
+    
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(max: 15000)]
+    private ?string $role = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(max: 15000)]
+    private ?string $complementary = null;
 
     #[ORM\ManyToOne(inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: false)]
@@ -198,14 +269,14 @@ class Character
     }
 
     #[Groups(['index'])]
-    public function getParents(): array
+    public function getRelations(): array
     {
-        $parents = [];
+        $relations = [];
         foreach ($this->getSynopses() as $synopsis) {
-            $parents[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
+            $relations[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
         }
 
-        return $parents;
+        return $relations;
     }
 
     public function getLink(): ?string
@@ -216,6 +287,174 @@ class Character
     public function setLink(?string $link): static
     {
         $this->link = $link;
+
+        return $this;
+    }
+
+    public function getNationality(): ?string
+    {
+        return $this->nationality;
+    }
+
+    public function setNationality(?string $nationality): self
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    public function getJob(): ?string
+    {
+        return $this->job;
+    }
+
+    public function setJob(?string $job): self
+    {
+        $this->job = $job;
+
+        return $this;
+    }
+
+    public function getBirthday(): ?string
+    {
+        return $this->birthday;
+    }
+
+    public function setBirthday(?string $birthday): self
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    public function getBirthdayPlace(): ?string
+    {
+        return $this->birthdayPlace;
+    }
+
+    public function setBirthdayPlace(?string $birthdayPlace): self
+    {
+        $this->birthdayPlace = $birthdayPlace;
+
+        return $this;
+    }
+
+    public function getDeathDate(): ?string
+    {
+        return $this->deathDate;
+    }
+
+    public function setDeathDate(?string $deathDate): self
+    {
+        $this->deathDate = $deathDate;
+
+        return $this;
+    }
+
+    public function getDeathPlace(): ?string
+    {
+        return $this->deathPlace;
+    }
+
+    public function setDeathPlace(?string $deathPlace): self
+    {
+        $this->deathPlace = $deathPlace;
+
+        return $this;
+    }
+
+    public function getParents(): ?string
+    {
+        return $this->parents;
+    }
+
+    public function setParents(?string $parents): self
+    {
+        $this->parents = $parents;
+
+        return $this;
+    }
+
+    public function getChildren(): ?string
+    {
+        return $this->children;
+    }
+
+    public function setChildren(?string $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    public function getSiblings(): ?string
+    {
+        return $this->siblings;
+    }
+
+    public function setSiblings(?string $siblings): self
+    {
+        $this->siblings = $siblings;
+
+        return $this;
+    }
+
+    public function getPartner(): ?string
+    {
+        return $this->partner;
+    }
+
+    public function setPartner(?string $partner): self
+    {
+        $this->partner = $partner;
+
+        return $this;
+    }
+
+    public function getSpecies(): ?string
+    {
+        return $this->species;
+    }
+
+    public function setSpecies(?string $species): self
+    {
+        $this->species = $species;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+    
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role): static
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+    
+    public function getComplementary(): ?string
+    {
+        return $this->complementary;
+    }
+    
+    public function setComplementary(?string $complementary): static
+    {
+        $this->complementary = $complementary;
 
         return $this;
     }

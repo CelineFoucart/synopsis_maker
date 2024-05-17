@@ -44,8 +44,8 @@
                     <i :class="'fa-solid ' + category.icon + ' fa-fw'"></i> {{ category.title }}
                 </span>
             </template>
-            <template #item-parents="{ parents }">
-                <div v-for="parent in parents">
+            <template #item-relations="{ relations }">
+                <div v-for="parent in relations">
                     <router-link :to="{ name: 'SynopsisShow', params:{slug: parent.slug, id: parent.id} }">
                         {{ parent.title }}
                     </router-link>
@@ -92,7 +92,7 @@ export default {
                 {text: 'Titre', value: 'title', sortable: true},
                 {text: 'Catégorie', value: 'category', sortable: true},
                 {text: 'Lien', value: 'link', sortable: true},
-                {text: 'Synopsis', value: 'parents', sortable: true},
+                {text: 'Synopsis', value: 'relations', sortable: true},
                 {text: "Actions", value: "operation"},
             ],
             character: {id: null, title: null, link: null, category: null, content: ''},

@@ -35,6 +35,15 @@
                             <label for="description" class="form-label mb-0">Description (géographie, histoire, caractéristiques...)</label>
                             <Description v-model:data="description" :saveButton="false"></Description>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="complementary" class="form-label">Informations complémentaires</label>
+                            <textarea class="form-control" id="complementary" v-model="complementary" :class="{ 'is-invalid': v$.complementary.$errors.length }"></textarea>
+                            <div class="invalid-feedback">
+                                Ce champ doit faire entre 1 et 15000 caractères.
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="link" class="form-label">Lien</label>
                             <input type="url" class="form-control" id="link" v-model="link" :class="{ 'is-invalid': v$.link.$errors.length }">
@@ -88,6 +97,7 @@ export default {
             role: null,
             link: null,
             description: '',
+            complementary: null,
             v$: useVuelidate(),
             loading: false,
         }
@@ -102,6 +112,7 @@ export default {
             title: { required, maxLength: maxLength(255), minLength: minLength(2) },
             link: { maxLength: maxLength(255), minLength: minLength(10), url },
             role: { maxLength: maxLength(15000), minLength: minLength(5) },
+            complementary: { maxLength: maxLength(15000), minLength: minLength(1) },
         }
     },
 
@@ -110,6 +121,7 @@ export default {
         this.link = this.data.link;
         this.role = this.data.role;
         this.description = this.data.description;
+        this.complementary = this.data.complementary;
     },
 
     methods: {
@@ -132,6 +144,7 @@ export default {
                 link: this.link,
                 role: this.role, 
                 description: this.description,
+                complementary: this.complementary
             };
 
             let success = false;

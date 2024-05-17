@@ -28,8 +28,8 @@
             <template #item-link="{ link }">
                 <a :href="link" target="_blank">{{ link }}</a>
             </template>
-            <template #item-parents="{ parents }">
-                <div v-for="parent in parents">
+            <template #item-relations="{ relations }">
+                <div v-for="parent in relations">
                     <router-link :to="{ name: 'SynopsisShow', params:{slug: parent.slug, id: parent.id} }">
                         {{ parent.title }}
                     </router-link>
@@ -78,7 +78,7 @@ export default {
             headers: [ 
                 {text: 'Titre', value: 'title', sortable: true},
                 {text: 'Lien', value: 'link', sortable: true},
-                {text: 'Synopsis', value: 'parents', sortable: true},
+                {text: 'Synopsis', value: 'relations', sortable: true},
                 {text: "Actions", value: "operation"},
             ],
             place: {id: null, title: null, role: null, link: null, description: null},

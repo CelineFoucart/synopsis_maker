@@ -35,9 +35,14 @@ class Place
     #[Groups(['index'])]
     private ?string $description = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['index'])]
+    #[Assert\Length(max: 15000)]
+    private ?string $complementary = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['index'])]
-    #[Assert\Length(min: 5, max: 255)]
+    #[Assert\Length(max: 255)]
     private ?string $link = null;
 
     #[ORM\ManyToOne(inversedBy: 'places')]
@@ -93,6 +98,18 @@ class Place
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+    
+    public function getComplementary(): ?string
+    {
+        return $this->complementary;
+    }
+    
+    public function setComplementary(?string $complementary): static
+    {
+        $this->complementary = $complementary;
 
         return $this;
     }
@@ -176,14 +193,14 @@ class Place
     }
 
     #[Groups(['index'])]
-    public function getParents(): array
+    public function getRelations(): array
     {
-        $parents = [];
+        $relations = [];
         foreach ($this->getSynopses() as $synopsis) {
-            $parents[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
+            $relations[] = ['id' => $synopsis->getId(), 'slug' => $synopsis->getSlug(), 'title' => $synopsis->getTitle()];
         }
 
-        return $parents;
+        return $relations;
     }
 
     #[Groups(['index'])]
