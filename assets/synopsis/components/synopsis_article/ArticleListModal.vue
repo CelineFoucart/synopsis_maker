@@ -38,7 +38,6 @@
                                 </section>
                             </div>
                         </div>
-                        <Loading v-if="loading"></Loading>
                     </div>
                 </div>
             </div>
@@ -51,14 +50,9 @@ import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { useArticleStore } from '&synopsis/stores/article.js';
 import { createToastify } from '&utils/toastify.js';
-import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'ArticleListModal',
-
-    components: {
-        Loading,
-    },
 
     props: {
         data: Object
@@ -66,7 +60,6 @@ export default {
 
     data() {
         return {
-            loading: false,
             search: null
         }
     },
@@ -99,14 +92,10 @@ export default {
     },
 
     async mounted () {
-        this.loading = true;
-
         const status = await this.articleStore.getAll();
         if (!status) {
             createToastify('Le chargement a échoué', 'error');
         }
-        
-        this.loading = false;
     },
 
     methods: {

@@ -8,6 +8,10 @@
                     <h2 class="h5 mb-0 text-secondary">Episodes et chapitres archivés</h2>
                 </div>
                 <div class="col-md-4 text-end">
+                    <router-link :to="{ name: 'SynopsisEpisodes', params:{slug: synopsisStore.synopsis.slug, id: synopsisStore.synopsis.id} }" class="btn btn-sm btn-dark me-1" v-tooltip="'Episodes'">
+                        <i class="fa-solid fa-copy fa-fw"></i>
+                        <span class="visually-hidden">Episodes</span>
+                    </router-link>
                     <button class="btn btn-sm btn-dark me-1" @click.prevent="openAll = !openAll" v-tooltip="openAll ? 'Tout ouvrir' : 'Tout fermer'">
                         <i class="fa-solid fa-folder-open fa-fw" v-if="!openAll"></i>
                         <i class="fa-solid fa-folder-closed fa-fw" v-if="openAll"></i>

@@ -4,10 +4,10 @@
         <HeaderSynopsis :synopsis="synopsisStore.synopsis"></HeaderSynopsis>
 
         <div class="row flex-md-row-reverse mt-4 g-2">
-            <div class="col-md-4 col-lg-3">
+            <div class="col-md-5 col-xl-3">
                 <Summary @on-select="onSelect"></Summary>
             </div>
-            <div class="col-md-8 col-lg-9">
+            <div class="col-md-7 col-xl-9">
                 <article v-if="selectedArticle === null">
                     <div class="text-center" v-if="homepage === null || homepage.length < 1">
                         <h2 class="mb-3 ">Bienvenue dans le concepteur d'univers de ce projet</h2>

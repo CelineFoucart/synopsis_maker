@@ -18,6 +18,15 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="category" class="form-label required">Statut</label>
+                            <select class="form-select" id="category" v-model="status">
+                                <option value="0">A faire</option>
+                                <option value="1">En cours</option>
+                                <option value="2">Terminé</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="content" class="form-label">Description</label>
                             <textarea class="form-control" id="content" v-model="content" :class="{ 'is-invalid': v$.content.$errors.length }"></textarea>
                             <div class="form-text">Donnez une courte description de moins de 1500 caractères.</div>
@@ -47,7 +56,7 @@
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
-import { required, maxLength, minLength  } from '@vuelidate/validators';
+import { required, maxLength, minLength, minValue, maxValue  } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import "vue3-colorpicker/style.css";
 export default {
@@ -62,6 +71,7 @@ export default {
         return {
             title: null,
             content: null,
+            status: null,
             v$: useVuelidate(),
             loading: false,
         }
@@ -75,12 +85,14 @@ export default {
         return {
             title: { required, maxLength: maxLength(255), minLength: minLength(2) },
             content: { maxLength: maxLength(1500), minLength: minLength(3) },
+            status: { required, minValue: minValue(0), maxValue: maxValue(2) }
         }
     },
 
     mounted () {
         this.title = this.task.title;
         this.content = this.task.content;
+        this.status = this.task.category;
     },
 
     methods: {
@@ -102,7 +114,7 @@ export default {
                 id: this.task.id, 
                 title: this.title, 
                 content: this.content, 
-                category: this.task.category,
+                category: this.status,
                 position: this.task.position
             };
 

@@ -296,6 +296,7 @@ export const useSynopsisStore = defineStore('synopsis', {
         },
 
         async addTask(task) {
+            console.log(task)
             try {
                 const index = this.synopsis.tasks.findIndex((element) => element.id === task.id);
                 if (index !== -1) {

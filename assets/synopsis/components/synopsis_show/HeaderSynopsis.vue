@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-md-8">
                 <h1 class="display-5">
                     <span class="me-2">{{ synopsis.title }}</span>
                     <span class="action-btn-header text-success h5 me-2" role="button" v-tooltip="'Editer les informations'" @click="editInfoModal = true">
@@ -9,7 +9,7 @@
                     </span>
                 </h1>
             </div>
-            <div class="col-6 text-end">
+            <div class="col-6 col-md-4 text-end">
                 <router-link :to="{ name: 'SynopsisIndex' }" class="btn btn-sm btn-dark" v-tooltip="'Liste'">
                     <i class="fa-solid fa-arrow-left fa-fw"></i>
                     <span class="visually-hidden">Liste</span>

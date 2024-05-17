@@ -2,7 +2,7 @@
     <div>
         <div class="modal-backdrop fade show"></div>
         <div class="modal fade show" id="placeModal" tabindex="-1" aria-labelledby="placeModalLabel">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title h5" id="placeModalLabel">Lieu</h3>

@@ -2,7 +2,7 @@
     <div>
         <div class="modal-backdrop fade show"></div>
         <div class="modal fade show" id="characterModal" tabindex="-1" aria-labelledby="characterModalLabel">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title h5" id="characterModalLabel">Personnage</h3>
@@ -35,7 +35,7 @@
                             <li class="nav-item" @click.prevent="toggleTab('informations')">
                                 <a class="nav-link" :class="{active: tabs.informations}" role="button">
                                     <i class="fa-solid fa-circle-info fa-fw"></i>
-                                    <span class="d-none d-md-inline">
+                                    <span class="d-none d-lg-inline">
                                         Informations
                                     </span>
                                 </a>
@@ -43,7 +43,7 @@
                             <li class="nav-item" @click.prevent="toggleTab('biography')">
                                 <a class="nav-link" :class="{active: tabs.biography}" role="button">
                                     <i class="fa-solid fa-file-lines fa-fw"></i>
-                                    <span class="d-none d-md-inline">
+                                    <span class="d-none d-lg-inline">
                                         Biographie
                                     </span>
                                 </a>
@@ -51,7 +51,7 @@
                             <li class="nav-item" @click.prevent="toggleTab('appearance')">
                                 <a class="nav-link" :class="{active: tabs.appearance}" role="button">
                                     <i class="fa-solid fa-address-card fa-fw"></i>
-                                    <span class="d-none d-md-inline">
+                                    <span class="d-none d-lg-inline">
                                         Apparence
                                     </span>
                                 </a>
@@ -59,7 +59,7 @@
                             <li class="nav-item" @click.prevent="toggleTab('personality')">
                                 <a class="nav-link" :class="{active: tabs.personality}" role="button">
                                     <i class="fa-solid fa-icons fa-fw"></i>
-                                    <span class="d-none d-md-inline">
+                                    <span class="d-none d-lg-inline">
                                         Personnalité
                                     </span>
                                 </a>
@@ -67,7 +67,7 @@
                             <li class="nav-item" @click.prevent="toggleTab('relations')">
                                 <a class="nav-link" :class="{active: tabs.relations}" role="button">
                                     <i class="fa-solid fa-people-group fa-fw"></i>
-                                    <span class="d-none d-md-inline">
+                                    <span class="d-none d-lg-inline">
                                         Relations
                                     </span>
                                 </a>
@@ -75,12 +75,12 @@
                         </ul>
                         <div class="mb-3 bg-white p-3 border-start border-end border-bottom">
                             <div v-if="tabs.biography">
-                                <label for="biography" class="d-md-none fw-bold">Biographie</label>
+                                <label for="biography" class="d-lg-none fw-bold">Biographie</label>
                                 <Description v-model:data="biography" :saveButton="false"></Description>
                             </div>
                             
                             <div v-if="tabs.appearance">
-                                <label for="appearance" class="d-md-none fw-bold">Apparence</label>
+                                <label for="appearance" class="d-lg-none fw-bold">Apparence</label>
                                 <Description v-model:data="appearance" :saveButton="false"></Description>
                             </div>
                             

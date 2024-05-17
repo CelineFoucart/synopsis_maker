@@ -2,13 +2,13 @@
     <section>
         <header>
             <h2 class="mb-5 mt-3 fw-normal">Catégories d'article</h2>
-            <div class="row g-2 flex-md-row-reverse align-items-center">
-                <div class="col-md-4 text-end">
+            <div class="row g-2 flex-lg-row-reverse align-items-center">
+                <div class="col-lg-4 text-end">
                     <button type="button" class="btn btn-success btn-sm" v-tooltip="'Ajouter'" @click="appendCategory">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
-                <div class="col-md-8">
+                <div class="col-lg-8">
                     <div class="d-flex flex-column flex-md-row align-items-center gap-2 mb-3">
                         <div class="input-group">
                             <span class="input-group-text">
