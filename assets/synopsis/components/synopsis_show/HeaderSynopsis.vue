@@ -77,6 +77,11 @@
                 <h6 class="text-muted small mb-3">Actions</h6>
                 <ul class="list-unstyled" style="margin-left: 20px;">
                     <li class="pb-2">
+                        <router-link :to="{ name: 'SynopsisSettings', params: {slug: synopsis.slug, id: synopsis.id} }" class="text-decoration-none">
+                            <i class="fa-solid fa-gears fa-fw"></i> Réglages et export
+                        </router-link>
+                    </li>
+                    <li class="pb-2">
                         <a href="" class="text-decoration-none">
                             <i class="fa-solid fa-print fa-fw"></i> Générer le pdf
                         </a>

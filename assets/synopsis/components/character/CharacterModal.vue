@@ -199,30 +199,45 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="parents" class="form-label fw-bold">Parents</label>
-                                            <input type="text" class="form-control" v-model="parents" id="birthday" :class="{ 'is-invalid': v$.parents.$errors.length }">
+                                            <input type="text" class="form-control" v-model="parents" id="parents" :class="{ 'is-invalid': v$.parents.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="siblings" class="form-label fw-bold">Fratrie</label>
-                                            <input type="text" class="form-control" v-model="siblings" id="birthday" :class="{ 'is-invalid': v$.siblings.$errors.length }">
+                                            <input type="text" class="form-control" v-model="siblings" id="siblings" :class="{ 'is-invalid': v$.siblings.$errors.length }">
+                                            <div class="invalid-feedback">
+                                                Ce champ doit faire entre 1 et 255 caractères.
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partner" class="form-label fw-bold">Conjoint(e)</label>
+                                            <input type="text" class="form-control" v-model="partner" id="partner" :class="{ 'is-invalid': v$.partner.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="partner" class="form-label fw-bold">Conjoint(e)</label>
-                                            <input type="text" class="form-control" v-model="partner" id="birthday" :class="{ 'is-invalid': v$.partner.$errors.length }">
+                                            <label for="children" class="form-label fw-bold">Enfants</label>
+                                            <input type="text" class="form-control" v-model="children" id="children" :class="{ 'is-invalid': v$.children.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="children" class="form-label fw-bold">Enfants</label>
-                                            <input type="text" class="form-control" v-model="children" id="birthday" :class="{ 'is-invalid': v$.children.$errors.length }">
+                                            <label for="faction" class="form-label fw-bold">Faction</label>
+                                            <input type="text" class="form-control" v-model="faction" id="faction" :class="{ 'is-invalid': v$.faction.$errors.length }">
+                                            <div class="invalid-feedback">
+                                                Ce champ doit faire entre 1 et 255 caractères.
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="membership" class="form-label fw-bold">Affiliation</label>
+                                            <input type="text" class="form-control" v-model="membership" id="membership" :class="{ 'is-invalid': v$.membership.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
@@ -300,6 +315,8 @@ export default {
             species: null,
             gender: null,
             role: null,
+            faction: null,
+            membership: null,
             complementary: null,
             v$: useVuelidate(),
             loading: false,
@@ -333,6 +350,8 @@ export default {
             children: { maxLength: maxLength(255), minLength: minLength(1) },
             siblings: { maxLength: maxLength(255), minLength: minLength(1) },
             partner: { maxLength: maxLength(255), minLength: minLength(1) },
+            faction: { maxLength: maxLength(255), minLength: minLength(1) },
+            membership: { maxLength: maxLength(255), minLength: minLength(1) },
         }
     },
 
@@ -362,7 +381,9 @@ export default {
             this.parents = this.data.parents;
             this.children = this.data.children;
             this.siblings = this.data.siblings;
-            this.partner = this.data.partner;
+            this.siblings = this.data.siblings;
+            this.faction = this.data.faction;
+            this.membership = this.data.membership;
 
             this.personality = this.data.personality;
 
@@ -426,6 +447,8 @@ export default {
                 children: this.children,
                 siblings: this.siblings,
                 partner: this.partner,
+                faction: this.faction,
+                membership: this.membership,
             };
 
             let success = false;

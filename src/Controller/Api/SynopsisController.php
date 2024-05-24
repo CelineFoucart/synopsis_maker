@@ -159,6 +159,19 @@ final class SynopsisController extends AbstractApiController
         return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
+    #[Route('/{id}/settings', name: 'api_synopsis_settings_edit', methods: ['PUT'])]
+    public function settingsAction(Synopsis $synopsis, Request $request): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
+        $data = json_decode($request->getContent(), true);
+        $synopsis->setSettings($data);
+        $synopsis->setUpdatedAt(new \DateTime());
+        $this->entityManager->persist($synopsis);
+        $this->entityManager->flush();
+
+        return $this->json($synopsis, Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
     #[Route('/{id}', name: 'api_synopsis_delete', methods: ['DELETE'])]
     public function deleteAction(Synopsis $synopsis): JsonResponse
     {

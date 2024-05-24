@@ -100,6 +100,10 @@ class Synopsis
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
     private ?string $worldbuildingHome = null;
+    
+    #[ORM\Column(nullable: true)]
+    #[Groups(['index'])]
+    private ?array $settings = [];
 
     public function __construct()
     {
@@ -109,6 +113,7 @@ class Synopsis
         $this->places = new ArrayCollection();
         $this->characters = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->setSettings();
     }
 
     public function getId(): ?int
@@ -434,6 +439,45 @@ class Synopsis
     public function setWorldbuildingHome(?string $worldbuildingHome): static
     {
         $this->worldbuildingHome = $worldbuildingHome;
+
+        return $this;
+    }
+    
+    public function getSettings(): ?array
+    {
+        if ($this->settings === null) {
+            $this->setSettings();
+        }
+
+        return $this->settings;
+    }
+    
+    public function setSettings(?array $settings = []): self
+    {
+        if ($settings === null || empty($settings)) {
+            $settings = [
+                'appendPitch' => true,
+                'appendDescription' => true,
+                'appendCategories' => true,
+                'appendChapters' => true,
+                'appendChapterTitles' => true,
+                'appendEpisodeTitles' => true,
+                'appendEpisodeCharacters' => true,
+                'appendEpisodePlaces' => true,
+                'appendNotes' => true,
+                'appendEpisodes' => true,
+                'appendCharacters' => true,
+                'appendPlaces' => true,
+                'appendWorldBuildingHome' => true,
+                'appendArticles' => true,
+                'isPublic' => false,
+                'showContent' => false,
+                'showCharacters' => false,
+                'showPlaces' => false, 
+            ];
+        }
+
+        $this->settings = $settings;
 
         return $this;
     }

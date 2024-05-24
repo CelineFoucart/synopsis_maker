@@ -126,6 +126,16 @@ class Character
     #[Groups(['index'])]
     #[Assert\Length(max: 15000)]
     private ?string $complementary = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $faction = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private ?string $membership = null;
 
     #[ORM\ManyToOne(inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: false)]
@@ -383,6 +393,28 @@ class Character
     public function setChildren(?string $children): self
     {
         $this->children = $children;
+
+        return $this;
+    }public function getFaction(): ?string
+    {
+        return $this->faction;
+    }
+    
+    public function setFaction(?string $faction): static
+    {
+        $this->faction = $faction;
+
+        return $this;
+    }
+    
+    public function getMembership(): ?string
+    {
+        return $this->membership;
+    }
+    
+    public function setMembership(?string $membership): static
+    {
+        $this->membership = $membership;
 
         return $this;
     }

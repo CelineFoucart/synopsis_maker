@@ -6,6 +6,7 @@ import SynopsisNotes from "&synopsis/views/synopsis/SynopsisNotes.vue";
 import SynopsisArchive from "&synopsis/views/synopsis/SynopsisArchive.vue";
 import SynopsisTodoList from "&synopsis/views/synopsis/SynopsisTodoList.vue";
 import WorldBuilding from "&synopsis/views/synopsis/WorldBuilding.vue";
+import SynopsisSettings from "&synopsis/views/synopsis/SynopsisSettings.vue";
 import Settings from "&synopsis/views/Settings.vue";
 import PlaceIndex from "&synopsis/views/PlaceIndex.vue";
 import CharacterIndex from "&synopsis/views/CharacterIndex.vue";
@@ -50,6 +51,11 @@ const routes =  [
                 path: ':id-:slug/worldbuilding',
                 component: WorldBuilding,
                 name: "WorldBuilding",
+            },
+            {
+                path: ':id-:slug/settings',
+                component: SynopsisSettings,
+                name: "SynopsisSettings",
             },
         ]
     },
