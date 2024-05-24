@@ -1,6 +1,6 @@
 <template>
     <section class="card shadow-sm">
-        <div class="card-header bg-light border-bottom-0 pb-0">
+        <div class="card-header bg-light-sule border-bottom-0 pb-0">
             <h3 class="h5 fw-bold card-title mb-0">{{ title }} ({{ tasks.length }}) </h3>
         </div>
         <div class="card-body bg-light">

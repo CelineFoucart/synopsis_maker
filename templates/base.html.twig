@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html class="h-100">
+<html class="h-100" data-bs-theme="dark">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{{app_name}}{% endblock %}</title>
         <link rel="icon" href="{{ asset('img/feather-bg-dark.png') }}">
-        {{ encore_entry_link_tags('app') }}
         {% block stylesheets %}{% endblock %}
+        {{ encore_entry_link_tags('app') }}
 
-        {{ encore_entry_script_tags('app') }}
         {% block javascripts %}{% endblock %}
+        {{ encore_entry_script_tags('app') }}
     </head>
-    <body class="d-flex flex-column h-100 position-relative">
+    <body class="d-flex flex-column h-100">
         {% include "fragments/_navbar.html.twig" %}
 
         <main class="flex-shrink-0">

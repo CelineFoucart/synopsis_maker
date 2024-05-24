@@ -64,3 +64,9 @@ export default {
     },
 }
 </script>
+
+<style>
+.jodit-status-bar-link {
+    display: none !important;
+}
+</style>
