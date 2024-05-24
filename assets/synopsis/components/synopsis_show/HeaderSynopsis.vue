@@ -82,7 +82,7 @@
                         </router-link>
                     </li>
                     <li class="pb-2">
-                        <a href="" class="text-decoration-none">
+                        <a :href="printPdf" class="text-decoration-none" target="_blank">
                             <i class="fa-solid fa-print fa-fw"></i> Générer le pdf
                         </a>
                     </li>
@@ -135,6 +135,10 @@ export default {
 
     computed: {
         ...mapStores(useSynopsisStore, useCategoryStore),
+
+        printPdf() {
+            return Routing.generate('app_export_pdf', { id: this.synopsis.id });
+        }
     },
 
     async mounted() {

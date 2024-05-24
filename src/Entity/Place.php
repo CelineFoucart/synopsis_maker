@@ -61,6 +61,11 @@ class Place
         $this->episodes = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->title ? $this->title : 'Lieu';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

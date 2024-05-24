@@ -1,0 +1,31 @@
+<div class="mb-1">
+    {% if episode.archived == false and episode.chapterArchived == false %}
+        {% if synopsis.settings.appendEpisodeTitles is defined and synopsis.settings.appendEpisodeTitles == true %}
+            <h4 style="margin-bottom:0">{{ episode.title }}</h4>
+            <p><small>{{ episode.description|nl2br }}</small></p>
+        {% endif %}
+
+        {% set append_characters = episode.characters|length > 0 and synopsis.settings.appendEpisodeCharacters is defined and synopsis.settings.appendEpisodeCharacters == true %}
+        {% set append_places = episode.places|length > 0 and synopsis.settings.appendEpisodePlaces is defined and synopsis.settings.appendEpisodePlaces == true %}
+
+        {% if append_characters or append_places %}
+            <aside>
+                {% if append_characters %}
+                    <div>
+                        <span class="fw-bold">Personnages associés :</span>
+                        {{ episode.characters|map(p => p)|join(', ') }}
+                    </div>
+                {% endif %}
+        
+                {% if append_places %}
+                    <div>
+                        <span class="fw-bold">Lieux associés :</span>
+                        {{ episode.places|map(p => p)|join(', ') }}
+                    </div>
+                {% endif %}
+            </aside>
+        {% endif %}
+
+        <p>{{ episode.content|raw }}</p>
+    {% endif %}
+</div>

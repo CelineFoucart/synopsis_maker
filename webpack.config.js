@@ -22,10 +22,12 @@ Encore
      */
     .addEntry('app', './assets/base/app.js')
     .addEntry('synopsis', './assets/synopsis/main.js')
+    .addEntry('darkmode', './assets/darkmode/darkmode.js')
 
     .addAliases({
         '&synopsis': `${__dirname}/assets/synopsis`,
         '&utils': `${__dirname}/assets/utils`,
+        '&darkmode': `${__dirname}/assets/darkmode`,
     })
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

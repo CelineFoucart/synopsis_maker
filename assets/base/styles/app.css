@@ -6,6 +6,16 @@
     padding: 90px 0;
 }
 
+.brand-img {
+    background-color: rgb(33, 37, 41);
+    color: #fff;
+    width:33px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (min-width: 768px) {
     .jumbotron {
         padding: 130px 0;

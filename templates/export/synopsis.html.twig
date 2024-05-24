@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="{{ asset('assets/img/feather-bg-dark.png') }}">
+		<link rel="stylesheet" href="{{ asset('assets/print.css') }}">
+		<title>
+			{% block title %}{{ synopsis.slug }}{% endblock %}
+		</title>
+	</head>
+	<body>
+		<div class="action">
+			<span><strong>Aperçu du fichier :</strong> {{ synopsis.slug }}.pdf</span>
+			<a href="javascript:window.print()" class="btn">Imprimer</a>
+		</div>
+		<main>
+			<header>
+				<h1>{{ synopsis.title }}</h1>
+				<div class="mt-1">
+					{% if synopsis.settings.appendCategories is defined and synopsis.settings.appendCategories == true %}
+						<p class="parents">
+							<strong>Catégories :</strong> {{ categories|join(', ')}}
+						</p>
+					{% endif %}
+					{% if synopsis.settings.appendPitch is defined and synopsis.settings.appendPitch == true %}
+						<p><strong>Pitch :</strong> {{ synopsis.pitch|nl2br }}</p>
+					{% endif %}
+				</div>
+			</header>
+
+			{% if synopsis.settings.appendDescription is defined and synopsis.settings.appendDescription == true %}
+				<aside class="mt-1">
+					{{ synopsis.description|raw }}
+				</aside>
+			{% endif %}
+
+			{% if synopsis.settings.appendChapters is defined and synopsis.settings.appendChapters == true %}
+				<section>
+					<h2>Déroulé</h2>
+					{% include 'export/_append_chapters.html.twig' %}
+				</section>
+			{% elseif synopsis.settings.appendEpisodes is defined and synopsis.settings.appendEpisodes == true %}
+				<section>
+					<h2 class="border-bottom">Déroulé</h2>
+					{% for episode in synopsis.episodes %}
+						{% include 'export/_episode_block.html.twig' %}
+					{% else %}
+						<p>Cet élément est vide</p>
+					{% endfor %}
+				</section>
+			{% endif %}
+
+			{% if synopsis.settings.appendCharacters is defined and synopsis.settings.appendCharacters == true %}
+				<section>
+					<h2>Personnages</h2>
+				</section>
+			{% endif %}
+
+			{% if synopsis.settings.appendPlaces is defined and synopsis.settings.appendPlaces == true %}
+				<section>
+					<h2>Lieux</h2>
+				</section>
+			{% endif %}
+
+			{% set append_home = synopsis.settings.appendWorldBuildingHome is defined and synopsis.settings.appendWorldBuildingHome == true %}
+			{% set append_articles = synopsis.settings.appendArticles is defined and synopsis.settings.appendArticles == true %}
+
+			{% if append_home or append_articles %}
+				<section>
+					<h2>Univers</h2>
+				</section>
+			{% endif %}
+
+			{% if synopsis.settings.appendNotes is defined and synopsis.settings.appendNotes == true %}
+				<section>
+					<h2>Notes et réflexions</h2>
+				</section>
+			{% endif %}
+		</main>
+	</body>
+</html>

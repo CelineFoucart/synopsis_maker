@@ -1,0 +1,23 @@
+{% for chapter in synopsis.chapters %}
+    {% if chapter.archived == false %}
+        <div class="bordered">
+            {% if synopsis.settings.appendChapterTitles is defined and synopsis.settings.appendChapterTitles == true %}
+                <h3>{{ chapter.title }}</h3>
+                <p style="margin-bottom: 10px"><small>{{ chapter.description|nl2br }}</small></p>
+            {% endif %}
+
+            {% for episode in chapter.episodes %}
+                {% include 'export/_episode_block.html.twig' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% else %}
+    <p>Cet élément est vide</p>
+{% endfor %}
+
+{% for episode in synopsis.episodes %}
+    {% if episode.chapterId is null %}
+        {% include 'export/_episode_block.html.twig' %}
+    {% endif %}
+{% endfor %}
+
