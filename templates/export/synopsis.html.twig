@@ -52,30 +52,14 @@
 				</section>
 			{% endif %}
 
-			{% if synopsis.settings.appendCharacters is defined and synopsis.settings.appendCharacters == true %}
-				<section>
-					<h2>Personnages</h2>
-				</section>
-			{% endif %}
-
-			{% if synopsis.settings.appendPlaces is defined and synopsis.settings.appendPlaces == true %}
-				<section>
-					<h2>Lieux</h2>
-				</section>
-			{% endif %}
-
-			{% set append_home = synopsis.settings.appendWorldBuildingHome is defined and synopsis.settings.appendWorldBuildingHome == true %}
-			{% set append_articles = synopsis.settings.appendArticles is defined and synopsis.settings.appendArticles == true %}
-
-			{% if append_home or append_articles %}
-				<section>
-					<h2>Univers</h2>
-				</section>
-			{% endif %}
+			{% include 'export/_character_block.html.twig' %}
+			{% include 'export/_place_block.html.twig' %}
+			{% include 'export/_wiki_block.html.twig' %}
 
 			{% if synopsis.settings.appendNotes is defined and synopsis.settings.appendNotes == true %}
 				<section>
-					<h2>Notes et réflexions</h2>
+					<h2 class="border-bottom">Notes et réflexions</h2>
+					{{ synopsis.notes|raw }}
 				</section>
 			{% endif %}
 		</main>

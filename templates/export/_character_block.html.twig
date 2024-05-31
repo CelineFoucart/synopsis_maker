@@ -1,0 +1,133 @@
+{% if synopsis.settings.appendCharacters is defined and synopsis.settings.appendCharacters == true %}
+    <section>
+        <h2 class="border-bottom">Personnages</h2>
+        {% for character in synopsis.characters %}
+            <h3 class="h4 mt-1">{{ character.name }}</h3>
+            <p><small>{{ character.description|nl2br }}</small></p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ character.name }}</td>
+                    </tr>
+                    {% if character.birthday %}
+                        <tr>
+                            <th>Naissance</th>
+                            <td>{{ character.birthday }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.birthdayPlace %}
+                        <tr>
+                            <th>Lieu de naissance</th>
+                            <td>{{ character.birthdayPlace }}</td>
+                        </tr>
+                    {% endif %}
+
+                    {% if character.deathDate %}
+                        <tr>
+                            <th>Mort</th>
+                            <td>{{ character.deathDate }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.deathPlace %}
+                        <tr>
+                            <th>Lieu de mort</th>
+                            <td>{{ character.deathPlace }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.species %}
+                        <tr>
+                            <th>Espèce</th>
+                            <td>{{ character.species }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.gender %}
+                        <tr>
+                            <th>Genre</th>
+                            <td>{{ character.gender }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.nationality %}
+                        <tr>
+                            <th>Nationalité</th>
+                            <td>{{ character.nationality }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.job %}
+                        <tr>
+                            <th>Emploi</th>
+                            <td>{{ character.job }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.faction %}
+                        <tr>
+                            <th>Faction</th>
+                            <td>{{ character.faction }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.membership %}
+                        <tr>
+                            <th>Affiliation</th>
+                            <td>{{ character.membership }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.parents or character.children or character.siblings or character.partner %}
+                        <tr>
+                            <th>Relations</th>
+                            <td>
+                                <ul>
+                                    {% if character.parents %}
+                                        <li><strong>Parents :</strong> {{ character.parents }}</li>
+                                    {% endif %}
+                                    {% if character.siblings %}
+                                        <li><strong>Fratrie :</strong> {{ character.siblings }}</li>
+                                    {% endif %}
+                                    {% if character.partner %}
+                                        <li><strong>Conjoint(e) :</strong> {{ character.partner }}</li>
+                                    {% endif %}
+                                    {% if character.children  %}
+                                        <li><strong>Enfants :</strong> {{ character.children }}</li>
+                                    {% endif %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if character.appearance is not null and character.appearance|length > 0 %}
+                        <tr>
+                            <th>Apparence</th>
+                            <td>{{ character.appearance|raw }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.biography is not null and character.biography|length > 0 %}
+                        <tr>
+                            <th>Biographie</th>
+                            <td>{{ character.biography|raw }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if character.personality|length > 0 and character.personality[0].key != null %}
+                        <tr>
+                            <th>Personnalité</th>
+                            <td>
+                                <ul>
+                                    {% for line in character.personality %}
+                                        <li>
+                                            <strong>{{ line.key }} :</strong> {{ line.content }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            {% if character.complementary %}
+                <p><strong>Informations complémentaires :</strong> {{ character.complementary|nl2br }}</p>
+            {% endif %}
+            {% if character.link %}
+                <p><strong>Voir aussi :</strong> <a href="{{ character.link }}">{{ character.link }}</a></p>
+            {% endif %}
+        {% else %}
+            <p>Cet élément est vide</p>
+        {% endfor %}
+    </section>
+{% endif %}

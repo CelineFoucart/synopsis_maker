@@ -1,0 +1,25 @@
+{% set append_home = synopsis.settings.appendWorldBuildingHome is defined and synopsis.settings.appendWorldBuildingHome == true %}
+{% set append_articles = synopsis.settings.appendArticles is defined and synopsis.settings.appendArticles == true %}
+
+{% if append_home or append_articles %}
+    <section>
+        <h2 class="border-bottom">Univers</h2>
+        <div class="worldbuilding">
+            {% if append_home %}
+                {{ synopsis.worldbuildingHome|raw }}
+            {% endif %}
+        </div>
+
+        {% for article in synopsis.articles %}
+            <h3 class="h4 mt-1" style="font-size:27px; padding-bottom: 5px">
+                {{ article.title }}
+            </h3>
+            {% if article.category %}
+                <p style="margin: 5px 0"><small class="badge">{{ article.category.title }}</small></p>
+            {% endif %}
+            <div class="worldbuilding">
+                {{ article.content|raw }}
+            </div>
+        {% endfor %}
+    </section>
+{% endif %}

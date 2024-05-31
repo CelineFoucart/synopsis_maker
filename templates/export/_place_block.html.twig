@@ -1,0 +1,28 @@
+{% if synopsis.settings.appendPlaces is defined and synopsis.settings.appendPlaces == true %}
+    <section>
+        <h2 class="border-bottom">Lieux</h2>
+        {% for place in synopsis.places %}
+            <h3 class="h4 mt-1" style="border:none">{{ place.title }}</h3>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Rôle</th>
+                        <td>{{ place.role|nl2br }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ place.description|raw }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if place.complementary %}
+                <p><strong>Informations complémentaires :</strong> {{ place.complementary|nl2br }}</p>
+            {% endif %}
+            {% if place.link %}
+                <p><strong>Voir aussi :</strong> <a href="{{ place.link }}">{{ place.link }}</a></p>
+            {% endif %}
+        {% else %}
+            <p>Cet élément est vide</p>
+        {% endfor %}
+    </section>
+{% endif %}
