@@ -35,6 +35,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    private ?string $plainPassword = null;
+
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 5, max: 255)]
@@ -70,6 +72,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->characters = new ArrayCollection();
         $this->worldBuildingCategories = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->setRoles(['ROLE_ADMIN']);
+    }
+
+    public function __toString()
+    {
+        return $this->username;
     }
     
     public function getId(): ?int
@@ -138,8 +146,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $password): void
+    {
+        $this->plainPassword = $password;
     }
 
     public function getEmail(): ?string

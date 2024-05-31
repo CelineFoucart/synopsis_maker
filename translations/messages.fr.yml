@@ -13,3 +13,18 @@ Email: Email
 Roles: Roles
 Your email address has been verified.: Votre adresse email a bien été vérifiée
 Agree terms: J'accepte les conditions d'utilisation
+User: Membre
+Users: Membres
+Dashboard: Tableau de bord
+Home: Accueil du site
+ID: ID
+Is Verified: Est Vérifié
+ROLE_USER: Membre
+ROLE_ADMIN: Administrateur
+Add: Ajouter
+Edit: Editer
+Create: Créer
+Account: Compte
+Permissions: Permissions  
+password_help: Laisser vide pour ne pas modifier le mot de passe.
+Plain Password: Mot de passe
