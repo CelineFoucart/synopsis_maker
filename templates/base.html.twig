@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html class="h-100" data-bs-theme="light">
+<html class="h-100">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{{app_name}}{% endblock %}</title>
         <link rel="icon" href="{{ asset('assets/img/feather-bg-dark.png') }}">
         {% block stylesheets %}{% endblock %}
-        {{ encore_entry_link_tags('darkmode') }}
         {{ encore_entry_link_tags('app') }}
 
         {% block javascripts %}{% endblock %}
-        {{ encore_entry_script_tags('darkmode') }}
         {{ encore_entry_script_tags('app') }}
     </head>
     <body class="d-flex flex-column h-100">

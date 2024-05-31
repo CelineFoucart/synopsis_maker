@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="modal-backdrop fade show"></div>
-        <div class="modal fade show" id="chapterModal" tabindex="-1" aria-labelledby="chapterModalLabel">
+        <div class="modal fade show" id="episodeModal" tabindex="-1" aria-labelledby="episodeModalLabel">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title h5" id="chapterModalConfigLabel">Episode</h3>
+                        <h3 class="modal-title h5" id="episodeModalLabel">Episode</h3>
                         <button type="button" class="btn-close" aria-label="fermeture" @click.prevent="closeModal"></button>
                     </div>
                     <div class="modal-body">
@@ -38,13 +38,13 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="places" class="form-label required">Lieux</label>
+                                    <label for="places" class="form-label">Lieux</label>
                                     <select id="places" v-model="places" multiple></select>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="characters" class="form-label required">Personnages</label>
+                                    <label for="characters" class="form-label">Personnages</label>
                                     <select id="characters" v-model="characters" multiple></select>
                                 </div>
                             </div>
@@ -210,9 +210,9 @@ export default {
 </script>
 
 <style scoped>
-#chapterModal {
+#episodeModal {
     display: block;
-    z-index: 3000;
+    z-index: 1080;
 }
 
 .modal::-webkit-scrollbar {

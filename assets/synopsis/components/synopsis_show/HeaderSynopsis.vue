@@ -87,7 +87,7 @@
                         </a>
                     </li>
                     <li class="pb-2">
-                        <a href="" class="text-decoration-none">
+                        <a :href="exportWord" class="text-decoration-none" target="_blank">
                             <i class="fa-solid fa-file-word fa-fw"></i> Exporter le fichier word
                         </a>
                     </li>
@@ -138,6 +138,10 @@ export default {
 
         printPdf() {
             return Routing.generate('app_export_pdf', { id: this.synopsis.id });
+        },
+
+        exportWord() {
+            return Routing.generate('app_export_word', { id: this.synopsis.id });
         }
     },
 

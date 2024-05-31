@@ -83,6 +83,5 @@ export default {
 <style scoped>
 #homepageModal {
     display: block;
-    z-index: 3000;
 }
 </style>

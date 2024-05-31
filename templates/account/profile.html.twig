@@ -4,7 +4,7 @@
 
 {% block body %}
 <section class="container-fluid text-bg-dark bg-dark jumbotron"> 
-    <div class="row justify-content-center">
+    <div class="row mx-0 justify-content-center">
         <div class="col-md-8 col-lg-6">
             <header>
                 <h1 class="display-5 fw-bold text-center lh-2 mb-3">Gérer mon profil</h1>
@@ -16,10 +16,15 @@
     </div>
 </section>
 <div class="container-fluid"> 
-    <div class="row my-5 align-items-center justify-content-center">
+    <div class="row my-5 mx-0 align-items-center justify-content-center">
         <div class="col-md-6 col-lg-4">
             {% for message in app.flashes('success') %}
                 <div class="alert alert-success">
+                    {{ message|trans() }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
                     {{ message|trans() }}
                 </div>
             {% endfor %}

@@ -7,6 +7,7 @@ parameters:
     app.version: '%env(APP_VERSION)%'
     app.name: '%env(APP_NAME)%'
     app.email: '%env(CONTACT_EMAIL)%'
+    app.tmp.folder: '%kernel.project_dir%/var/cache'
 
 services:
     # default configuration for services in *this* file
@@ -29,3 +30,7 @@ services:
         arguments:
             $contactEmail: '%app.email%'
             $contactName: '%app.name%'
+    
+    App\Service\WordGenerator:
+        arguments:
+            $tmpDir: '%app.tmp.folder%'

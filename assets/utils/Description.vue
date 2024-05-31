@@ -1,13 +1,39 @@
 <template>
     <article>
         <h2 class="h5">{{ label }}</h2>
-        <jodit-editor v-model="content" :buttons="buttons" :config="config" />
+        <Editor ref="editor" v-model="content" :init="editorOptions" />
     </article>
 </template>
 
 <script>
-import 'jodit/build/jodit.min.css'
-import { JoditEditor } from 'jodit-vue'
+import tinymce from 'tinymce';
+import 'tinymce/icons/default/icons.min.js';
+import 'tinymce/themes/silver/theme.min.js';
+import 'tinymce/models/dom/model.min.js';
+import 'tinymce/skins/ui/oxide/skin.js';
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/emoticons';
+import 'tinymce/plugins/emoticons/js/emojis';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/wordcount';
+import 'tinymce/plugins/fullscreen';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/anchor';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/preview';
+import 'tinymce/plugins/nonbreaking';
+import 'tinymce/plugins/visualchars';
+import 'tinymce/plugins/visualblocks';
+import 'tinymce/plugins/insertdatetime';
+import 'tinymce/plugins/searchreplace';
+import 'tinymce/plugins/quickbars';
+import 'tinymce/plugins/charmap';
+import './fr-FR.js';
+import 'tinymce/skins/content/default/content.css';
+import Editor from '@tinymce/tinymce-vue';
 
 export default {
     name: 'Description',
@@ -17,33 +43,43 @@ export default {
             type: String,
             default: ''
         },
-        placeholder: {
-            type: String,
-            default: 'Renseignez la description'
-        },
         label: String
     },
 
     components: {
-        JoditEditor
+        Editor
     },
 
     data() {
         return {
             content: '',
-            config: {
-                "language": "fr"
+            editorOptions: { 
+                element_format: 'xhtml',
+                license_key: 'gpl',
+                language: 'fr_FR',
+                branding: false,
+                promotion: false,
+                link_context_toolbar: true,
+                contextmenu: 'alignleft aligncenter alignright alignjustify | bold italic underline strikethrough | forecolor backcolor fontsizes | image link table | selectall cut copy paste removeformat',
+                insertdatetime_formats: ['%H:%M:%S', '%d/%m/%Y', '%d/%m/%Y %H:%M:%S'],
+                quickbars_insert_toolbar: 'quicktable quicklink hr bullist numlist',
+                quickbars_selection_toolbar: 'bold italic underline strikethrough bullist quicklink blockquote quicktable',
+                convert_urls: false,
+                fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt",
+                toolbar:
+                    'fullscreen undo redo | blocks fontsize bold italic underline strikethrough forecolor backcolor removeformat | \
+                    alignleft aligncenter alignright alignjustify outdent indent  bullist numlist | \
+                    quicklink quicktable hr charmap | lineheight fontfamily | searchreplace preview code ',
+                menu: {
+                    file: { title: 'File', items: 'code wordcount | newdocument print ' },
+                },
+                highlight_on_focus: false,
+                toolbar_mode: 'sliding',
+                menubar: 'file view format edit insert table',
+                plugins: 'advlist anchor autolink nonbreaking preview visualchars visualblocks insertdatetime searchreplace quickbars charmap lists link image table code wordcount fullscreen',
+                skin_url: '/assets/oxide',
+                content_css: '/assets/editor.css'
             },
-            buttons: [
-                'undo', 'redo', 'source', 'spellcheck', '|', 
-                'bold', 'underline', 'italic', 'strikethrough', 'eraser', '|', 
-                'align', 'indent', 'outdent',  '|', 'ul', 'ol', '|', 
-                'paragraph', 'font', 'fontsize', 'brush', 'lineHeight', '|', 'superscript', 'subscript', '|', 
-                'image', 'hr', 'table', 'link', 'symbols', '|',
-                'cut', 'copy', 'paste', 'selectall', 'copyformat', '|', 'find', '|', 
-                'preview', 'fullsize', 'print', '|', 'about'
-                
-            ]
         }
     },
 
@@ -56,7 +92,7 @@ export default {
             if (this.data !== this.content) {
                 this.content = this.data;
             }
-        }
+        },
     },
 
     mounted () {
@@ -64,9 +100,3 @@ export default {
     },
 }
 </script>
-
-<style>
-.jodit-status-bar-link {
-    display: none !important;
-}
-</style>

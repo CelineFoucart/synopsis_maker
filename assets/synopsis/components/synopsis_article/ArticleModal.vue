@@ -176,7 +176,6 @@ export default {
 <style scoped>
 #articleModal {
     display: block;
-    z-index: 3000;
 }
 
 #title {
