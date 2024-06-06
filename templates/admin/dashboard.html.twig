@@ -1,7 +1,52 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
-{% block content_title %}<h1>Tableau de bord</h1>{% endblock %}
+{% block content_title %}Tableau de bord{% endblock %}
 
 {% block main %}
-    {# stats #}
+<div class="row">
+    <div class="col-lg-3 col-xs-6">
+        <section class="small-box bg-aqua">
+            <div class="inner">
+                <h3>{{ numberOfUsers }}</h3>
+                <p>Membres</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-user"></i>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <section class="small-box bg-green">
+            <div class="inner">
+                <h3>{{ numberOfSynopsis }}</h3>
+                <p>Synopsis</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-file" aria-hidden="true"></i>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <section class="small-box bg-yellow">
+            <div class="inner">
+                <h3>{{ numberOfCharacters + numberOfPlaces }}</h3>
+                <p>Personnages et lieux</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <section class="small-box bg-red">
+            <div class="inner">
+                <h3>{{ numberOfEpisodes }}</h3>
+                <p>Episodes</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-object-group" aria-hidden="true"></i>
+            </div>
+        </section>
+    </div>
+</div>
 {% endblock main %}
