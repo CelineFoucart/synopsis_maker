@@ -18,22 +18,22 @@ class Synopsis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['index'])]
+    #[Groups(['index', 'public'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 255)]
-    #[Groups(['index'])]
+    #[Groups(['index', 'public'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['index'])]
+    #[Groups(['index', 'public'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 3000, nullable: true)]
     #[Assert\Length(min: 2, max: 2500)]
-    #[Groups(['index'])]
+    #[Groups(['index', 'public'])]
     private ?string $pitch = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -42,7 +42,7 @@ class Synopsis
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['index'])]
+    #[Groups(['index', 'public'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -50,11 +50,12 @@ class Synopsis
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'synopses')]
-    #[Groups(['index'])]
+    #[Groups(['index', 'public'])]
     private Collection $categories;
 
     #[ORM\ManyToOne(inversedBy: 'synopses')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['index', 'public'])]
     private ?User $author = null;
 
     #[ORM\OneToMany(targetEntity: Episode::class, mappedBy: 'synopsis', orphanRemoval: true)]
@@ -105,6 +106,9 @@ class Synopsis
     #[Groups(['index'])]
     private ?array $settings = [];
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $public = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -114,6 +118,7 @@ class Synopsis
         $this->characters = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->setSettings();
+        $this->public = false;
     }
 
     public function getId(): ?int
@@ -447,6 +452,8 @@ class Synopsis
             $this->setSettings();
         }
 
+        $this->settings['isPublic'] = $this->isPublic();
+
         return $this->settings;
     }
 
@@ -476,6 +483,19 @@ class Synopsis
         }
 
         $this->settings = $settings;
+        $this->setPublic(isset($this->settings['isPublic']) ? (bool) $this->settings['isPublic'] : false);
+
+        return $this;
+    }
+
+    public function isPublic(): bool
+    {
+        return  (bool) $this->public;
+    }
+
+    public function setPublic(?bool $public): static
+    {
+        $this->public = $public;
 
         return $this;
     }

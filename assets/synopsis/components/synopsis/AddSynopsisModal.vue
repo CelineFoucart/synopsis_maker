@@ -20,6 +20,10 @@
                         <div class="mb-3">
                             <label for="categories" class="form-label required">Catégories</label>
                             <select id="categories" v-model="categories" multiple></select>
+                            <div class="form-text">
+                                Pas de catégorie ? Ajoutez-en sur la page 
+                                <router-link :to="{ name: 'Settings' }">configuration</router-link>.
+                            </div>
                             <div class="text-danger small" v-if="v$.categories.$errors.length">
                                 Ce champ est obligatoire. Veuillez choisir au moins une catégorie.
                             </div>

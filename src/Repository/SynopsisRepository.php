@@ -52,6 +52,27 @@ class SynopsisRepository extends ServiceEntityRepository
         return $this->paginator->paginate($query, $page, $limit);
     }
 
+    public function findPublicPaginated(int $page, int $limit, string $field, string $sort, ?string $search = null): SlidingPagination
+    {
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.categories', 'c')->addSelect('c')
+            ->leftJoin('s.author', 'u')->addSelect('u')
+            ->andWhere('s.public = :public')
+            ->setParameter('public', true)
+            ->andWhere('s.archived IS NULL OR s.archived = :archived')
+            ->setParameter('archived', false)
+        ;
+
+        if ($search !== null && strlen($search) > 0) {
+            $search = str_replace(' ', '%', $search);
+            $query->andWhere('s.title LIKE :query OR c.title LIKE :query')->setParameter('query', '%' . $search . '%');
+        }
+
+        $query->orderBy($field, $sort);
+
+        return $this->paginator->paginate($query, $page, $limit);
+    }
+
     public function findOneById(int $id): ?Synopsis
     {
         return $this->createQueryBuilder('s')
