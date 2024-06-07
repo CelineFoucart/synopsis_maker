@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\ProfileFormType;
+use App\Form\UserProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ final class ProfileController extends AbstractController
     {
         /** @var User */
         $user = $this->getUser();
-        $form = $this->createForm(ProfileFormType::class, $user);
+        $form = $this->createForm(UserProfileType::class, $user);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) { 
@@ -33,6 +33,8 @@ final class ProfileController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Vos informations ont bien été modifié');
+            
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->render('account/profile.html.twig', [

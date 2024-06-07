@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/base/app.js')
     .addEntry('synopsis', './assets/synopsis/main.js')
+    .addEntry('editor', './assets/editor/editor.js')
 
     .addAliases({
         '&synopsis': `${__dirname}/assets/synopsis`,
