@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Controller\Api\AbstractApiController;
+use App\Entity\Synopsis;
 use App\Repository\SynopsisRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,5 +27,33 @@ final class ExploreController extends AbstractApiController
         $meta = $pagination->getPaginationData();
 
         return $this->json(['synopses' => $pagination->getItems(), 'meta' => $meta], Response::HTTP_OK, [], ['groups' => ['public']]);
+    }
+
+    #[Route('/{id}', name: 'api_explore_synopsis', methods:['GET'])]
+    public function showAction(Synopsis $synopsis): JsonResponse
+    {
+        if ($synopsis->isPublic() === false) {
+            throw $this->createNotFoundException();
+        }
+
+        $settings = $synopsis->getSettings();
+        $publicData = [
+            'id' => $synopsis->getId(),
+            'title' => $synopsis->getTitle(),
+            'categories' => $synopsis->getCategories(),
+            'author' => $synopsis->getAuthor(),
+            'pitch' => $synopsis->getPitch(),
+            'description' => $synopsis->getDescription(),
+            'episodes' => $settings['showContent'] ? $synopsis->getEpisodes() : [],
+            'characters' => $settings['showCharacters'] ? $synopsis->getCharacters() : [],
+            'places' => $settings['showPlaces'] ? $synopsis->getPlaces() : [],
+            'settings' => [
+                'showContent' => $settings['showContent'],
+                'showCharacters' => $settings['showCharacters'],
+                'showPlaces' => $settings['showPlaces'],
+            ]
+        ];
+
+        return $this->json($publicData, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 }

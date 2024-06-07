@@ -10,7 +10,7 @@ const routes =  [
         component: ExploreIndex,
     },
     { 
-        path: '/synopsis-:slug', 
+        path: '/synopsis-:id-:slug',
         name: 'synopsis_show',
         component: Synopsis,
     },

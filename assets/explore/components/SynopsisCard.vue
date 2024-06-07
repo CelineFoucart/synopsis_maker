@@ -1,6 +1,6 @@
 <template>
     <section class="shadow-sm">
-        <header class="p-3 bg-dark position-relative" v-tooltip="'Afficher'">
+        <header class="p-3 bg-dark position-relative">
             <div class="row align-items-center">
                 <div class="col-9">
                     <span v-for="category in synopsis.categories" :key="category.id" class="badge me-1 bg-danger">
@@ -8,8 +8,8 @@
                     </span>
                     <h3 class="h5 text-white mt-2">{{ synopsis.title }}</h3>
                 </div>
-                <div class="col-3 text-end">
-                    <router-link :to="{ name: 'synopsis_show', params:{slug: synopsis.slug} }" class="text-white stretched-link">
+                <div class="col-3 text-end" v-if="showLink">
+                    <router-link :to="{ name: 'synopsis_show', params:{slug: synopsis.slug, id: synopsis.id} }" class="text-white stretched-link">
                         <i class="fas fa-eye fa-2xl"></i>
                         <div class="visually-hidden">Voir</div>
                     </router-link>
@@ -26,7 +26,7 @@
                     </router-link>
                 </span>
             </p>
-            <p class="pitch">
+            <p class="pitch mb-0">
                 {{ synopsis.pitch }}
             </p>
         </div>
@@ -37,11 +37,16 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/fr';
 dayjs.locale('fr');
+
 export default {
     name: 'SynopsisCard',
 
     props: {
         synopsis: Object,
+        showLink: {
+            type: Boolean, 
+            default: true
+        }
     },
 
     methods: {

@@ -7,13 +7,11 @@
             </div>
         </div>
     </article>
-    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script>
 import HeaderIndex from '&explore/components/HeaderIndex.vue';
 import SynopsisCard from '&explore/components/SynopsisCard.vue';
-import Loading from '&utils/Loading.vue';
 import { mapStores } from "pinia";
 import { useSynopsisStore } from '&explore/stores/synopsis.js';
 
@@ -22,7 +20,6 @@ export default {
 
     components: {
         HeaderIndex,
-        Loading,
         SynopsisCard
     },
 

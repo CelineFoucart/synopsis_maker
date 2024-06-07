@@ -6,14 +6,23 @@
     <div class="container-fluid my-3">
         <router-view></router-view>
     </div>
+    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script>
-    export default {
-        name: 'Explore'
-    }
+import Loading from '&utils/Loading.vue';
+import { mapStores } from "pinia";
+import { useSynopsisStore } from '&explore/stores/synopsis.js';
+
+export default {
+    name: 'Explore',
+
+    components: {
+        Loading
+    },
+
+    computed: {
+        ...mapStores(useSynopsisStore),
+    },
+}
 </script>
-
-<style lang="css" scoped>
-
-</style>
