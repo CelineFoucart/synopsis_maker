@@ -35,7 +35,7 @@ class Chapter
 
     #[ORM\OneToMany(targetEntity: Episode::class, mappedBy: 'chapter')]
     #[Groups(['index'])]
-    #[ORM\OrderBy(["position" => "ASC"])]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private Collection $episodes;
 
     #[ORM\Column(length: 30, nullable: true)]

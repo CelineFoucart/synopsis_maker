@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\EpisodeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
-use App\Repository\EpisodeRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -214,7 +214,7 @@ class Episode
 
         return $this;
     }
-    
+
     #[Groups(['index'])]
     public function getChapterId(): ?int
     {
@@ -237,8 +237,6 @@ class Episode
 
     /**
      * @param Collection<int, Place> $places
-     * 
-     * @return static
      */
     public function setPlaces(Collection $places): static
     {
@@ -289,8 +287,6 @@ class Episode
 
     /**
      * @param Collection<int, Character> $characters
-     * 
-     * @return static
      */
     public function setCharacters(Collection $characters): static
     {

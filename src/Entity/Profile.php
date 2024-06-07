@@ -95,12 +95,12 @@ class Profile
     public function setUser(?User $user): static
     {
         // unset the owning side of the relation if necessary
-        if ($user === null && $this->user !== null) {
+        if (null === $user && null !== $this->user) {
             $this->user->setProfile(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($user !== null && $user->getProfile() !== $this) {
+        if (null !== $user && $user->getProfile() !== $this) {
             $user->setProfile($this);
         }
 

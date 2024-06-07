@@ -8,9 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SynopsisRepository::class)]
 class Synopsis
@@ -63,7 +63,7 @@ class Synopsis
 
     #[ORM\OneToMany(targetEntity: Chapter::class, mappedBy: 'synopsis', orphanRemoval: true)]
     #[Groups(['index'])]
-    #[ORM\OrderBy(["position" => "ASC"])]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     private Collection $chapters;
 
     #[ORM\Column(nullable: true)]
@@ -77,7 +77,7 @@ class Synopsis
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
     private ?string $notes = null;
-    
+
     #[ORM\Column(nullable: true)]
     #[Groups(['index'])]
     private ?array $tasks = null;
@@ -100,7 +100,7 @@ class Synopsis
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
     private ?string $worldbuildingHome = null;
-    
+
     #[ORM\Column(nullable: true)]
     #[Groups(['index'])]
     private ?array $settings = [];
@@ -341,17 +341,15 @@ class Synopsis
      */
     public function getTasks(): ?array
     {
-        return $this->tasks !== null ? $this->tasks : [];
+        return null !== $this->tasks ? $this->tasks : [];
     }
 
     /**
      * Set the value of tasks.
-     *
-     * @return static
      */
     public function setTasks(?array $tasks): static
     {
-        $this->tasks = $tasks !== null ? $tasks : [];
+        $this->tasks = null !== $tasks ? $tasks : [];
 
         return $this;
     }
@@ -442,19 +440,19 @@ class Synopsis
 
         return $this;
     }
-    
+
     public function getSettings(): ?array
     {
-        if ($this->settings === null) {
+        if (null === $this->settings) {
             $this->setSettings();
         }
 
         return $this->settings;
     }
-    
+
     public function setSettings(?array $settings = []): self
     {
-        if ($settings === null || empty($settings)) {
+        if (null === $settings || empty($settings)) {
             $settings = [
                 'appendPitch' => true,
                 'appendDescription' => true,
@@ -473,7 +471,7 @@ class Synopsis
                 'isPublic' => false,
                 'showContent' => false,
                 'showCharacters' => false,
-                'showPlaces' => false, 
+                'showPlaces' => false,
             ];
         }
 

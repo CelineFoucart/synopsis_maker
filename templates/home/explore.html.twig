@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Explorer | {{ parent() }} {% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('explore') }}
+{% endblock %}
+
+{% block body %}
+    <div id="explore"></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    {{ encore_entry_script_tags('explore') }}
+{% endblock %}

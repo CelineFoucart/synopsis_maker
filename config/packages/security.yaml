@@ -39,6 +39,7 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/explore, roles: ROLE_USER }
         - { path: ^/synopsis, roles: ROLE_USER }
         - { path: ^/export, roles: ROLE_USER }
         - { path: ^/gallery, roles: ROLE_USER }

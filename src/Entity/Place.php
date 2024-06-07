@@ -106,12 +106,12 @@ class Place
 
         return $this;
     }
-    
+
     public function getComplementary(): ?string
     {
         return $this->complementary;
     }
-    
+
     public function setComplementary(?string $complementary): static
     {
         $this->complementary = $complementary;

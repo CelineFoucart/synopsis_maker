@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\CharacterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\CharacterRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
 #[ORM\Table(name: '`character`')]
@@ -60,63 +60,63 @@ class Character
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
-    private $nationality = null;
-    
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
-    #[Groups(['index'])]
-    private $job = null;
+    private $nationality;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
-    private $birthday = null;
-    
+    private $job;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
-    private $birthdayPlace = null;
-    
+    private $birthday;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
-    private $deathDate = null;
-    
+    private $birthdayPlace;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
-    private $deathPlace = null;
-    
+    private $deathDate;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
-    private $parents = null;
-    
+    private $deathPlace;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Groups(['index'])]
+    private $parents;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
     private ?string $children = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
     private ?string $siblings = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
     private ?string $partner = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
     private ?string $species = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
     private ?string $gender = null;
-    
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['index'])]
     #[Assert\Length(max: 15000)]
@@ -126,12 +126,12 @@ class Character
     #[Groups(['index'])]
     #[Assert\Length(max: 15000)]
     private ?string $complementary = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
     private ?string $faction = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Groups(['index'])]
@@ -400,23 +400,25 @@ class Character
         $this->children = $children;
 
         return $this;
-    }public function getFaction(): ?string
+    }
+
+    public function getFaction(): ?string
     {
         return $this->faction;
     }
-    
+
     public function setFaction(?string $faction): static
     {
         $this->faction = $faction;
 
         return $this;
     }
-    
+
     public function getMembership(): ?string
     {
         return $this->membership;
     }
-    
+
     public function setMembership(?string $membership): static
     {
         $this->membership = $membership;
@@ -471,7 +473,7 @@ class Character
 
         return $this;
     }
-    
+
     public function getRole(): ?string
     {
         return $this->role;
@@ -483,12 +485,12 @@ class Character
 
         return $this;
     }
-    
+
     public function getComplementary(): ?string
     {
         return $this->complementary;
     }
-    
+
     public function setComplementary(?string $complementary): static
     {
         $this->complementary = $complementary;

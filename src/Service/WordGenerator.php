@@ -6,17 +6,16 @@ namespace App\Service;
 
 use App\Entity\Episode;
 use App\Entity\Synopsis;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\Settings;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\Style\Language;
-use PhpOffice\PhpWord\Shared\Converter;
 use Doctrine\Common\Collections\Collection;
 use PhpOffice\PhpWord\Element\Section;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Settings;
+use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\SimpleType\Jc;
-use PhpOffice\PhpWord\SimpleType\TextAlignment;
 use PhpOffice\PhpWord\Style\Font;
+use PhpOffice\PhpWord\Style\Language;
 
 final class WordGenerator
 {
@@ -29,7 +28,7 @@ final class WordGenerator
         Settings::setZipClass(Settings::PCLZIP);
         $this->phpWord = new PhpWord();
     }
-    
+
     public function setSynopsis(Synopsis $synopsis): self
     {
         $this->synopsis = $synopsis;
@@ -39,8 +38,6 @@ final class WordGenerator
 
     /**
      * Create the file and return an associated array with the path and the filename.
-     * 
-     * @return array
      */
     public function generate(): array
     {
@@ -48,7 +45,7 @@ final class WordGenerator
 
         if ($this->synopsis->getSettings()['appendChapters']) {
             $this->setChapterSection();
-        } else if($this->synopsis->getSettings()['appendEpisodes']) {
+        } elseif ($this->synopsis->getSettings()['appendEpisodes']) {
             $this->setEpisodeSection();
         }
 
@@ -78,7 +75,7 @@ final class WordGenerator
     {
         $section = $this->phpWord->addSection();
         $section->addTitle($this->synopsis->getTitle(), 0);
-        
+
         if (!$this->synopsis->getCategories()->isEmpty() && $this->synopsis->getSettings()['appendCategories']) {
             $categories = $this->reduceCollectionToString($this->synopsis->getCategories());
             $section->addText($categories, ['bold' => true, 'italic' => true], ['spaceAfter' => Converter::cmToTwip(0.6)]);
@@ -122,13 +119,11 @@ final class WordGenerator
             foreach ($chapter->getEpisodes() as $episode) {
                 $this->appendEpisode($episode, $section);
             }
-
-
         }
 
         if ($this->synopsis->getSettings()['appendEpisodes']) {
             foreach ($this->synopsis->getEpisodes() as $episode) {
-                if ($episode->getChapterId() === null) {
+                if (null === $episode->getChapterId()) {
                     $this->appendEpisode($episode, $section, 2);
                 }
             }
@@ -158,7 +153,7 @@ final class WordGenerator
         if ($this->synopsis->getSettings()['appendEpisodeTitles'] && !$episode->getCharacters()->isEmpty()) {
             $characters = $this->reduceCollectionToString($episode->getCharacters());
             $section->addText(
-                'Personnages associés : ' . $characters, 
+                'Personnages associés : '.$characters,
                 ['bold' => true, 'italic' => true], ['spaceAfter' => Converter::cmToTwip(0.6)])
             ;
         }
@@ -166,7 +161,7 @@ final class WordGenerator
         if ($this->synopsis->getSettings()['appendEpisodePlaces'] && !$episode->getPlaces()->isEmpty()) {
             $places = $this->reduceCollectionToString($episode->getPlaces());
             $section->addText(
-                'Lieux associés : ' . $places, 
+                'Lieux associés : '.$places,
                 ['bold' => true, 'italic' => true], ['spaceAfter' => Converter::cmToTwip(0.6)])
             ;
         }
@@ -186,68 +181,68 @@ final class WordGenerator
             $section->addText(str_replace("\n", '</w:t><w:br/><w:t xml:space="preserve">', $character->getDescription()));
 
             if ($character->getBirthday()) {
-                $section->addListItem('Naissance : ' . $character->getBirthday());
+                $section->addListItem('Naissance : '.$character->getBirthday());
             }
 
             if ($character->getBirthdayPlace()) {
-                $section->addListItem('Lieu de naissance : ' . $character->getBirthdayPlace());
+                $section->addListItem('Lieu de naissance : '.$character->getBirthdayPlace());
             }
 
-            if ($character->getDeathDate()) { 
-                $section->addListItem('Mort : ' . $character->getDeathDate());
+            if ($character->getDeathDate()) {
+                $section->addListItem('Mort : '.$character->getDeathDate());
             }
 
             if ($character->getDeathPlace()) {
-                $section->addListItem('Lieu de mort : ' . $character->getDeathPlace());
+                $section->addListItem('Lieu de mort : '.$character->getDeathPlace());
             }
 
             if ($character->getSpecies()) {
-                $section->addListItem('Espèce : ' . $character->getSpecies());
+                $section->addListItem('Espèce : '.$character->getSpecies());
             }
 
             if ($character->getGender()) {
-                $section->addListItem('Genre : ' . $character->getGender());
+                $section->addListItem('Genre : '.$character->getGender());
             }
-            
+
             if ($character->getNationality()) {
-                $section->addListItem('Nationalité : ' . $character->getNationality());
+                $section->addListItem('Nationalité : '.$character->getNationality());
             }
 
             if ($character->getJob()) {
-                $section->addListItem('Emploi : ' . $character->getJob());
+                $section->addListItem('Emploi : '.$character->getJob());
             }
             if ($character->getFaction()) {
-                $section->addListItem('Faction : ' . $character->getFaction());
+                $section->addListItem('Faction : '.$character->getFaction());
             }
 
             if ($character->getMembership()) {
-                $section->addListItem('Affiliation : ' . $character->getMembership());
+                $section->addListItem('Affiliation : '.$character->getMembership());
             }
 
             if ($character->getParents()) {
-                $section->addListItem('Parents : ' . $character->getParents());
+                $section->addListItem('Parents : '.$character->getParents());
             }
 
             if ($character->getSiblings()) {
-                $section->addListItem('Fratrie : ' . $character->getSiblings());
+                $section->addListItem('Fratrie : '.$character->getSiblings());
             }
 
             if ($character->getPartner()) {
-                $section->addListItem('Conjoint(e) : ' . $character->getPartner());
+                $section->addListItem('Conjoint(e) : '.$character->getPartner());
             }
 
             if ($character->getChildren()) {
-                $section->addListItem('Enfants : ' . $character->getChildren());
+                $section->addListItem('Enfants : '.$character->getChildren());
             }
 
             if ($character->getComplementary()) {
-                $section->addListItem('Informations complémentaires : ' . $character->getComplementary());
+                $section->addListItem('Informations complémentaires : '.$character->getComplementary());
             }
 
             if ($character->getLink()) {
-                $section->addListItem('Voir aussi : ' . $character->getLink());
+                $section->addListItem('Voir aussi : '.$character->getLink());
             }
-            
+
             if ($character->getAppearance()) {
                 $section->addTitle('Apparence', 3);
                 HTML::addHtml($section, $character->getAppearance());
@@ -258,10 +253,10 @@ final class WordGenerator
                 HTML::addHtml($section, $character->getBiography());
             }
 
-            if ($character->getPersonality() !== null && count($character->getPersonality()) > 0 && $character->getPersonality()[0]['key'] !== null) {
+            if (null !== $character->getPersonality() && count($character->getPersonality()) > 0 && null !== $character->getPersonality()[0]['key']) {
                 $section->addTitle('Personnalité', 3);
                 foreach ($character->getPersonality() as $line) {
-                    $section->addListItem($line['key'] . ' : ' . $line['content']);
+                    $section->addListItem($line['key'].' : '.$line['content']);
                 }
             }
         }
@@ -281,15 +276,14 @@ final class WordGenerator
             }
 
             if ($place->getComplementary()) {
-                $section->addListItem('Informations complémentaires : ' . $place->getComplementary());
+                $section->addListItem('Informations complémentaires : '.$place->getComplementary());
             }
 
             if ($place->getLink()) {
-                $section->addListItem('Voir aussi : ' . $place->getLink());
+                $section->addListItem('Voir aussi : '.$place->getLink());
             }
 
             HTML::addHtml($section, $place->getDescription());
-
         }
 
         return $this;
@@ -300,7 +294,7 @@ final class WordGenerator
         $section = $this->phpWord->addSection();
         $section->addTitle('Univers', 1);
 
-        if ($this->synopsis->getWorldbuildingHome() &&  $this->synopsis->getSettings()['appendWorldBuildingHome']) {
+        if ($this->synopsis->getWorldbuildingHome() && $this->synopsis->getSettings()['appendWorldBuildingHome']) {
             HTML::addHtml($section, $this->synopsis->getWorldbuildingHome());
         }
 
@@ -331,8 +325,8 @@ final class WordGenerator
 
     /**
      * Save the file.
-     * 
-     * @return array an associated array with the path and the filename.
+     *
+     * @return array an associated array with the path and the filename
      */
     private function saveFile(): array
     {
@@ -371,8 +365,8 @@ final class WordGenerator
     {
         $this->phpWord->addTitleStyle(0, ['size' => 40, 'bold' => true]);
         $this->phpWord->addTitleStyle(
-            1, 
-            ['size' => 30,  'bold' => true, 'smallCaps' => true, 'bgColor' => '21252908'], 
+            1,
+            ['size' => 30,  'bold' => true, 'smallCaps' => true, 'bgColor' => '21252908'],
             ['spaceBefore' => Converter::cmToTwip(0.5), 'alignment' => Jc::CENTER]
         );
         $this->phpWord->addTitleStyle(2, ['size' => 20,  'bold' => true, 'underline' => Font::UNDERLINE_SINGLE]);

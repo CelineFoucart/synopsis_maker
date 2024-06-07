@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * A console command that creates an admin user and stores him in the database.
@@ -35,15 +37,14 @@ class CreateAdminCommand extends Command
         private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $passwordHasher,
         private ValidatorInterface $validator
-    )
-    {
+    ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
         $this
-            ->setHelp("This command creates a new admin user and store him in the database.")
+            ->setHelp('This command creates a new admin user and store him in the database.')
             ->addArgument('username', InputArgument::OPTIONAL, 'User pseudo')
             ->addArgument('email', InputArgument::OPTIONAL, 'User email')
             ->addArgument('password', InputArgument::OPTIONAL, 'User password')

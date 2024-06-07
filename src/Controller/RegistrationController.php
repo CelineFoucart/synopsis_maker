@@ -41,17 +41,17 @@ final class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword( $userPasswordHasher->hashPassword( $user, $form->get('plainPassword')->getData()));
+            $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
             $user->setRoles(['ROLE_USER']);
 
             $entityManager->persist($user);
             $entityManager->flush();
-            
+
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address($this->contactEmail, $this->contactName))
                     ->to($user->getEmail())
-                    ->subject('Votre inscription sur ' . $this->contactName)
+                    ->subject('Votre inscription sur '.$this->contactName)
                     ->htmlTemplate('account/confirmation_email.html.twig')
             );
 
@@ -81,7 +81,7 @@ final class RegistrationController extends AbstractController
         if (null === $user) {
             return $this->redirectToRoute('app_register');
         }
-        
+
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {

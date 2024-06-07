@@ -21,6 +21,12 @@ final class HomeController extends AbstractController
         return $this->render('home/index_anonymous.html.twig');
     }
 
+    #[Route('/explore', name: 'app_explore')]
+    public function exploreAction(): Response
+    {
+        return $this->render('home/explore.html.twig');
+    }
+
     #[Route('/terms', name: 'app_terms')]
     public function termsAction(): Response
     {

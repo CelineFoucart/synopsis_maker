@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
 use App\Entity\Synopsis;
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -16,7 +16,7 @@ final class SynopsisHandler
     private Synopsis $synopsis;
 
     public function __construct(
-        private CategoryRepository $categoryRepository, 
+        private CategoryRepository $categoryRepository,
         private SluggerInterface $slugger
     ) {
     }
@@ -32,14 +32,14 @@ final class SynopsisHandler
         ;
 
         if (!isset($data['categories'])) {
-            $this->errors = ['categories'=>'Ce champ est obligatoire'];
+            $this->errors = ['categories' => 'Ce champ est obligatoire'];
 
             return $this;
         }
 
         $categories = $this->categoryRepository->findByIds($data['categories'], $user);
         if (empty($categories)) {
-            $this->errors = ['categories'=>'Ce champ est obligatoire'];
+            $this->errors = ['categories' => 'Ce champ est obligatoire'];
 
             return $this;
         }
@@ -48,8 +48,8 @@ final class SynopsisHandler
             $this->synopsis->addCategory($category);
         }
 
-        if ($this->synopsis->getTitle() === null) {
-            $this->errors = ['title'=>'Ce champ est obligatoire'];
+        if (null === $this->synopsis->getTitle()) {
+            $this->errors = ['title' => 'Ce champ est obligatoire'];
 
             return $this;
         }
@@ -58,19 +58,19 @@ final class SynopsisHandler
 
         return $this;
     }
-    
+
     public function getSynopsis(): Synopsis
     {
         return $this->synopsis;
     }
-    
+
     public function setSynopsis(Synopsis $synopsis): static
     {
         $this->synopsis = $synopsis;
 
         return $this;
     }
-    
+
     public function getErrors(): array
     {
         return $this->errors;

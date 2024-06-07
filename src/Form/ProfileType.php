@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Profile;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,16 +18,16 @@ class ProfileType extends AbstractType
         $builder
             ->add('about', TextareaType::class, [
                 'required' => false,
-                'help' => "Présentation de 15000 caractères maximum."
+                'help' => 'Présentation de 15000 caractères maximum.',
             ])
             ->add('localisation', TextType::class, [
-                'required' => false
+                'required' => false,
             ])
             ->add('rank', TextType::class, [
-                'required' => false
+                'required' => false,
             ])
             ->add('interests', TextType::class, [
-                'required' => false
+                'required' => false,
             ])
         ;
     }

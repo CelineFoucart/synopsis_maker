@@ -23,10 +23,12 @@ Encore
     .addEntry('app', './assets/base/app.js')
     .addEntry('synopsis', './assets/synopsis/main.js')
     .addEntry('editor', './assets/editor/editor.js')
+    .addEntry('explore', './assets/explore/main.js')
 
     .addAliases({
         '&synopsis': `${__dirname}/assets/synopsis`,
         '&utils': `${__dirname}/assets/utils`,
+        '&explore': `${__dirname}/assets/explore`,
     })
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

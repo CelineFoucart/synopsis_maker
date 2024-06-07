@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
@@ -51,6 +53,6 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
-        yield MenuItem::linkToRoute('Home', 'fas fa-globe', 'app_home');
+        yield MenuItem::linkToUrl('Home', 'fas fa-globe', '/');
     }
 }
