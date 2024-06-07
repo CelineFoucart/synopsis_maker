@@ -77,6 +77,18 @@ blockquote {
     padding-right: 8px;
 }
 
+.profile-square {
+    height: 250px;
+    width: 250px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
 :root {
     --easy-table-header-font-size: 16px;
     --easy-table-body-row-font-size: 16px;

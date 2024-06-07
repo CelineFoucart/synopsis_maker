@@ -64,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $articles;
 
+    #[ORM\Column(options: ["default" => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->synopses = new ArrayCollection();
@@ -72,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->characters = new ArrayCollection();
         $this->worldBuildingCategories = new ArrayCollection();
         $this->articles = new ArrayCollection();
-        $this->setRoles(['ROLE_ADMIN']);
+        $this->setRoles(['ROLE_USER']);
     }
 
     public function __toString()
@@ -359,6 +362,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $article->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
