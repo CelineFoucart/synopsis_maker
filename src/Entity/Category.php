@@ -16,13 +16,13 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 255)]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 2500, nullable: true)]

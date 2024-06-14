@@ -6,12 +6,13 @@ export const useSynopsisStore = defineStore('synopsis', {
         synopses: [], 
         pagination: {current: 0, limit: 10, totalCount: 0, firstItemNumber: 0, lastItemNumber: 0, last: 0, pagesInRange: []},
         synopsis: null, 
-        loading: false,
+        loading: false
     }),
 
     actions: {
         async getSynopses(page = 1, limit = 10, sortField = 's.title', sortOrder = 'asc', query = null) { 
             this.loading = true;
+            this.author = null;
             try {
                 const params = { page: page, limit: limit, field: sortField, order: sortOrder, query: query };
 
@@ -37,6 +38,7 @@ export const useSynopsisStore = defineStore('synopsis', {
         async getSynopsis(params) {
             this.loading = true;
             this.synopses = [];
+            this.author = null;
             this.pagination = {current: 0, limit: 10, totalCount: 0, firstItemNumber: 0, lastItemNumber: 0, last: 0, pagesInRange: []};
             try {
                 const url = Routing.generate("api_explore_synopsis", {id: params.id});

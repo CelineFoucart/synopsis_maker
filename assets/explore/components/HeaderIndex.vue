@@ -1,7 +1,7 @@
 <template>
     <header class="pb-3">
         <div class="row align-items-end g-3">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <h2 class="h4 mb-3">Synopsis publiés par les membres</h2>
                 <span class="sort-title small rounded me-2">Trier par :</span>
                 <a href="#" class="filter btn btn-sm" :class="{'active': field === 's.title'}" @click="field = 's.title'">
@@ -21,7 +21,11 @@
                     </a>
                 </span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6 d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" v-tooltip="'Membres'" @click="showUserList = true">
+                    <i class="fas fa-users fa-fw"></i>
+                    <div class="visually-hidden">Membres</div>
+                </button>
                 <div class="input-group">
                     <input type="text" id="search-input" class="form-control input-sm" v-model="query" placeholder="Rechercher...">
                     <button class="btn btn-primary" v-tooltip="'Rechercher'" @click="getSynopses()">
@@ -33,6 +37,8 @@
                 <Pagination :pagination="synopsisStore.pagination" @on-change="onPaginationChange"></Pagination>
             </div>
         </div>
+
+        <UserListModal @on-close="showUserList = false" v-if="showUserList === true"></UserListModal>
     </header>
 </template>
 
@@ -41,12 +47,14 @@ import Pagination from '&utils/Pagination.vue';
 import { useSynopsisStore } from '&explore/stores/synopsis.js';
 import { mapStores } from "pinia";
 import { createToastify } from '&utils/toastify.js';
+import UserListModal from '&explore/components/UserListModal.vue';
 
 export default {
     name: 'HeaderIndex',
 
     components: {
         Pagination,
+        UserListModal
     },
 
     data() {
@@ -55,7 +63,8 @@ export default {
             field: 's.title',
             sort: 'asc',
             page: 1,
-            limit: 10
+            limit: 10,
+            showUserList: false
         }
     },
 

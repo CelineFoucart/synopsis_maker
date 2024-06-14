@@ -1,5 +1,5 @@
 <template>
-    <section class="shadow-sm">
+    <section class="shadow-sm h-100">
         <header class="p-3 bg-dark position-relative">
             <div class="row align-items-center">
                 <div class="col-9">
@@ -19,7 +19,7 @@
         <div class="p-3">
             <p class="text-secondary small">
                 <span><i class="fas fa-calendar-alt fa-fw me-1"></i>{{ formatDatetime(synopsis.createdAt) }}</span>
-                <span class="ps-2">
+                <span class="ps-2" v-if="synopsis.author">
                     <i class="fas fa-user fa-fw me-1"></i> 
                     <router-link :to="{ name: 'user_show', params:{id: synopsis.author.id} }" class="text-decoration-none">
                         {{ synopsis.author.username }}

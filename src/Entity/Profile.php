@@ -6,6 +6,7 @@ use App\Repository\ProfileRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
@@ -17,18 +18,22 @@ class Profile
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(min: 2, max: 15000)]
+    #[Groups(['show-author'])]
     private ?string $about = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 1, max: 255)]
+    #[Groups(['show-author'])]
     private ?string $localisation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 1, max: 255)]
+    #[Groups(['show-author'])]
     private ?string $rank = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 1, max: 255)]
+    #[Groups(['show-author'])]
     private ?string $interests = null;
 
     #[ORM\OneToOne(mappedBy: 'profile', cascade: ['persist', 'remove'])]

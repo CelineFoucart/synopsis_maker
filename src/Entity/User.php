@@ -20,13 +20,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 180)]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -68,9 +68,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $articles;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups(['index', 'show-author'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[Groups(['show-author'])]
     private ?Profile $profile = null;
 
     public function __construct()

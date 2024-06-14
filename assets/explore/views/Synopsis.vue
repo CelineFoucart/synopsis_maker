@@ -184,10 +184,6 @@ import { useSynopsisStore } from '&explore/stores/synopsis.js';
 import SynopsisCard from '&explore/components/SynopsisCard.vue';
 import EpisodeCard from '&explore/components/EpisodeCard.vue';
 import { createToastify } from '&utils/toastify.js';
-import Error from '&utils/Error.vue';
-import dayjs from 'dayjs';
-import 'dayjs/locale/fr';
-dayjs.locale('fr');
 
 export default {
     name: 'Synopsis',
@@ -221,12 +217,6 @@ export default {
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
-        }
-    },
-
-    methods: {
-        formatDatetime(datetime) {
-            return dayjs(datetime).format('DD MMMM YYYY');
         }
     },
 }

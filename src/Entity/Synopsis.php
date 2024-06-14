@@ -18,22 +18,22 @@ class Synopsis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 255)]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 3000, nullable: true)]
     #[Assert\Length(min: 2, max: 2500)]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?string $pitch = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -42,15 +42,15 @@ class Synopsis
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['index'])]
+    #[Groups(['index', 'show-author'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'synopses')]
-    #[Groups(['index', 'public'])]
+    #[Groups(['index', 'public', 'show-author'])]
     private Collection $categories;
 
     #[ORM\ManyToOne(inversedBy: 'synopses')]

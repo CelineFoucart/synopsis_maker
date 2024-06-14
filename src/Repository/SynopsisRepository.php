@@ -73,6 +73,27 @@ class SynopsisRepository extends ServiceEntityRepository
         return $this->paginator->paginate($query, $page, $limit);
     }
 
+    /**
+     * @param User $user
+     * 
+     * @return Synopsis[]
+     */
+    public function findUserPublicList(User $user): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.author', 'u')
+            ->leftJoin('s.categories', 'c')->addSelect('c')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $user->getId())
+            ->andWhere('s.public = :public')
+            ->setParameter('public', true)
+            ->orderBy('s.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     public function findOneById(int $id): ?Synopsis
     {
         return $this->createQueryBuilder('s')

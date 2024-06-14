@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Controller\Api\AbstractApiController;
+use App\Entity\User;
 use App\Entity\Synopsis;
 use App\Repository\SynopsisRepository;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Controller\Api\AbstractApiController;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-#[Route('/api/explore')]
+#[Route('/api')]
 final class ExploreController extends AbstractApiController
 {
-    #[Route('', name: 'api_explore_index', methods:['GET'])]
+    #[Route('/explore', name: 'api_explore_index', methods:['GET'])]
     public function indexAction(SynopsisRepository $synopsisRepository, Request $request): JsonResponse
     {
         $page = $request->query->getInt('page', 1);
@@ -29,7 +32,7 @@ final class ExploreController extends AbstractApiController
         return $this->json(['synopses' => $pagination->getItems(), 'meta' => $meta], Response::HTTP_OK, [], ['groups' => ['public']]);
     }
 
-    #[Route('/{id}', name: 'api_explore_synopsis', methods:['GET'])]
+    #[Route('/explore/{id}', name: 'api_explore_synopsis', methods:['GET'])]
     public function showAction(Synopsis $synopsis): JsonResponse
     {
         if ($synopsis->isPublic() === false) {
@@ -57,4 +60,26 @@ final class ExploreController extends AbstractApiController
 
         return $this->json($publicData, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
+
+    #[Route('/user', name: 'api_explore_user_index', methods:['GET'])]
+    public function sindexUserAction(UserRepository $userRepository): JsonResponse
+    {
+        return $this->json($userRepository->findAll(), Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/user/{id}', name: 'api_explore_user_show', methods:['GET'])]
+    public function showUserAction(User $user, SynopsisRepository $synopsisRepository): JsonResponse
+    {
+        $publicData = [
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'createdAt' => $user->getCreatedAt(),
+            'profile' => $user->getProfile(),
+            'synopses' => $synopsisRepository->findUserPublicList($user),
+        ];
+
+        return $this->json($publicData, Response::HTTP_OK, [], ['groups' => ['show-author']]);
+    }
+
+
 }
