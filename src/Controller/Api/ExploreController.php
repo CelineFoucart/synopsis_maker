@@ -44,6 +44,7 @@ final class ExploreController extends AbstractApiController
             'author' => $synopsis->getAuthor(),
             'pitch' => $synopsis->getPitch(),
             'description' => $synopsis->getDescription(),
+            'chapters' => $settings['showContent'] ? $synopsis->getChapters() : [],
             'episodes' => $settings['showContent'] ? $synopsis->getEpisodes() : [],
             'characters' => $settings['showCharacters'] ? $synopsis->getCharacters() : [],
             'places' => $settings['showPlaces'] ? $synopsis->getPlaces() : [],

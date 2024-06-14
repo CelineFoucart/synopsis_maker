@@ -89,6 +89,22 @@ blockquote {
     border-radius: 5px;
 }
 
+.pitch {
+    white-space: pre-wrap;
+}
+
+.breadcrumb {
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+}
+
 :root {
     --easy-table-header-font-size: 16px;
     --easy-table-body-row-font-size: 16px;

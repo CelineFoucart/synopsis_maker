@@ -56,9 +56,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-.pitch {
-    white-space: pre-wrap;
-}
-</style>

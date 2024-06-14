@@ -11,11 +11,13 @@
                     <i class="fas fa-calendar-alt fa-fw"></i>date
                 </a>
                 <span class="border-start ps-1 ms-1">
-                    <a href="#" class="filter btn btn-sm" v-tooltip="'Ascendant'" :class="{'active': sort === 'asc'}" @click="sort = 'asc'">
-                        <i class="fas fa-sort-amount-up-alt fa-fw"></i>
+                    <a href="#" class="filter btn btn-sm" v-tooltip="tooltipAsc" :class="{'active': sort === 'asc'}" @click="sort = 'asc'">
+                        <i class="fas fa-sort-alpha-up" v-if="field === 's.title'"></i>
+                        <i class="fas fa-sort-amount-up-alt fa-fw" v-else></i>
                     </a>
-                    <a href="#" class="filter btn btn-sm" v-tooltip="'Descendant'" :class="{'active': sort === 'desc'}"  @click="sort = 'desc'">
-                        <i class="fas fa-sort-amount-down-alt fa-fw"></i>
+                    <a href="#" class="filter btn btn-sm" v-tooltip="tooltipDesc" :class="{'active': sort === 'desc'}"  @click="sort = 'desc'">
+                        <i class="fas fa-sort-alpha-down-alt" v-if="field === 's.title'"></i>
+                        <i class="fas fa-sort-amount-down-alt fa-fw" v-else></i>
                     </a>
                 </span>
             </div>
@@ -59,6 +61,22 @@ export default {
 
     computed: {
         ...mapStores(useSynopsisStore),
+
+        tooltipAsc() {
+            if (this.field === 's.title') {
+                return "Trier de A à Z";
+            }
+
+            return "Trier du plus ancien au plus récent";
+        },
+
+        tooltipDesc() {
+            if (this.field === 's.title') {
+                return "Trier de Z à A";
+            }
+
+            return "Trier du plus récent au plus ancien";
+        }
     },
 
     watch: {
