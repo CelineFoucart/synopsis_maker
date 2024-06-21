@@ -9,6 +9,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\AppAuthenticator;
 use App\Security\EmailVerifier;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +43,7 @@ final class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            $user->setCreatedAt(new DateTimeImmutable('now', new \DateTimeZone("Europe/Paris")));
             $user->setRoles(['ROLE_USER']);
 
             $entityManager->persist($user);
