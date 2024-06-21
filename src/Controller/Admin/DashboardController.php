@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Entity\Character;
 use App\Entity\Episode;
+use App\Entity\Log;
 use App\Entity\Place;
 use App\Entity\Synopsis;
 use App\Entity\User;
@@ -53,6 +54,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('Log', 'fa fa-exclamation-triangle', Log::class);
         yield MenuItem::linkToUrl('Home', 'fas fa-globe', '/');
     }
 }

@@ -65,7 +65,7 @@ final class SynopsisController extends AbstractApiController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $synopsis->setCreatedAt(new \DateTimeImmutable());
+        $synopsis->setCreatedAt(new \DateTimeImmutable("now", new \DateTimeZone("Europe/Paris")));
 
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -98,7 +98,7 @@ final class SynopsisController extends AbstractApiController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
 
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -116,7 +116,7 @@ final class SynopsisController extends AbstractApiController
         }
 
         $synopsis->setLegend($data['legend']);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -134,7 +134,7 @@ final class SynopsisController extends AbstractApiController
         }
 
         $synopsis->setNotes($data['notes']);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -152,7 +152,7 @@ final class SynopsisController extends AbstractApiController
         }
 
         $synopsis->setWorldbuildingHome($data['homepage']);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -165,7 +165,7 @@ final class SynopsisController extends AbstractApiController
         $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         $data = json_decode($request->getContent(), true);
         $synopsis->setSettings($data);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 

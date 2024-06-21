@@ -112,7 +112,7 @@ final class EpisodeController extends AbstractApiController
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
-        $episode->setUpdatedAt(new \DateTime());
+        $episode->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($episode);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);

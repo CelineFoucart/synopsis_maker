@@ -32,7 +32,7 @@ final class SynopsisCharacterController extends AbstractApiController
         }
 
         $character->addSynopsis($synopsis)->setAuthor($this->getUser());
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($character);
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -46,7 +46,7 @@ final class SynopsisCharacterController extends AbstractApiController
     {
         $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         $synopsis->addCharacter($character);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -62,7 +62,7 @@ final class SynopsisCharacterController extends AbstractApiController
         }
 
         $synopsis->removeCharacter($character);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 

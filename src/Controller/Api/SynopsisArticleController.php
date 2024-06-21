@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/synopsis')]
 final class SynopsisArticleController extends AbstractApiController
@@ -48,7 +47,7 @@ final class SynopsisArticleController extends AbstractApiController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
         
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($article);
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -62,7 +61,7 @@ final class SynopsisArticleController extends AbstractApiController
     {
         $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         $synopsis->addArticle($article);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -78,7 +77,7 @@ final class SynopsisArticleController extends AbstractApiController
         }
 
         $synopsis->removeArticle($article);
-        $synopsis->setUpdatedAt(new \DateTime());
+        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);
