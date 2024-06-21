@@ -1,0 +1,33 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block content_title %}Export de la base de données{% endblock %}
+
+{% block main %}
+<div id="flash-messages">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message|trans|raw }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title h5">Exporter la base de données</h2>
+        <p>
+            Cette opération enregistrement l'ensemble des données de la base de données dans un fichier sql. 
+            Vous pouvez ensuite importer ces données via par exemple <em>phpmyadmin</em>.
+        </p>
+
+        <form action="" method="POST">
+            <input type="hidden" name="token" value="{{ csrf_token('backup') }}">
+            <button type="submit" class="btn btn-primary" type="submit">
+                <span class="action-label">Exporter les données</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock main %}

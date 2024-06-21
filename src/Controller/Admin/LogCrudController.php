@@ -29,7 +29,7 @@ class LogCrudController extends AbstractCrudController
         yield TextField::new('level');
         yield TextField::new('action');
         yield TextField::new('object');
-        yield TextField::new('message')->hideOnIndex();
+        yield TextField::new('message');
         yield TextField::new('trace')->hideOnIndex();
     }
 
@@ -40,6 +40,13 @@ class LogCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->showEntityActionsInlined()->setDefaultSort(['createdAt' => 'DESC']);
+        return $crud
+            ->showEntityActionsInlined()
+            ->setDefaultSort(['createdAt' => 'DESC'])
+            ->setHelp(
+                'index', 
+                "Les logs de type <strong>ERROR</strong> indique une erreur survenue dans l'application. Les logs de type <strong>INFO</strong> indique une opération qui s'est bien déroulée."
+            )
+        ;
     }
 }

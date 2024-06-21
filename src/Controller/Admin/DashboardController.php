@@ -54,7 +54,8 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
-        yield MenuItem::linkToCrud('Log', 'fa fa-exclamation-triangle', Log::class);
+        yield MenuItem::linkToCrud('Logs', 'fa fa-exclamation-triangle', Log::class);
+        yield MenuItem::linktoRoute('Backup', 'fa fa-database', 'app_admin_backup');
         yield MenuItem::linkToUrl('Home', 'fas fa-globe', '/');
     }
 }

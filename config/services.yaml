@@ -34,3 +34,7 @@ services:
     App\Service\WordGenerator:
         arguments:
             $tmpDir: '%app.tmp.folder%'
+
+    App\Service\BackupService:
+        arguments:
+            $tmpDir: '%app.tmp.folder%'
