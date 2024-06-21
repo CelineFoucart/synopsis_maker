@@ -82,7 +82,12 @@ final class WordGenerator
         }
 
         if ($this->synopsis->getPitch() && $this->synopsis->getSettings()['appendPitch']) {
-            $textWithBreakLines = str_replace("\n", '</w:t><w:br/><w:t xml:space="preserve">', $this->synopsis->getPitch());
+            if ($this->synopsis->getPitch() !== null) {
+                $textWithBreakLines = str_replace("\n", '</w:t><w:br/><w:t xml:space="preserve">', $this->synopsis->getPitch());
+            } else {
+                $textWithBreakLines = '';
+            }
+
             $section->addText(
                 'Pitch : '.$textWithBreakLines,
                 ['bold' => true, 'italic' => true],
@@ -107,7 +112,7 @@ final class WordGenerator
                 $section->addTitle($chapter->getTitle(), 2);
             }
 
-            if ($this->synopsis->getSettings()['appendChapterTitles'] && $chapter->getDescription()) {
+            if ($this->synopsis->getSettings()['appendChapterTitles'] && $chapter->getDescription() !== null) {
                 $textWithBreakLines = str_replace("\n", '</w:t><w:br/><w:t xml:space="preserve">', $chapter->getDescription());
                 $section->addText($textWithBreakLines, ['italic' => true], ['spaceAfter' => Converter::cmToTwip(0.6)]);
             }
@@ -178,7 +183,9 @@ final class WordGenerator
 
         foreach ($this->synopsis->getCharacters() as $character) {
             $section->addTitle($character->getName(), 2);
-            $section->addText(str_replace("\n", '</w:t><w:br/><w:t xml:space="preserve">', $character->getDescription()));
+            if ($character->getDescription()) {
+                $section->addText(str_replace("\n", '</w:t><w:br/><w:t xml:space="preserve">', $character->getDescription()));
+            }
 
             if ($character->getBirthday()) {
                 $section->addListItem('Naissance : '.$character->getBirthday());
