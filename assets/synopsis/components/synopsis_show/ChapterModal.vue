@@ -137,6 +137,5 @@ export default {
 <style scoped>
 #chapterModal {
     display: block;
-    z-index: 3000;
 }
 </style>

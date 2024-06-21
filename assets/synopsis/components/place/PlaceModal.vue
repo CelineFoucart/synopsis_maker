@@ -168,6 +168,5 @@ export default {
 <style scoped>
 #placeModal {
     display: block;
-    z-index: 3000;
 }
 </style>
