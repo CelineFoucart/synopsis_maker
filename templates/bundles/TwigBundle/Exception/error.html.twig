@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oups il y a eu une erreur | {{ parent() }} {% endblock %}
+
+{% block body %}
+    <article class="container text-center mt-5">
+        <header class="mb-4">
+            <h1 class="display-1 fw-bold text-danger">
+                <i class="fas fa-exclamation-triangle"></i> Oups !
+            </h1>
+        </header>
+        <p class="lead fw-bold text-danger">Il semblerait qu'il y a eu une erreur inattendue. Nous travaillons à résoudre le problème.</p>
+        <footer class="mt-5">
+            <a href="{{ path('app_home') }}" class="btn btn-danger btn-lg">Retour à la page d'accueil</a>
+        </footer>
+    </article>
+{% endblock %}

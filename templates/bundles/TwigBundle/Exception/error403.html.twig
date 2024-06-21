@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur 403 | {{ parent() }} {% endblock %}
+
+{% block body %}
+    <article class="container text-center mt-5">
+        <header class="mb-4">
+            <h1 class="display-1 fw-bold text-danger">
+                <i class="fas fa-exclamation-triangle"></i> 403 - Accès interdit
+            </h1>
+        </header>
+        <p class="lead fw-bold text-danger">Oups ! Vous n'avez pas les autorisations pour consulter cette page.</p>
+        <footer class="mt-5">
+            <a href="{{ path('app_home') }}" class="btn btn-danger btn-lg">Retour à la page d'accueil</a>
+        </footer>
+    </article>
+{% endblock %}
