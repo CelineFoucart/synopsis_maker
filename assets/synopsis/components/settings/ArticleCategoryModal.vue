@@ -136,10 +136,5 @@ export default {
 <style scoped>
 #categoryModal {
     display: block;
-    z-index: 3000;
-}
-
-.modal-backdrop {
-    z-index: 2080;
 }
 </style>

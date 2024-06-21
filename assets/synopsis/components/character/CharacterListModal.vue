@@ -130,7 +130,6 @@ export default {
 <style scoped>
 #characterListModal {
     display: block;
-    z-index: 3000;
 }
 
 .modal-body {

@@ -122,7 +122,6 @@ export default {
 <style scoped>
 #articleListeModal {
     display: block;
-    z-index: 3000;
 }
 
 .modal-body {

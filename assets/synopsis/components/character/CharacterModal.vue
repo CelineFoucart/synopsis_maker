@@ -15,15 +15,15 @@
                             </div>
                             <div class="flex-fill">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label mb-0 required">Nom</label>
-                                    <input type="text" class="form-control" id="name" v-model="name" :class="{ 'is-invalid': v$.name.$errors.length }">
+                                    <label for="name-character" class="form-label mb-0 required">Nom</label>
+                                    <input type="text" class="form-control" id="name-character" v-model="name" :class="{ 'is-invalid': v$.name.$errors.length }">
                                     <div class="invalid-feedback">
                                         Ce champ est obligatoire et doit faire entre 2 et 255 caractères.
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="description" class="form-label mb-0">Description</label>
-                                    <textarea class="form-control" id="description" v-model="description" :class="{ 'is-invalid': v$.description.$errors.length }"></textarea>
+                                    <label for="description-character" class="form-label mb-0">Description</label>
+                                    <textarea class="form-control" id="description-character" v-model="description" :class="{ 'is-invalid': v$.description.$errors.length }"></textarea>
                                     <div class="invalid-feedback">
                                         Ce champ doit faire entre 5 et 15000 caractères.
                                     </div>
@@ -89,20 +89,20 @@
                                     <div class="row g-3 align-items-end">
                                         <div class="col-12 text-end">
                                             <button type="button" class="btn btn-link p-0" @click="removePersonality(itemPersonality.id)">
-                                                    <i class="fa-solid fa-trash text-danger fa-lg"></i>
-                                                    <span class="visually-hidden">Retirer</span>
-                                                </button>
+                                                <i class="fa-solid fa-trash text-danger fa-lg"></i>
+                                                <span class="visually-hidden">Retirer</span>
+                                            </button>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-floating">
-                                                <input type="text" v-model="itemPersonality.key" class="form-control" id="key" placeholder="Par exemple, but, motivation...">
-                                                <label for="key">Titre</label>
+                                                <input type="text" v-model="itemPersonality.key" class="form-control" :id="'key'+itemPersonality.id" placeholder="Par exemple, but, motivation...">
+                                                <label :for="'key'+itemPersonality.id">Titre</label>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-floating">
-                                                <textarea id="content" placeholder="Ajouter une description" v-model="itemPersonality.content" class="form-control"></textarea>
-                                                <label for="content">Contenu</label>
+                                                <textarea id="content-character" placeholder="Ajouter une description" v-model="itemPersonality.content" class="form-control"></textarea>
+                                                <label for="content-character">Contenu</label>
                                             </div>
                                         </div>
                                     </div>
@@ -117,8 +117,8 @@
                                 <div class="row">
                                     <div class="col_md-12">
                                         <div class="mb-3">
-                                            <label for="role" class="form-label fw-bold">Rôle dans l'histoire</label>
-                                            <textarea class="form-control" id="role" v-model="role" :class="{ 'is-invalid': v$.role.$errors.length }"></textarea>
+                                            <label for="role-character" class="form-label fw-bold">Rôle dans l'histoire</label>
+                                            <textarea class="form-control" id="role-character" v-model="role" :class="{ 'is-invalid': v$.role.$errors.length }"></textarea>
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 15000 caractères.
                                             </div>
@@ -126,29 +126,29 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="birthday" class="form-label fw-bold">Date de naissance</label>
-                                            <input type="text" class="form-control" v-model="birthday" id="birthday" :class="{ 'is-invalid': v$.birthday.$errors.length }">
+                                            <label for="birthday-character" class="form-label fw-bold">Date de naissance</label>
+                                            <input type="text" class="form-control" v-model="birthday" id="birthday-character" :class="{ 'is-invalid': v$.birthday.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="birthdayPlace" class="form-label fw-bold">Lieu de naissance</label>
-                                            <input type="text" class="form-control" v-model="birthdayPlace" id="birthdayPlace" :class="{ 'is-invalid': v$.birthdayPlace.$errors.length }">
+                                            <label for="birthdayPlace-character" class="form-label fw-bold">Lieu de naissance</label>
+                                            <input type="text" class="form-control" v-model="birthdayPlace" id="birthdayPlace-character" :class="{ 'is-invalid': v$.birthdayPlace.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="deathDate" class="form-label fw-bold">Date de mort</label>
-                                            <input type="text" class="form-control" v-model="deathDate" id="deathDate" :class="{ 'is-invalid': v$.deathDate.$errors.length }">
+                                            <label for="deathDate-character" class="form-label fw-bold">Date de mort</label>
+                                            <input type="text" class="form-control" v-model="deathDate" id="deathDate-character" :class="{ 'is-invalid': v$.deathDate.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="deathPlace" class="form-label fw-bold">Lieu de mort</label>
-                                            <input type="text" class="form-control" v-model="deathPlace" id="birthdayPlace" :class="{ 'is-invalid': v$.deathPlace.$errors.length }">
+                                            <input type="text" class="form-control" v-model="deathPlace" id="deathPlace" :class="{ 'is-invalid': v$.deathPlace.$errors.length }">
                                             <div class="invalid-feedback">
                                                 Ce champ doit faire entre 1 et 255 caractères.
                                             </div>
@@ -472,7 +472,6 @@ export default {
 <style scoped>
 #characterModal {
     display: block;
-    z-index: 3000;
 }
 
 .input-group-text {

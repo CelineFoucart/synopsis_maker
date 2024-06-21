@@ -25,7 +25,7 @@
                     <tr v-for="character in synopsisStore.synopsis.characters" :key="character.id">
                         <td>
                             <h3 class="fw-bold h6 mb-0">
-                                <a :href="character.link" v-if="character.link !== null" target="_blank" class="text-decoration-none">
+                                <a :href="character.link" v-if="character.link !== null && character.link.length > 0" target="_blank" class="text-decoration-none">
                                     {{ character.name }}
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>

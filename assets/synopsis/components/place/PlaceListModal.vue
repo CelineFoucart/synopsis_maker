@@ -129,7 +129,6 @@ export default {
 <style scoped>
 #placeListModal {
     display: block;
-    z-index: 3000;
 }
 
 .modal-body {

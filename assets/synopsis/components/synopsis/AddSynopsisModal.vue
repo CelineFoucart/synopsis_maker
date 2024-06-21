@@ -174,14 +174,9 @@ export default {
 <style>
 #synopsisModal {
     display: block;
-    z-index: 3000;
 }
 
 #synopsisModal .choices {
     margin-bottom: 0;
-}
-
-.modal-backdrop {
-    z-index: 2080;
 }
 </style>
