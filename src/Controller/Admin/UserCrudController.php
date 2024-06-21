@@ -76,7 +76,9 @@ class UserCrudController extends AbstractCrudController
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        assert($entityInstance instanceof User);
         $this->setPassword($entityInstance);
+        $entityInstance->setCreatedAt(new \DateTimeImmutable("now", new \DateTimeZone("Europe/Paris")));
         $entityInstance->setRoles(array_values($entityInstance->getRoles()));
 
         parent::persistEntity($entityManager, $entityInstance);

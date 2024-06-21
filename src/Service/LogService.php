@@ -28,6 +28,11 @@ final class LogService
     public function error(string $action, string $message, string $object = 'Exception', ?string $trace = null): static
     {
         $log = $this->createLog($action, $object, $message)->setLevel('ERROR')->setTrace($trace);
+
+        if (!$this->entityManager->isOpen()) {
+            $this->doctrine->resetManager();
+        }
+
         $this->entityManager->persist($log);
         $this->entityManager->flush();
 
