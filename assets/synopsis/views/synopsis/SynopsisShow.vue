@@ -4,13 +4,19 @@
         <HeaderSynopsis :synopsis="synopsisStore.synopsis" @on-delete="deleteSynopsis"></HeaderSynopsis>
         <p class="lead mt-3">{{ synopsisStore.synopsis.pitch }}</p>
         <section>
-            <h2 class="h5 d-flex justify-content-between">
+            <h2 class="h5">
                 Description
-                <span class="text-success" role="button" @click="onSave" v-tooltip="'Sauvegarder'">
-                    <i class="fa-solid fa-floppy-disk"></i>
+                <span class="text-success" role="button" @click="editMode = true" v-tooltip="'Sauvegarder'" v-if="editMode === false">
+                    <i class="fas fa-pen fa-fw"></i>
                 </span>
             </h2>
-            <Description v-model:data="description"></Description>
+            <Description v-model:data="description" :editMode="editMode"></Description>
+            <button class="btn btn-success btn-sm mt-2 me-1" v-if="editMode" @click="onSave">
+                <i class="fas fa-save fa-fw"></i> Sauvegarder
+            </button>
+            <button class="btn btn-secondary btn-sm mt-2" v-if="editMode" @click="editMode = false">
+                <i class="fas fa-times fa-fw"></i> Fermer
+            </button>
         </section>
         <div class="row">
             <div class="col-lg-6">
@@ -53,7 +59,8 @@ export default {
     data() {
         return {
             error: false,
-            description: ''
+            description: '',
+            editMode: false,
         }
     },
 
@@ -89,6 +96,8 @@ export default {
             if (!status) {
                 createToastify('Le formulaire comporte des erreurs.', 'error');
             }
+
+            this.editMode = false;
         },
 
         async deleteSynopsis() {

@@ -10,11 +10,11 @@
                 </h1>
             </div>
             <div class="col-6 col-md-4 text-end">
-                <router-link :to="{ name: 'SynopsisIndex' }" class="btn btn-sm btn-dark" v-tooltip="'Liste'">
+                <router-link :to="{ name: 'SynopsisIndex' }" class="btn btn-sm btn-dark mb-1" v-tooltip="'Liste'">
                     <i class="fa-solid fa-arrow-left fa-fw"></i>
                     <span class="visually-hidden">Liste</span>
                 </router-link>
-                <div class="btn-group mx-1">
+                <div class="btn-group ms-1 mb-1">
                     <router-link :to="{ name: 'SynopsisShow', params:{slug: synopsis.slug, id: synopsis.id} }" class="btn btn-sm btn-dark" v-tooltip="'Informations'">
                         <i class="fa-solid fa-pen-to-square fa-fw"></i>
                         <span class="visually-hidden">Informations générales</span>
@@ -24,7 +24,7 @@
                         <span class="visually-hidden">Scènes</span>
                     </router-link>
                 </div>
-                <button class="btn btn-sm btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" v-tooltip="'Menu'">
+                <button class="btn btn-sm btn-dark ms-1 mb-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" v-tooltip="'Menu'">
                     <i class="fa-solid fa-ellipsis"></i>
                     <span class="visually-hidden">Menu</span>
                 </button>

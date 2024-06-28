@@ -9,9 +9,6 @@
                         <h2 class="h5 mb-0 text-secondary">Ajoutez des épisodes et des chapitres puis réordonnez-les pour concevoir le synopsis</h2>
                     </div>
                     <div class="col-md-4 text-end">
-                        <button href="#" class="btn btn-sm btn-dark collapsed me-1" v-tooltip="'Afficher la légende'" data-bs-toggle="collapse" data-bs-target="#collapseComment" aria-expanded="true" aria-controls="collapseComment">
-                            <i class="fas fa-comment" aria-hidden="true"></i> 
-                        </button>
                         <button class="btn btn-sm btn-dark me-1" @click.prevent="openAll = !openAll" v-tooltip="openAll ? 'Tout ouvrir' : 'Tout fermer'">
                             <i class="fa-solid fa-folder-open fa-fw" v-if="!openAll"></i>
                             <i class="fa-solid fa-folder-closed fa-fw" v-if="openAll"></i>
@@ -39,16 +36,21 @@
                     </button>
                 </div>
             </div>
-            <aside class="d-flex gap-3 justify-content-end">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="chapterDesc" v-model="showChapterDescription">
-                    <label class="form-check-label" for="chapterDesc">Descriptions des chapitres</label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="episodeDesc" v-model="showEpisodeDescription">
-                    <label class="form-check-label" for="episodeDesc">Descriptions des épisodes</label>
-                </div>
-            </aside>
+            <div class="d-flex justify-content-between align-items-center mt-1">
+                <button href="#" class="btn btn-sm btn-dark collapsed me-1" v-tooltip="'Afficher la légende'" data-bs-toggle="collapse" data-bs-target="#collapseComment" aria-expanded="true" aria-controls="collapseComment">
+                    <i class="fas fa-comment" aria-hidden="true"></i> 
+                </button>
+                <aside class="d-flex gap-3 justify-content-end">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="chapterDesc" v-model="showChapterDescription">
+                        <label class="form-check-label" for="chapterDesc">Descriptions des chapitres</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="episodeDesc" v-model="showEpisodeDescription">
+                        <label class="form-check-label" for="episodeDesc">Descriptions des épisodes</label>
+                    </div>
+                </aside>
+            </div>
             <SynopsisElementList 
                 :openAll="openAll" 
                 :archived="false"

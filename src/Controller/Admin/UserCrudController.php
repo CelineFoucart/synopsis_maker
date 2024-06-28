@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -43,6 +44,7 @@ class UserCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('username');
         yield EmailField::new('email');
+        yield DateTimeField::new('createdAt');
         
         yield Field::new('plainPassword')->setFormType(PasswordType::class)->setRequired(Crud::PAGE_NEW === $pageName)->onlyOnForms();
         yield FormField::addColumn('col-md-6');

@@ -28,15 +28,15 @@
                         <tbody>
                             <tr>
                                 <th>Rang</th>
-                                <td>{{ author.profile.rank }}</td>
+                                <td>{{ author.profile ? author.profile.rank : '' }}</td>
                             </tr>
                             <tr>
                                 <th>Localisation</th>
-                                <td>{{ author.profile.localisation }}</td>
+                                <td>{{ author.profile ? author.profile.localisation : '' }}</td>
                             </tr>
                             <tr>
                                 <th>Centres d'intérêt</th>
-                                <td>{{ author.profile.interests }}</td>
+                                <td>{{ author.profile ? author.profile.interests : '' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -47,7 +47,7 @@
             <section class="card shadow-sm mt-4">
                 <div class="card-body">
                     <h2 class="h5 pb-2 border-bottom card-title">A propos</h2>
-                    <div v-html="author.profile.about"></div>
+                    <div v-html="author.profile.about" v-if="author.profile"></div>
                 </div>
             </section>
         </div>

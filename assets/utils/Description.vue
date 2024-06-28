@@ -1,7 +1,12 @@
 <template>
     <article>
         <h2 class="h5" v-if="label && label.length > 0">{{ label }}</h2>
-        <Editor ref="editor" :id="id" v-model="content" :init="editorOptions" />
+        <div :style="{'display': editMode === true ? 'block': 'none'}">
+            <Editor :id="id" v-model="content" :init="editorOptions" />
+        </div>
+        <div :style="{'display': editMode === false ? 'block': 'none'}">
+            <Editor v-model="content" :init="editorOptions" :disabled="true" :inline="true" />
+        </div>
     </article>
 </template>
 
@@ -50,6 +55,10 @@ export default {
         id: {
             type: String,
             default: 'content'
+        },
+        editMode: {
+            type: Boolean,
+            default: false
         }
     },
 
