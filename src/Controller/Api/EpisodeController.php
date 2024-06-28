@@ -112,7 +112,7 @@ final class EpisodeController extends AbstractApiController
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
-        $episode->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $episode->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($episode);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);
@@ -191,6 +191,7 @@ final class EpisodeController extends AbstractApiController
         }
 
         $episode->setArchived(!$episode->isArchived());
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($episode);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);

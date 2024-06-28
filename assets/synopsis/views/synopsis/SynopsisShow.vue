@@ -22,6 +22,7 @@
         </div>
         <MetaData :element="synopsisStore.synopsis"></MetaData>
     </article>
+    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script lang="js">
@@ -34,6 +35,7 @@ import Description from '&utils/Description.vue';
 import MetaData from '&synopsis/components/synopsis_show/MetaData.vue';
 import SynopsisPlace from '&synopsis/components/synopsis_show/SynopsisPlace.vue';
 import SynopsisCharacter from '&synopsis/components/synopsis_show/SynopsisCharacter.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisShow',
@@ -44,7 +46,8 @@ export default {
         Error,
         MetaData,
         SynopsisPlace,
-        SynopsisCharacter
+        SynopsisCharacter,
+        Loading
     },
 
     data() {

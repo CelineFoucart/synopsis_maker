@@ -61,6 +61,7 @@
         </article>
         <ChapterModal :chapter="chapterToEdit" v-if="chapterModal" @on-close="chapterModal = false"></ChapterModal>
         <EpisodeModal :episode="episodeToEdit" v-if="episodeModal" @on-close="episodeModal = false"></EpisodeModal>
+        <Loading v-if="synopsisStore.loading"></Loading>
     </div>
 </template>
 
@@ -74,6 +75,7 @@ import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vu
 import SynopsisElementList from '&synopsis/components/synopsis_show/SynopsisElementList.vue';
 import ChapterModal from '&synopsis/components/synopsis_show/ChapterModal.vue';
 import EpisodeModal from '&synopsis/components/synopsis_show/EpisodeModal.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisEpisodes',
@@ -84,6 +86,7 @@ export default {
         SynopsisElementList,
         ChapterModal,
         EpisodeModal,
+        Loading
     },
 
     data() {

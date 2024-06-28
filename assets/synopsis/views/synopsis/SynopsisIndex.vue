@@ -19,6 +19,7 @@
         </div>
     </div>
     <AddSynopsisModal v-if="showAddModal" @on-close="showAddModal = false"></AddSynopsisModal>
+    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script>
@@ -29,6 +30,7 @@ import Pagination from '&utils/Pagination.vue';
 import AsideSynopsis from '&synopsis/components/synopsis/AsideSynopsis.vue';
 import SynopsisList from '&synopsis/components/synopsis/SynopsisList.vue';
 import AddSynopsisModal from '&synopsis/components/synopsis/AddSynopsisModal.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisIndex',
@@ -37,7 +39,8 @@ export default {
         Pagination,
         AsideSynopsis,
         SynopsisList,
-        AddSynopsisModal
+        AddSynopsisModal,
+        Loading
     },
 
     data() {

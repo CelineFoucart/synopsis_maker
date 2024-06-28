@@ -47,7 +47,7 @@ final class SynopsisArticleController extends AbstractApiController
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
         
-        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($article);
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -61,7 +61,7 @@ final class SynopsisArticleController extends AbstractApiController
     {
         $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         $synopsis->addArticle($article);
-        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -77,7 +77,7 @@ final class SynopsisArticleController extends AbstractApiController
         }
 
         $synopsis->removeArticle($article);
-        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);

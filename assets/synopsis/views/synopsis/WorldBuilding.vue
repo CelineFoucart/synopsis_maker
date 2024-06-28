@@ -68,6 +68,7 @@
         </div>
         <HomePageModal :synopsis="synopsisStore.synopsis" @on-close="homepageModal = false" v-if="homepageModal"></HomePageModal>
     </article>
+    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script lang="js">
@@ -82,6 +83,7 @@ import Summary from '&synopsis/components/synopsis_article/Summary.vue';
 import ArticleModal from '&synopsis/components/synopsis_article/ArticleModal.vue';
 import HomePageModal from '&synopsis/components/synopsis_article/HomePageModal.vue';
 import UnlinkModal from '&utils/UnlinkModal.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'WorldBuilding',
@@ -92,7 +94,8 @@ export default {
         Summary,
         ArticleModal,
         UnlinkModal,
-        HomePageModal
+        HomePageModal,
+        Loading
     },
 
     data() {

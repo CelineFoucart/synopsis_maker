@@ -6,7 +6,7 @@ export const useSynopsisStore = defineStore('synopsis', {
         synopses: [], 
         pagination: {current: 0, limit: 10, totalCount: 0, firstItemNumber: 0, lastItemNumber: 0, last: 0, pagesInRange: []},
         synopsis: null, 
-        loading: false,
+        loading: true,
     }),
 
     actions: {
@@ -93,9 +93,10 @@ export const useSynopsisStore = defineStore('synopsis', {
             this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_legend_edit", {id: id});
-                await axios.put(url, data);
+                const response = await axios.put(url, data);
                 if (this.synopsis) {
                     this.synopsis.legend = data.legend;
+                    this.synopsis.updatedAt = response.data.updatedAt;
                 }
                 this.loading = false;
                 return true;
@@ -109,9 +110,10 @@ export const useSynopsisStore = defineStore('synopsis', {
             this.loading = true;
             try {
                 const url = Routing.generate("api_synopsis_legend_notes", {id: id});
-                await axios.put(url, { notes: data });
+                const response = await axios.put(url, { notes: data });
                 if (this.synopsis) {
                     this.synopsis.notes = data;
+                    this.synopsis.updatedAt = response.data.updatedAt;
                 }
                 this.loading = false;
                 return true;
@@ -124,9 +126,10 @@ export const useSynopsisStore = defineStore('synopsis', {
         async putSynopsisSettings(data, id) {
             try {
                 const url = Routing.generate("api_synopsis_settings_edit", {id: id});
-                await axios.put(url, data);
+                const response = await axios.put(url, data);
                 if (this.synopsis) {
                     this.synopsis.settings = data;
+                    this.synopsis.updatedAt = response.data.updatedAt;
                 }
                 
                 return true;
@@ -153,6 +156,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_chapter_create", {id: this.synopsis.id});
                 const response = await axios.post(url, data);
                 this.synopsis.chapters = response.data.chapters;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -164,6 +168,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_chapter_edit", {id: this.synopsis.id, chapterId: id});
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
+                this.synopsis.updatedAt = response.data.updatedAt;
 
                 return true;
             } catch (error) {
@@ -193,6 +198,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const response = await axios.post(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+                this.synopsis.updatedAt = response.data.updatedAt;
 
                 return true;
             } catch (error) {
@@ -206,6 +212,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const response = await axios.put(url, data);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+                this.synopsis.updatedAt = response.data.updatedAt;
 
                 return true;
             } catch (error) {
@@ -272,6 +279,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const response = await axios.put(url, { target: newChapter, position: position });
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 this.loading = false;
                 return true;
             } catch (error) {
@@ -303,6 +311,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const response = await axios.put(url);
                 this.synopsis.chapters = response.data.chapters;
                 this.synopsis.episodes = response.data.episodes;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -310,7 +319,6 @@ export const useSynopsisStore = defineStore('synopsis', {
         },
 
         async addTask(task) {
-            console.log(task)
             try {
                 const index = this.synopsis.tasks.findIndex((element) => element.id === task.id);
                 if (index !== -1) {
@@ -322,6 +330,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_task", {id: this.synopsis.id});
                 const response = await axios.put(url, this.synopsis.tasks);
                 this.synopsis.tasks = response.data.tasks;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -338,6 +347,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_task", {id: this.synopsis.id});
                 const response = await axios.put(url, this.synopsis.tasks);
                 this.synopsis.tasks = response.data.tasks;
+                this.synopsis.updatedAt = response.data.updatedAt;
 
                 return true;
             } catch (error) {
@@ -352,6 +362,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_task_reorder", params);
                 const response = await axios.put(url, this.synopsis.tasks);
                 this.synopsis.tasks = response.data.tasks;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 this.loading = false;
                 return true;
             } catch (error) {
@@ -369,6 +380,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_place", {id: this.synopsis.id});
                 const response = await axios.post(url, data);
                 this.synopsis.places = response.data.places;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -395,6 +407,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_place_append", {id: this.synopsis.id, placeId: placeId});
                 const response = await axios.put(url);
                 this.synopsis.places = response.data.places;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -410,6 +423,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_character", {id: this.synopsis.id});
                 const response = await axios.post(url, data);
                 this.synopsis.characters = response.data.characters;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -425,6 +439,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_character_append", {id: this.synopsis.id, characterId: characterId});
                 const response = await axios.put(url);
                 this.synopsis.characters = response.data.characters;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -451,6 +466,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_article", {id: this.synopsis.id});
                 const response = await axios.post(url, data);
                 this.synopsis.articles = response.data.articles;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -466,6 +482,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_article_append", {id: this.synopsis.id, articleId: articleId});
                 const response = await axios.put(url);
                 this.synopsis.articles = response.data.articles;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -477,6 +494,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 const url = Routing.generate("api_synopsis_article_remove", {id: this.synopsis.id, articleId: articleId});
                 const response = await axios.delete(url);
                 this.synopsis.articles = response.data.articles;
+                this.synopsis.updatedAt = response.data.updatedAt;
                 return true;
             } catch (error) {
                 return false;
@@ -490,6 +508,7 @@ export const useSynopsisStore = defineStore('synopsis', {
                 await axios.put(url, {homepage: data});
                 if (this.synopsis) {
                     this.synopsis.worldbuildingHome = data;
+                    this.synopsis.updatedAt = response.data.updatedAt;
                 }
                 this.loading = false;
 

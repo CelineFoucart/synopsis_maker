@@ -59,6 +59,7 @@
         </DataTable>
         <CategoryModal :category="category" v-if="showEditModal" @on-close="showEditModal = false"></CategoryModal>
         <Delete :loading="loading" :title="category.title" v-if="showDeleteModal" @on-confirm="deleteCategory" @on-close="showDeleteModal = false"></Delete>
+        <Loading v-if="categoryStore.loading"></Loading>
     </section>
 </template>
 
@@ -70,6 +71,7 @@ import CategoryModal from '&synopsis/components/settings/CategoryModal.vue';
 import Delete from '&utils/Delete.vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'CategoryIndex',
@@ -77,7 +79,8 @@ export default {
     components: {
         DataTable: Vue3EasyDataTable,
         CategoryModal,
-        Delete
+        Delete,
+        Loading
     },
 
     data() {

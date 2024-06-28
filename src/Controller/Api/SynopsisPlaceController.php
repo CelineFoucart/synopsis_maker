@@ -31,7 +31,7 @@ final class SynopsisPlaceController extends AbstractApiController
         }
 
         $place->addSynopsis($synopsis)->setAuthor($this->getUser());
-        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($place);
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
@@ -45,7 +45,7 @@ final class SynopsisPlaceController extends AbstractApiController
     {
         $this->denyAccessUnlessGranted(VoterAction::EDIT, $synopsis);
         $synopsis->addPlace($place);
-        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 
@@ -61,7 +61,7 @@ final class SynopsisPlaceController extends AbstractApiController
         }
 
         $synopsis->removePlace($place);
-        $synopsis->setUpdatedAt(new \DateTime("now", new \DateTimeZone("Europe/Paris")));
+        $synopsis->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($synopsis);
         $this->entityManager->flush();
 

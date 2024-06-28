@@ -13,6 +13,7 @@
             <Description v-model:data="notes"></Description>
         </section>
     </article>
+    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script>
@@ -22,6 +23,7 @@ import { createToastify } from '&utils/toastify.js';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import Description from '&utils/Description.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisNotes',
@@ -30,6 +32,7 @@ export default {
         HeaderSynopsis,
         Description,
         Error,
+        Loading,
     },
 
     data() {

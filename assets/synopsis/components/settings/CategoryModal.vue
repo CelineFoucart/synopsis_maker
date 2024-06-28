@@ -120,8 +120,4 @@ export default {
 #categoryModal {
     display: block;
 }
-
-.modal-backdrop {
-    z-index: 2080;
-}
 </style>

@@ -32,7 +32,8 @@ final class ChapterController extends AbstractApiController
         if (!empty($errors)) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST);
         }
-
+        $synopsis->setUpdatedAt(new \DateTime());
+        $this->entityManager->persist($synopsis);
         $this->entityManager->persist($chapter);
         $this->entityManager->flush();
         $this->entityManager->refresh($synopsis);

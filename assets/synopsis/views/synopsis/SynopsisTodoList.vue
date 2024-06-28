@@ -32,6 +32,7 @@
                 </div>
             </div>
         </article>
+        <Loading v-if="synopsisStore.loading"></Loading>
     </div>
 </template>
 
@@ -43,6 +44,7 @@ import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import TodoColumn from '&synopsis/components/synopsis_todo/TodoColumn.vue';
 import Sortable from 'sortablejs';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisTodoList',
@@ -50,7 +52,8 @@ export default {
     components: {
         HeaderSynopsis,
         TodoColumn,
-        Error
+        Error,
+        Loading
     },
 
     data() {

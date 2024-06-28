@@ -65,6 +65,7 @@
     </article>
     <ArticleModal :data="article"  @on-close="showEditModal = false" v-if="showEditModal"></ArticleModal>
     <Delete :title="article.title" v-if="showDeleteModal" @on-confirm="deleteAction" @on-close="showDeleteModal = false"></Delete>
+    <Loading v-if="articleStore.loading"></Loading>
 </template>
 
 <script>
@@ -76,6 +77,7 @@ import ArticleModal from '&synopsis/components/synopsis_article/ArticleModal.vue
 import { useArticleCategoryStore } from '&synopsis/stores/articleCategory.js';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'ArticleIndex',
@@ -83,7 +85,8 @@ export default {
     components: {
         DataTable: Vue3EasyDataTable,
         Delete,
-        ArticleModal
+        ArticleModal,
+        Loading
     },
 
     data() {

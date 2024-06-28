@@ -171,6 +171,7 @@
             </div>
         </div>
     </article>
+    <Loading v-if="synopsisStore.loading"></Loading>
 </template>
 
 <script>
@@ -179,6 +180,7 @@ import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import { createToastify } from '&utils/toastify.js';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisSettings',
@@ -186,6 +188,7 @@ export default {
     components: {
         HeaderSynopsis,
         Error,
+        Loading,
     },
 
     data() {

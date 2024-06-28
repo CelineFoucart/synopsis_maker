@@ -20,6 +20,7 @@
             </div>
             <SynopsisElementList :openAll="openAll" :archived="true"></SynopsisElementList>
         </article>
+        <Loading v-if="synopsisStore.loading"></Loading>
     </div>
 </template>
 
@@ -31,6 +32,7 @@ import { createToastify } from '&utils/toastify.js';
 import Error from '&utils/Error.vue';
 import HeaderSynopsis from '&synopsis/components/synopsis_show/HeaderSynopsis.vue';
 import SynopsisElementList from '&synopsis/components/synopsis_show/SynopsisElementList.vue';
+import Loading from '&utils/Loading.vue';
 
 export default {
     name: 'SynopsisArchive',
@@ -38,7 +40,8 @@ export default {
     components: {
         HeaderSynopsis,
         Error,
-        SynopsisElementList
+        SynopsisElementList,
+        Loading
     },
 
     data() {
@@ -61,8 +64,6 @@ export default {
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
-        } else {
-            this.legend = this.synopsisStore.synopsis.legend;
         }
 
         const statusCategory = await this.categoryStore.getCategories();

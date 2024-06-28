@@ -1,7 +1,7 @@
 <template>
     <article>
-        <h2 class="h5">{{ label }}</h2>
-        <Editor ref="editor" v-model="content" :init="editorOptions" />
+        <h2 class="h5" v-if="label && label.length > 0">{{ label }}</h2>
+        <Editor ref="editor" :id="id" v-model="content" :init="editorOptions" />
     </article>
 </template>
 
@@ -43,7 +43,14 @@ export default {
             type: String,
             default: ''
         },
-        label: String
+        label: {
+            type: String,
+            default: null
+        },
+        id: {
+            type: String,
+            default: 'content'
+        }
     },
 
     components: {
