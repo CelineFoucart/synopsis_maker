@@ -52,7 +52,7 @@
 
                         <div class="mb-3">
                             <label for="content" class="form-label mb-0">Contenu</label>
-                            <Description v-model:data="content" :saveButton="false"></Description>
+                            <Description v-model:data="content" :editMode="true"></Description>
                         </div>
                     </div>
                     <div class="modal-footer">

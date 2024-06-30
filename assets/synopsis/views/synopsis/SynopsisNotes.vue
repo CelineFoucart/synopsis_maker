@@ -10,7 +10,7 @@
                     <i class="fa-solid fa-floppy-disk"></i>
                 </span>
             </h2>
-            <Description v-model:data="notes"></Description>
+            <Description v-model:data="notes" :editMode="true"></Description>
         </section>
     </article>
     <Loading v-if="synopsisStore.loading"></Loading>

@@ -10,7 +10,7 @@
                     </div>
                     <div class="modal-body">
                         <label for="description" class="form-label mb-0">Contenu de la page d'accueil</label>
-                        <Description v-model:data="homepage"></Description>
+                        <Description v-model:data="homepage" :editMode="true"></Description>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" @click.prevent="closeModal">

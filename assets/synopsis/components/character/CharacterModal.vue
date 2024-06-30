@@ -76,12 +76,12 @@
                         <div class="mb-3 bg-white p-3 border-start border-end border-bottom">
                             <div v-if="tabs.biography">
                                 <label for="biography" class="d-lg-none fw-bold">Biographie</label>
-                                <Description v-model:data="biography" :saveButton="false"></Description>
+                                <Description v-model:data="biography" :editMode="true"></Description>
                             </div>
                             
                             <div v-if="tabs.appearance">
                                 <label for="appearance" class="d-lg-none fw-bold">Apparence</label>
-                                <Description v-model:data="appearance" :saveButton="false"></Description>
+                                <Description v-model:data="appearance" :editMode="true"></Description>
                             </div>
                             
                             <div v-if="tabs.personality">
