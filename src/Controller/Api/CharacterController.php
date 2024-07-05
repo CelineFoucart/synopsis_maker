@@ -24,14 +24,6 @@ final class CharacterController extends AbstractApiController
         return $this->json($characterRepository->findByAuthor($this->getUser()), Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
-    #[Route('/{id}', name: 'api_character_show', methods: ['GET'])]
-    public function showAction(Character $character): JsonResponse
-    {
-        $this->denyAccessUnlessGranted(VoterAction::EDIT, $character);
-
-        return $this->json($character, Response::HTTP_OK, [], ['groups' => ['index']]);
-    }
-
     #[Route('/{id}', name: 'api_character_edit', methods: ['PUT'])]
     public function editAction(Character $character, SerializerInterface $serializer, Request $request): JsonResponse
     {
