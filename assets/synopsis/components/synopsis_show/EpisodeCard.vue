@@ -8,7 +8,7 @@
             </h3>
             <p v-if="episode.characters.length > 0" class="mb-0">
                 <i class="fa-solid fa-user fa-fw"></i>
-                <span v-for="character in episode.characters" class="badge text-bg-secondary me-1">{{ character.name }}</span>
+                <CharacterBadge :character="character" v-for="character in episode.characters" :key="character.id"></CharacterBadge>
             </p>
             <p v-if="episode.places.length > 0" class="mb-0">
                 <i class="fa-solid fa-location-dot fa-fw"></i>
@@ -45,12 +45,14 @@ import { mapStores } from "pinia";
 import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import Delete from '&utils/Delete.vue';
 import { createToastify } from '&utils/toastify.js';
+import CharacterBadge from '&synopsis/components/character/CharacterBadge.vue';
 
 export default {
     name: 'EpisodeCard',
 
     components: {
         Delete,
+        CharacterBadge
     },
 
     emits: ['on-edit-episode', 'on-archive-episode'],

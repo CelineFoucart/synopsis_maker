@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\Character;
-use App\Repository\CharacterRepository;
 use App\Security\Voter\VoterAction;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\CharacterRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/character')]
 final class CharacterController extends AbstractApiController
@@ -21,6 +22,14 @@ final class CharacterController extends AbstractApiController
     public function indexAction(CharacterRepository $characterRepository): JsonResponse
     {
         return $this->json($characterRepository->findByAuthor($this->getUser()), Response::HTTP_OK, [], ['groups' => ['index']]);
+    }
+
+    #[Route('/{id}', name: 'api_character_show', methods: ['GET'])]
+    public function showAction(Character $character): JsonResponse
+    {
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $character);
+
+        return $this->json($character, Response::HTTP_OK, [], ['groups' => ['index']]);
     }
 
     #[Route('/{id}', name: 'api_character_edit', methods: ['PUT'])]

@@ -119,7 +119,7 @@ export default {
             this.showDeleteModal = false;
             const status = await this.characterStore.delete(this.character.id);
             if (status) {
-                createToastify('La catégorie a été supprimée', 'success');
+                createToastify('Le personnage a été supprimé', 'success');
             }
 
             this.character = {id: null, name: null, description: null, link: null, biography: '', appearance: '', personality: []};

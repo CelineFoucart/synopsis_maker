@@ -76,12 +76,18 @@
                         <div class="mb-3 bg-white p-3 border-start border-end border-bottom">
                             <div v-if="tabs.biography">
                                 <label for="biography" class="d-lg-none fw-bold">Biographie</label>
-                                <Description v-model:data="biography" :editMode="true"></Description>
+                                <Description id="biography" v-model:data="biography" :editMode="true"></Description>
+                                <div class="text-danger" v-if="v$.biography.$errors.length > 0">
+                                    Ce champ doit faire entre 5 et 25000 caractères.
+                                </div>
                             </div>
                             
                             <div v-if="tabs.appearance">
                                 <label for="appearance" class="d-lg-none fw-bold">Apparence</label>
-                                <Description v-model:data="appearance" :editMode="true"></Description>
+                                <Description id="appearance" v-model:data="appearance" :editMode="true"></Description>
+                                <div class="text-danger" v-if="v$.appearance.$errors.length > 0">
+                                    Ce champ doit faire entre 5 et 25000 caractères.
+                                </div>
                             </div>
                             
                             <div v-if="tabs.personality">
@@ -439,7 +445,7 @@ export default {
                 birthdayPlace: this.birthdayPlace,
                 deathDate: this.deathDate,
                 deathPlace: this.deathPlace,
-                gende: this.gender,
+                gender: this.gender,
                 species: this.species,
                 role: this.role,
                 complementary: this.complementary,
@@ -454,6 +460,7 @@ export default {
             let success = false;
             if (this.data.id) {
                 success = await this.characterStore.edit(this.data.id, data);
+                data.id = this.data.id;
             } else {
                 success = await this.synopsisStore.addCharacter(data);
             }
