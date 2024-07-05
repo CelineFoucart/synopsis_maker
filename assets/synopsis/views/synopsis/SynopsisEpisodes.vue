@@ -36,7 +36,7 @@
                     </button>
                 </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center mt-1">
+            <div class="d-flex justify-content-between align-items-center my-1">
                 <button href="#" class="btn btn-sm btn-dark collapsed me-1" v-tooltip="'Afficher la légende'" data-bs-toggle="collapse" data-bs-target="#collapseComment" aria-expanded="true" aria-controls="collapseComment">
                     <i class="fas fa-comment" aria-hidden="true"></i> 
                 </button>
@@ -113,6 +113,7 @@ export default {
 
     async mounted () {
         if (this.synopsisStore.synopsis !== null) {
+            this.legend = this.synopsisStore.synopsis.legend;
             return;
         }
         

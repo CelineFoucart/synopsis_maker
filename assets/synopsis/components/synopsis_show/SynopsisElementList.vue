@@ -24,8 +24,7 @@
                 </EpisodeCard>
             </div>
         </div>
-        
-        <Loading v-if="synopsisStore.loading"></Loading>
+
         <ArchiveModal :elementToArchive="elementToArchive"  @on-close="archiveModal = false" v-if="archiveModal"></ArchiveModal>
     </div>
 </template>
@@ -38,14 +37,12 @@ import { createToastify } from '&utils/toastify.js';
 import ChapterCard from '&synopsis/components/synopsis_show/ChapterCard.vue';
 import EpisodeCard from '&synopsis/components/synopsis_show/EpisodeCard.vue';
 import ArchiveModal from '&synopsis/components/synopsis_show/ArchiveModal.vue';
-import Loading from '&utils/Loading.vue';
 import Sortable from 'sortablejs';
 
 export default {
     name: 'SynopsisElementList',
 
     components: {
-        Loading,
         ChapterCard,
         EpisodeCard,
         ArchiveModal

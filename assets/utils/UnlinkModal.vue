@@ -15,7 +15,7 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" @click.prevent="closeModal">
+                        <button type="button" class="btn btn-secondary btn-sm" tabindex="-1" @click.prevent="closeModal">
                             <i class="fa-solid fa-xmark fa-fw"></i> Annuler
                         </button>
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent="accept">

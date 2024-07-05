@@ -1,5 +1,5 @@
 <template>
-    <article class="card h-100" :style="{'border-color': episode.color ? episode.color : 'rgba(0, 0, 0, 0.176' }">
+    <article class="card h-100 position-relative" :class="{'card-width-lg' : episode.color}" :style="{'border-color': episode.color ? episode.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
             <h3 class="card-title h5 fw-bold" :class="{'text-success': episode.valid }">
                 <span class="handle" v-if="archived === false"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
@@ -110,5 +110,9 @@ export default {
 <style scoped>
 .button {
     cursor: pointer;
+}
+
+.card-width-lg {
+    border-left-width: 8px;
 }
 </style>
