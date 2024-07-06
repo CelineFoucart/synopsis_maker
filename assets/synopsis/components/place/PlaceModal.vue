@@ -33,7 +33,7 @@
 
                         <div class="mb-3">
                             <label for="description" class="form-label mb-0">Description (géographie, histoire, caractéristiques...)</label>
-                            <Description v-model:data="description" :editMode="true"></Description>
+                            <Description :id="description" v-model:data="description" :editMode="true"></Description>
                         </div>
 
                         <div class="mb-3">

@@ -98,39 +98,42 @@ export default {
     },
 
     async mounted () {
-        if (this.synopsisStore.synopsis !== null) {
-            return;
+        if (this.synopsisStore.synopsis === null) {
+            const status = await this.synopsisStore.getSynopsis(this.$route.params);
+            if (!status) {
+                createToastify("Ce synopsis n'existe pas.", 'error');
+                this.error = true;
+            }
         }
+
+        this.enableSortable();
         
-        const status = await this.synopsisStore.getSynopsis(this.$route.params);
-        if (!status) {
-            createToastify("Ce synopsis n'existe pas.", 'error');
-            this.error = true;
-        }
     },
 
     updated() {
-        document.querySelectorAll('.sortable-list').forEach(element => {
-            new Sortable(element, {
-                group: 'shared',
-                ghostClass: 'blue-background-class',
-                animation: 150,
-                onEnd: async (evt) => {
-                    const category = evt.to.dataset.list;
-                    const taskId = evt.item.dataset.id;
-                    const position = evt.newIndex;
+        this.enableSortable();
+    },
 
-                    const status = await this.synopsisStore.reorderTask(taskId, category, position);
-                    if (!status) {
-                        createToastify("L'opération a échoué.", "error")
-                    }
-                },
+    methods: {
+        enableSortable() {
+            document.querySelectorAll('.sortable-list').forEach(element => {
+                new Sortable(element, {
+                    group: 'shared',
+                    ghostClass: 'blue-background-class',
+                    animation: 150,
+                    onEnd: async (evt) => {
+                        const category = evt.to.dataset.list;
+                        const taskId = evt.item.dataset.id;
+                        const position = evt.newIndex;
+
+                        const status = await this.synopsisStore.reorderTask(taskId, category, position);
+                        if (!status) {
+                            createToastify("L'opération a échoué.", "error")
+                        }
+                    },
+                });
             });
-        });
-    }
+        }
+    },
 }
 </script>
-
-<style scoped>
-
-</style>
