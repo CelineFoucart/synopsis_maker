@@ -17,7 +17,7 @@
                             <span v-else>{{ place.title }}</span>
                         </h3>
                         <p class="pitch">{{ place.role }}</p>
-                        <div class="rounded border p-3">
+                        <div class="rounded border bg-white p-3">
                             <h4 class="h6">Description</h4>
                             <Description id="description" v-model:data="place.description" :editMode="false"></Description>
                             <div v-if="place.complementary !== null && place.complementary.length > 0">
