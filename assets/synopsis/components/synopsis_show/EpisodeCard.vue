@@ -12,7 +12,7 @@
             </p>
             <p v-if="episode.places.length > 0" class="mb-0">
                 <i class="fa-solid fa-location-dot fa-fw"></i>
-                <span v-for="place in episode.places" class="badge text-bg-secondary me-1">{{ place.title }}</span>
+                <PlaceBadge :place="place" v-for="place in episode.places" :key="place.id"></PlaceBadge>
             </p>
             <p class="mt-2" style="white-space: pre-wrap;" :class="{'text-success': episode.valid }" v-if="showDescription">
                 {{ substract(episode.description) }}
@@ -46,13 +46,15 @@ import { useSynopsisStore } from '&synopsis/stores/synopsis.js';
 import Delete from '&utils/Delete.vue';
 import { createToastify } from '&utils/toastify.js';
 import CharacterBadge from '&synopsis/components/character/CharacterBadge.vue';
+import PlaceBadge from '&synopsis/components/place/PlaceBadge.vue';
 
 export default {
     name: 'EpisodeCard',
 
     components: {
         Delete,
-        CharacterBadge
+        CharacterBadge,
+        PlaceBadge
     },
 
     emits: ['on-edit-episode', 'on-archive-episode'],

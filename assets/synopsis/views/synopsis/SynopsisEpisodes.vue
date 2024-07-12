@@ -112,11 +112,6 @@ export default {
     },
 
     async mounted () {
-        if (this.synopsisStore.synopsis !== null) {
-            this.legend = this.synopsisStore.synopsis.legend;
-            return;
-        }
-        
         const status = await this.synopsisStore.getSynopsis(this.$route.params);
         if (!status) {
             createToastify("Ce synopsis n'existe pas.", 'error');

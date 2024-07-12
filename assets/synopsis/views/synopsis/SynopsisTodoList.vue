@@ -98,12 +98,10 @@ export default {
     },
 
     async mounted () {
-        if (this.synopsisStore.synopsis === null) {
-            const status = await this.synopsisStore.getSynopsis(this.$route.params);
-            if (!status) {
-                createToastify("Ce synopsis n'existe pas.", 'error');
-                this.error = true;
-            }
+        const status = await this.synopsisStore.getSynopsis(this.$route.params);
+        if (!status) {
+            createToastify("Ce synopsis n'existe pas.", 'error');
+            this.error = true;
         }
 
         this.enableSortable();

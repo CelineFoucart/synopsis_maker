@@ -69,17 +69,12 @@ export default {
     },
     
     async mounted () {
-        if (this.synopsisStore.synopsis !== null) {
-            this.description = this.synopsisStore.synopsis.description ? this.synopsisStore.synopsis.description : '';
-            return;
-        }
-        
         this.status = await this.synopsisStore.getSynopsis(this.$route.params);
         if (!this.status) {
             createToastify("Ce synopsis n'existe pas.", 'error');
             this.error = true;
         } else {
-            this.description = this.synopsisStore.synopsis.description;
+            this.description = this.synopsisStore.synopsis.description ? this.synopsisStore.synopsis.description : '';
         }
     },
 
