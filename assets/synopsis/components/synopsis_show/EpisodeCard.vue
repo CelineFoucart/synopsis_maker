@@ -81,6 +81,10 @@ export default {
 
     methods: {
         substract(value) {
+            if (value === null) {
+                return '';
+            }
+
             const MAX_LENGTH = 200;
 
             if (value.length <= MAX_LENGTH) {
