@@ -508,7 +508,6 @@ export const useSynopsisStore = defineStore('synopsis', {
                 await axios.put(url, {homepage: data});
                 if (this.synopsis) {
                     this.synopsis.worldbuildingHome = data;
-                    this.synopsis.updatedAt = response.data.updatedAt;
                 }
                 this.loading = false;
 
