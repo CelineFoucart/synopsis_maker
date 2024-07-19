@@ -25,6 +25,8 @@
                 <h3 class="card-title h5 mb-0">Déroulé</h3>
             </header>
             <div class="card-body d-flex flex-column gap-3" v-if="showContent">
+                <div v-html="synopsis.description"></div>
+
                 <div v-for="chapter in synopsis.chapters" :key="chapter.id" class="rounded shadow-chapter p-3">
                     <div class="text-muted small">{{ chapter.title }}</div>
                     <div class="small" v-if="chapter.episodes.length < 1">
