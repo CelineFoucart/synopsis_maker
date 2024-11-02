@@ -23,7 +23,7 @@
                     <p class="small mb-0" style="white-space: pre-wrap;">{{ chapter.description }}</p>
                 </div>
             </header>
-            <div class="row g-2 sortable-list" v-if="isOpen" :data-list="chapter.id">
+            <div class="row g-2 sortable-list" :style="{'display': isOpen ? 'flex' : 'none' }" :data-list="chapter.id">
                 <div class="col-md-4 col-lg-3" v-for="episode in episodes" :key="episode.id" :data-id="episode.id">
                     <EpisodeCard :showDescription="showEpisodeDescription" :archived="archived" :episode="episode" @on-archive-episode="onArchiveEpisode" @on-edit-episode="onEditEpisode"></EpisodeCard>
                 </div>
