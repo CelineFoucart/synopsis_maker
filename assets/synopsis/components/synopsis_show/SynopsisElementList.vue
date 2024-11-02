@@ -97,6 +97,10 @@ export default {
                 }
             });
 
+            chapters.sort(function(a, b) {
+                return a.position - b.position;
+            });
+
             return chapters;
         },
 
@@ -111,6 +115,10 @@ export default {
                 if (episode.chapterId === null && this.isAvailable(episode)) {
                     episodes.push(episode);
                 }
+            });
+
+            episodes.sort(function(a, b) {
+                return a.position - b.position;
             });
 
             return episodes;

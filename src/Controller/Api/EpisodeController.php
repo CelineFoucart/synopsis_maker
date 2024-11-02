@@ -142,7 +142,7 @@ final class EpisodeController extends AbstractApiController
     }
 
     #[Route('/{episodeId}/position', name: 'api_synopsis_episode_position', methods: ['PUT'])]
-    public function positionAction(#[MapEntity(id: 'id')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode, Request $request): JsonResponse
+    public function positionAction(#[MapEntity(expr: 'repository.findOneById(id)')] Synopsis $synopsis, #[MapEntity(id: 'episodeId')] Episode $episode, Request $request): JsonResponse
     {
         $oldChapter = $episode->getChapter();
 

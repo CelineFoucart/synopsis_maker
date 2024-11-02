@@ -1,15 +1,8 @@
 <template>
     <article class="card shadow-sm bg-light" :style="{'border-color': chapter.color ? chapter.color : 'rgba(0, 0, 0, 0.176' }">
         <div class="card-body">
-            <header class="row">
-                <div class="col-9">
-                    <h2 class="h5">
-                        <span class="handle" v-if="archived === false"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
-                        {{ chapter.title }}
-                        <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archivé'" v-if="chapter.archived === true"></i>
-                    </h2>
-                </div>                  
-                <div class="col-3 fs-5 justify-content-end align-items-center d-flex gap-1">                    
+            <header class="row flex-md-row-reverse">
+                <div class="col-md-3 fs-5 justify-content-end align-items-center d-flex gap-1">                    
                     <span class="button" @click.prevent="isOpen = !isOpen">
                         <i class="fa-solid fa-folder-open fa-fw" v-if="!isOpen" v-tooltip="'Ouvrir'"></i>
                         <i class="fa-solid fa-folder-closed fa-fw" v-if="isOpen" v-tooltip="'Fermer'"></i>
@@ -18,6 +11,13 @@
                     <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archive'" @click="$emit('on-archive', chapter)"></i>
                     <i class="fa-solid fa-pen fa-fw button" v-tooltip="'Editer'" @click="$emit('on-edit', chapter)"></i>
                     <i class="fa-solid fa-trash fa-fw button text-danger" v-tooltip="'Supprimer'" @click="deleteModal = true"></i>
+                </div>
+                <div class="col-md-9">
+                    <h2 class="h5">
+                        <span class="handle" v-if="archived === false"><i class="fa-solid fa-fw fa-arrows-up-down-left-right"></i></span>
+                        {{ chapter.title }}
+                        <i class="fa-solid fa-box-archive fa-fw button" v-tooltip="'Archivé'" v-if="chapter.archived === true"></i>
+                    </h2>
                 </div>
                 <div class="col-12" v-if="chapter.description && showDescription">
                     <p class="small mb-0" style="white-space: pre-wrap;">{{ chapter.description }}</p>
@@ -78,6 +78,10 @@ export default {
                 if (episode.archived === this.archived || (episode.archived === null && this.archived === false)) {
                     episodes.push(episode);
                 }
+            });
+
+            episodes.sort(function(a, b) {
+                return a.position - b.position;
             });
 
             return episodes;

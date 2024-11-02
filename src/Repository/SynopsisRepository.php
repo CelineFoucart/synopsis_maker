@@ -102,6 +102,7 @@ class SynopsisRepository extends ServiceEntityRepository
             ->leftJoin('s.chapters', 'p')->addSelect('p')
             ->andWhere('s.id = :id')
             ->setParameter('id', $id)
+            ->orderBy('e.position')
             ->getQuery()
             ->getOneOrNullResult()
         ;
